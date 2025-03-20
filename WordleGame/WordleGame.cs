@@ -22,7 +22,7 @@
 			GuessesLeft = 0;
 			GameState = GameState.NotStarted;
 		}
-		private static HashSet<string> LoadAllowedWords() => [.. File.ReadAllLines(@"Data\allowedWords.txt")];
+		private static HashSet<string> LoadAllowedWords() => [.. File.ReadAllLines(@"Data\allowed_words.txt")];
 
 		public void Start()
 		{
