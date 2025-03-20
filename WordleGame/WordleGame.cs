@@ -8,6 +8,9 @@
 		public GameState GameState { get; private set; }
 		public WordleGame(string wordle, int guesses)
 		{
+			if (wordle.Length != 5) throw new WordleWrongLengthException();
+			if (guesses < 1) throw new NoGuessesException();
+
 			Wordle = wordle;
 			Guesses = guesses;
 			GuessesLeft = 0;
@@ -33,5 +36,21 @@
 		Ongoing,
 		Completed,
 		Failed
+	}
+	public class WordleWrongLengthException : Exception
+	{
+		public WordleWrongLengthException() { }
+
+		public WordleWrongLengthException(string message) : base(message) { }
+
+		public WordleWrongLengthException(string message, Exception inner) : base(message, inner) { }
+	}
+	public class NoGuessesException : Exception
+	{
+		public NoGuessesException() { }
+
+		public NoGuessesException(string message) : base(message) { }
+
+		public NoGuessesException(string message, Exception inner) : base(message, inner) { }
 	}
 }
