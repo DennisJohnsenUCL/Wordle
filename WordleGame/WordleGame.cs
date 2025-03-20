@@ -6,10 +6,16 @@
 		public int Guesses { get; }
 		public int GuessesLeft { get; private set; }
 		public GameState GameState { get; private set; }
+		private readonly HashSet<string> allowedWords;
+
 		public WordleGame(string wordle, int guesses = 6)
 		{
 			if (wordle.Length != 5) throw new WordleWrongLengthException();
 			if (guesses < 1) throw new NoGuessesException();
+
+			allowedWords = [.. File.ReadAllLines("allowedWords.txt")];
+
+			if (!allowedWords.Contains(wordle)) throw new WordleNotAllowedWordException();
 
 			Wordle = wordle;
 			Guesses = guesses;
@@ -35,6 +41,7 @@
 			{
 				if (wordleGuess[i] == Wordle[i]) correctness[i] = Correctness.Correct;
 				else if (!Wordle.Contains(wordleGuess[i])) correctness[i] = Correctness.Absent;
+				//ZZ I don't think this will work if there are also Correct of the same letter
 				else if (Wordle.Count(x => x == wordleGuess[i]) >= wordleGuess.Substring(0, i + 1).Count(x => x == wordleGuess[i])) correctness[i] = Correctness.Present;
 			}
 
@@ -80,6 +87,12 @@
 		public WordleGuessWrongLengthException() { }
 		public WordleGuessWrongLengthException(string message) : base(message) { }
 		public WordleGuessWrongLengthException(string message, Exception inner) : base(message, inner) { }
+	}
+	public class WordleNotAllowedWordException : Exception
+	{
+		public WordleNotAllowedWordException() { }
+		public WordleNotAllowedWordException(string message) : base(message) { }
+		public WordleNotAllowedWordException(string message, Exception inner) : base(message, inner) { }
 	}
 	public class NoGuessesException : Exception
 	{
