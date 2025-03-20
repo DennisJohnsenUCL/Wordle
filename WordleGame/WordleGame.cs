@@ -24,16 +24,37 @@
 				GuessesLeft = Guesses;
 			}
 		}
+		public WordleResponse GuessWordle(string wordleGuess)
+		{
+			if (wordleGuess.Length != 5) throw new WordleGuessWrongLengthException();
+
+			char[] chars = wordleGuess.ToCharArray();
+			Correctness[] correctness = new Correctness[5];
+
+			for (int i = 0; i < wordleGuess.Length; i++)
+			{
+				if (wordleGuess[i] == Wordle[i]) correctness[i] = Correctness.Correct;
+				else if (!Wordle.Contains(wordleGuess[i])) correctness[i] = Correctness.Absent;
+				else if (Wordle.Count(x => x == wordleGuess[i]) >= wordleGuess.Substring(0, i + 1).Count(x => x == wordleGuess[i])) correctness[i] = Correctness.Present;
+			}
+
+			return new WordleResponse(chars, correctness);
+		}
 		public override string ToString()
 		{
 			return $"This Wordle game is {GameState}, the Wordle is {Wordle}, " +
 				$"and there are {GuessesLeft} guesses left out of {Guesses} guesses";
 		}
 	}
-	public struct WordleResponse
+	public class WordleResponse
 	{
 		public char[] Chars { get; }
 		public Correctness[] Correctness { get; }
+		public WordleResponse(char[] chars, Correctness[] correctness)
+		{
+			Chars = chars;
+			Correctness = correctness;
+		}
 	}
 	public enum GameState
 	{
@@ -51,17 +72,19 @@
 	public class WordleWrongLengthException : Exception
 	{
 		public WordleWrongLengthException() { }
-
 		public WordleWrongLengthException(string message) : base(message) { }
-
 		public WordleWrongLengthException(string message, Exception inner) : base(message, inner) { }
+	}
+	public class WordleGuessWrongLengthException : Exception
+	{
+		public WordleGuessWrongLengthException() { }
+		public WordleGuessWrongLengthException(string message) : base(message) { }
+		public WordleGuessWrongLengthException(string message, Exception inner) : base(message, inner) { }
 	}
 	public class NoGuessesException : Exception
 	{
 		public NoGuessesException() { }
-
 		public NoGuessesException(string message) : base(message) { }
-
 		public NoGuessesException(string message, Exception inner) : base(message, inner) { }
 	}
 }
