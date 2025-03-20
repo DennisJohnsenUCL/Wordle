@@ -30,12 +30,23 @@
 				$"and there are {GuessesLeft} guesses left out of {Guesses} guesses";
 		}
 	}
+	public struct WordleResponse
+	{
+		public char[] Chars { get; }
+		public Correctness[] Correctness { get; }
+	}
 	public enum GameState
 	{
 		NotStarted,
 		Ongoing,
 		Completed,
 		Failed
+	}
+	public enum Correctness
+	{
+		Correct,
+		Present,
+		Absent
 	}
 	public class WordleWrongLengthException : Exception
 	{
