@@ -10,12 +10,12 @@
 
 		public WordleGame(string wordle, int guesses = 6)
 		{
-			if (wordle.Length != 5) throw new WordleWrongLengthException();
-			if (guesses < 1) throw new NoGuessesException();
+			if (wordle.Length != 5) throw new WordleWrongLengthException("The Wordle must be 5 letters");
+			if (guesses < 1) throw new NoGuessesException("The amount of guesses must be greater than 0");
 
-			allowedWords = [.. File.ReadAllLines("allowedWords.txt")];
+			allowedWords = [.. File.ReadAllLines(@"Data\allowedWords.txt")];
 
-			if (!allowedWords.Contains(wordle)) throw new WordleNotAllowedWordException();
+			if (!allowedWords.Contains(wordle)) throw new WordleNotAllowedWordException("The Wordle is not in the list of allowed words");
 
 			Wordle = wordle;
 			Guesses = guesses;
@@ -32,7 +32,8 @@
 		}
 		public WordleResponse GuessWordle(string wordleGuess)
 		{
-			if (wordleGuess.Length != 5) throw new WordleGuessWrongLengthException();
+			if (wordleGuess.Length != 5) throw new WordleGuessWrongLengthException("Wordle guesses must be 5 letters");
+			if (!allowedWords.Contains(wordleGuess)) throw new WordleNotAllowedWordException("The guessed word is not in the list of allowed words");
 
 			char[] chars = wordleGuess.ToCharArray();
 			Correctness[] correctness = new Correctness[5];
