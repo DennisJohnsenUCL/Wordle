@@ -21,6 +21,11 @@
 				GuessesLeft = Guesses;
 			}
 		}
+		public override string ToString()
+		{
+			return $"This Wordle game is {GameState}, the Wordle is {Wordle}, " +
+				$"and there are {GuessesLeft} guesses left out of {Guesses} guesses";
+		}
 	}
 	public enum GameState
 	{
