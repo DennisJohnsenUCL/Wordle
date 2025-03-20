@@ -6,14 +6,14 @@
 		public int Guesses { get; }
 		public int GuessesLeft { get; private set; }
 		public GameState GameState { get; private set; }
-		private readonly HashSet<string> allowedWords;
+		private static readonly HashSet<string> allowedWords = LoadAllowedWords();
 
+		//>> Do constructor chaining instead
+		//>> Pick random Wordle from previous Wordles list if not given
 		public WordleGame(string wordle, int guesses = 6)
 		{
 			if (wordle.Length != 5) throw new WordleWrongLengthException("The Wordle must be 5 letters");
 			if (guesses < 1) throw new NoGuessesException("The amount of guesses must be greater than 0");
-
-			allowedWords = [.. File.ReadAllLines(@"Data\allowedWords.txt")];
 
 			if (!allowedWords.Contains(wordle)) throw new WordleNotAllowedWordException("The Wordle is not in the list of allowed words");
 
@@ -22,6 +22,7 @@
 			GuessesLeft = 0;
 			GameState = GameState.NotStarted;
 		}
+		private static HashSet<string> LoadAllowedWords() => [.. File.ReadAllLines(@"Data\allowedWords.txt")];
 		public void Start()
 		{
 			if (GameState == GameState.NotStarted)
@@ -42,7 +43,7 @@
 			{
 				if (wordleGuess[i] == Wordle[i]) correctness[i] = Correctness.Correct;
 				else if (!Wordle.Contains(wordleGuess[i])) correctness[i] = Correctness.Absent;
-				//ZZ I don't think this will work if there are also Correct of the same letter
+				//>> I don't think this will work if there are also Correct of the same letter
 				else if (Wordle.Count(x => x == wordleGuess[i]) >= wordleGuess.Substring(0, i + 1).Count(x => x == wordleGuess[i])) correctness[i] = Correctness.Present;
 			}
 
