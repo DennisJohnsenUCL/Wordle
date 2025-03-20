@@ -6,7 +6,7 @@
 		public int Guesses { get; }
 		public int GuessesLeft { get; private set; }
 		public GameState GameState { get; private set; }
-		public WordleGame(string wordle, int guesses)
+		public WordleGame(string wordle, int guesses = 6)
 		{
 			if (wordle.Length != 5) throw new WordleWrongLengthException();
 			if (guesses < 1) throw new NoGuessesException();
