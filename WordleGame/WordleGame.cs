@@ -23,6 +23,7 @@
 			GameState = GameState.NotStarted;
 		}
 		private static HashSet<string> LoadAllowedWords() => [.. File.ReadAllLines(@"Data\allowedWords.txt")];
+
 		public void Start()
 		{
 			if (GameState == GameState.NotStarted)
@@ -30,7 +31,9 @@
 				GameState = GameState.Ongoing;
 				GuessesLeft = Guesses;
 			}
+			else throw new WordleGameAlreadyStartedException();
 		}
+
 		public WordleResponse GuessWordle(string wordleGuess)
 		{
 			if (wordleGuess.Length != 5) throw new WordleGuessWrongLengthException("Wordle guesses must be 5 letters");
@@ -49,6 +52,7 @@
 
 			return new WordleResponse(chars, correctness);
 		}
+
 		public override string ToString()
 		{
 			return $"This Wordle game is {GameState}, the Wordle is {Wordle}, " +
@@ -101,5 +105,11 @@
 		public NoGuessesException() { }
 		public NoGuessesException(string message) : base(message) { }
 		public NoGuessesException(string message, Exception inner) : base(message, inner) { }
+	}
+	public class WordleGameAlreadyStartedException : Exception
+	{
+		public WordleGameAlreadyStartedException() { }
+		public WordleGameAlreadyStartedException(string message) : base(message) { }
+		public WordleGameAlreadyStartedException(string message, Exception inner) : base(message, inner) { }
 	}
 }
