@@ -51,15 +51,7 @@ namespace WordleGame
 				return new WordleResponse(chars, [.. Enumerable.Repeat(Correctness.Correct, 5)]);
 			}
 
-			Correctness[] correctness = new Correctness[5];
-
-			for (int i = 0; i < wordleGuess.Length; i++)
-			{
-				if (wordleGuess[i] == Wordle[i]) correctness[i] = Correctness.Correct;
-				else if (!Wordle.Contains(wordleGuess[i])) correctness[i] = Correctness.Absent;
-				//>> I don't think this will work if there are also Correct of the same letter?
-				else if (Wordle.Count(x => x == wordleGuess[i]) >= wordleGuess.Substring(0, i + 1).Count(x => x == wordleGuess[i])) correctness[i] = Correctness.Present;
-			}
+			Correctness[] correctness = WordleGameUtils.GetCorrectnesses(Wordle, wordleGuess);
 
 			GuessesLeft--;
 			if (GuessesLeft == 0) GameState = GameState.Failed;
