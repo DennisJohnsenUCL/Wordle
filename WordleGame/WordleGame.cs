@@ -1,4 +1,8 @@
-﻿namespace WordleGame
+﻿using WordleGame.Enums;
+using WordleGame.Exceptions;
+using WordleGame.Models;
+
+namespace WordleGame
 {
 	public class WordleGame
 	{
@@ -24,6 +28,7 @@
 			GuessesLeft = 0;
 			GameState = GameState.NotStarted;
 		}
+
 		private static HashSet<string> LoadAllowedWords() => [.. File.ReadAllLines(@"Data\allowed_words.txt")];
 
 		private static void LoadPreviousWordles()
@@ -45,7 +50,7 @@
 				GameState = GameState.Ongoing;
 				GuessesLeft = Guesses;
 			}
-			else throw new WordleGameAlreadyStartedException();
+			else throw new WordleGameAlreadyStartedException("This game has already been started");
 		}
 
 		public WordleResponse GuessWordle(string wordleGuess)
@@ -64,6 +69,7 @@
 				else if (Wordle.Count(x => x == wordleGuess[i]) >= wordleGuess.Substring(0, i + 1).Count(x => x == wordleGuess[i])) correctness[i] = Correctness.Present;
 			}
 
+			GuessesLeft--;
 			return new WordleResponse(chars, correctness);
 		}
 
@@ -72,58 +78,5 @@
 			return $"This Wordle game is {GameState}, the Wordle is {Wordle}, " +
 				$"and there are {GuessesLeft} guesses left out of {Guesses} guesses";
 		}
-	}
-	public class WordleResponse
-	{
-		public char[] Chars { get; }
-		public Correctness[] Correctness { get; }
-		public WordleResponse(char[] chars, Correctness[] correctness)
-		{
-			Chars = chars;
-			Correctness = correctness;
-		}
-	}
-	public enum GameState
-	{
-		NotStarted,
-		Ongoing,
-		Completed,
-		Failed
-	}
-	public enum Correctness
-	{
-		Correct,
-		Present,
-		Absent
-	}
-	public class WordleWrongLengthException : Exception
-	{
-		public WordleWrongLengthException() { }
-		public WordleWrongLengthException(string message) : base(message) { }
-		public WordleWrongLengthException(string message, Exception inner) : base(message, inner) { }
-	}
-	public class WordleGuessWrongLengthException : Exception
-	{
-		public WordleGuessWrongLengthException() { }
-		public WordleGuessWrongLengthException(string message) : base(message) { }
-		public WordleGuessWrongLengthException(string message, Exception inner) : base(message, inner) { }
-	}
-	public class WordleNotAllowedWordException : Exception
-	{
-		public WordleNotAllowedWordException() { }
-		public WordleNotAllowedWordException(string message) : base(message) { }
-		public WordleNotAllowedWordException(string message, Exception inner) : base(message, inner) { }
-	}
-	public class NoGuessesException : Exception
-	{
-		public NoGuessesException() { }
-		public NoGuessesException(string message) : base(message) { }
-		public NoGuessesException(string message, Exception inner) : base(message, inner) { }
-	}
-	public class WordleGameAlreadyStartedException : Exception
-	{
-		public WordleGameAlreadyStartedException() { }
-		public WordleGameAlreadyStartedException(string message) : base(message) { }
-		public WordleGameAlreadyStartedException(string message, Exception inner) : base(message, inner) { }
 	}
 }
