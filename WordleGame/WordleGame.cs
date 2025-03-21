@@ -1,6 +1,7 @@
 ﻿using WordleGame.Enums;
 using WordleGame.Exceptions;
 using WordleGame.Models;
+using WordleGame.Utils;
 
 namespace WordleGame
 {
@@ -10,36 +11,20 @@ namespace WordleGame
 		public int Guesses { get; }
 		public int GuessesLeft { get; private set; }
 		public GameState GameState { get; private set; }
-		private static readonly HashSet<string> allowedWords = LoadAllowedWords();
-		private static string[]? previousWordles;
 
-		public WordleGame() : this(GetRandomWordle(), 6) { }
+		public WordleGame() : this(WordleGameUtils.GetRandomWordle(), 6) { }
 		public WordleGame(string wordle) : this(wordle, 6) { }
-		public WordleGame(int guesses) : this(GetRandomWordle(), guesses) { }
+		public WordleGame(int guesses) : this(WordleGameUtils.GetRandomWordle(), guesses) { }
 		public WordleGame(string wordle, int guesses)
 		{
 			if (wordle.Length != 5) throw new WordleWrongLengthException("The Wordle must be 5 letters");
 			if (guesses < 1) throw new NoGuessesException("The amount of guesses must be greater than 0");
-			if (!allowedWords.Contains(wordle)) throw new WordleNotAllowedWordException("The Wordle is not in the list of allowed words");
+			if (!WordleGameUtils.allowedWords.Contains(wordle)) throw new WordleNotAllowedWordException("The Wordle is not in the list of allowed words");
 
 			Wordle = wordle;
 			Guesses = guesses;
 			GuessesLeft = 0;
 			GameState = GameState.NotStarted;
-		}
-
-		private static HashSet<string> LoadAllowedWords() => [.. File.ReadAllLines(@"Data\allowed_words.txt")];
-
-		private static void LoadPreviousWordles()
-		{
-			previousWordles = File.ReadAllLines(@"Data\previous_wordles.txt");
-		}
-
-		private static string GetRandomWordle()
-		{
-			if (null == previousWordles) LoadPreviousWordles();
-			Random rng = new();
-			return previousWordles![rng.Next(0, previousWordles.Length)];
 		}
 
 		public void Start()
@@ -54,24 +39,25 @@ namespace WordleGame
 
 		public WordleResponse GuessWordle(string wordleGuess)
 		{
-			if (GameState != GameState.Ongoing) throw new WordleGameNotOnGoingException();
+			if (GameState != GameState.Ongoing) throw new WordleGameNotOnGoingException("This game is not currently ongoing");
 			if (wordleGuess.Length != 5) throw new WordleGuessWrongLengthException("Wordle guesses must be 5 letters");
-			if (!allowedWords.Contains(wordleGuess)) throw new WordleNotAllowedWordException("The guessed word is not in the list of allowed words");
+			if (!WordleGameUtils.allowedWords.Contains(wordleGuess)) throw new WordleNotAllowedWordException("The guessed word is not in the list of allowed words");
+
+			char[] chars = wordleGuess.ToCharArray();
 
 			if (wordleGuess == Wordle)
 			{
 				GameState = GameState.Completed;
-				return new WordleResponse(Wordle.ToCharArray(), [.. Enumerable.Repeat(Correctness.Correct, 5)]);
+				return new WordleResponse(chars, [.. Enumerable.Repeat(Correctness.Correct, 5)]);
 			}
 
-			char[] chars = wordleGuess.ToCharArray();
 			Correctness[] correctness = new Correctness[5];
 
 			for (int i = 0; i < wordleGuess.Length; i++)
 			{
 				if (wordleGuess[i] == Wordle[i]) correctness[i] = Correctness.Correct;
 				else if (!Wordle.Contains(wordleGuess[i])) correctness[i] = Correctness.Absent;
-				//>> I don't think this will work if there are also Correct of the same letter
+				//>> I don't think this will work if there are also Correct of the same letter?
 				else if (Wordle.Count(x => x == wordleGuess[i]) >= wordleGuess.Substring(0, i + 1).Count(x => x == wordleGuess[i])) correctness[i] = Correctness.Present;
 			}
 
