@@ -7,10 +7,12 @@
 		public int GuessesLeft { get; private set; }
 		public GameState GameState { get; private set; }
 		private static readonly HashSet<string> allowedWords = LoadAllowedWords();
+		private static string[]? previousWordles;
 
-		//>> Do constructor chaining instead
-		//>> Pick random Wordle from previous Wordles list if not given
-		public WordleGame(string wordle, int guesses = 6)
+		public WordleGame() : this(GetRandomWordle(), 6) { }
+		public WordleGame(string wordle) : this(wordle, 6) { }
+		public WordleGame(int guesses) : this(GetRandomWordle(), guesses) { }
+		public WordleGame(string wordle, int guesses)
 		{
 			if (wordle.Length != 5) throw new WordleWrongLengthException("The Wordle must be 5 letters");
 			if (guesses < 1) throw new NoGuessesException("The amount of guesses must be greater than 0");
@@ -23,6 +25,18 @@
 			GameState = GameState.NotStarted;
 		}
 		private static HashSet<string> LoadAllowedWords() => [.. File.ReadAllLines(@"Data\allowed_words.txt")];
+
+		private static void LoadPreviousWordles()
+		{
+			previousWordles = File.ReadAllLines(@"Data\previous_wordles.txt");
+		}
+
+		private static string GetRandomWordle()
+		{
+			if (null == previousWordles) LoadPreviousWordles();
+			Random rng = new();
+			return previousWordles![rng.Next(0, previousWordles.Length)];
+		}
 
 		public void Start()
 		{
