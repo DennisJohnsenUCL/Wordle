@@ -20,7 +20,6 @@ namespace WordleGame
 		{
 			if (wordle.Length != 5) throw new WordleWrongLengthException("The Wordle must be 5 letters");
 			if (guesses < 1) throw new NoGuessesException("The amount of guesses must be greater than 0");
-
 			if (!allowedWords.Contains(wordle)) throw new WordleNotAllowedWordException("The Wordle is not in the list of allowed words");
 
 			Wordle = wordle;
@@ -55,8 +54,15 @@ namespace WordleGame
 
 		public WordleResponse GuessWordle(string wordleGuess)
 		{
+			if (GameState != GameState.Ongoing) throw new WordleGameNotOnGoingException();
 			if (wordleGuess.Length != 5) throw new WordleGuessWrongLengthException("Wordle guesses must be 5 letters");
 			if (!allowedWords.Contains(wordleGuess)) throw new WordleNotAllowedWordException("The guessed word is not in the list of allowed words");
+
+			if (wordleGuess == Wordle)
+			{
+				GameState = GameState.Completed;
+				return new WordleResponse(Wordle.ToCharArray(), [.. Enumerable.Repeat(Correctness.Correct, 5)]);
+			}
 
 			char[] chars = wordleGuess.ToCharArray();
 			Correctness[] correctness = new Correctness[5];
@@ -70,6 +76,7 @@ namespace WordleGame
 			}
 
 			GuessesLeft--;
+			if (GuessesLeft == 0) GameState = GameState.Failed;
 			return new WordleResponse(chars, correctness);
 		}
 
