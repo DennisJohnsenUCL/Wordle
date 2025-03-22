@@ -1,9 +1,9 @@
-﻿using WordleGame.Enums;
-using WordleGame.Exceptions;
-using WordleGame.Models;
-using WordleGame.Utils;
+﻿using WordleCore.Enums;
+using WordleCore.Exceptions;
+using WordleCore.Models;
+using WordleCore.Utils;
 
-namespace WordleGame
+namespace WordleCore
 {
 	public class WordleGame
 	{

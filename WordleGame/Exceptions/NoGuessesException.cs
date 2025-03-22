@@ -1,4 +1,4 @@
-﻿namespace WordleGame.Exceptions
+﻿namespace WordleCore.Exceptions
 {
 	public class NoGuessesException : Exception
 	{

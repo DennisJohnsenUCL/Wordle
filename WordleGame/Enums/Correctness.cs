@@ -1,4 +1,4 @@
-﻿namespace WordleGame.Enums
+﻿namespace WordleCore.Enums
 {
 	public enum Correctness
 	{

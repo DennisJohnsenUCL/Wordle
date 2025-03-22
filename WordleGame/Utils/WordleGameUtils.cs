@@ -1,6 +1,6 @@
-﻿using WordleGame.Enums;
+﻿using WordleCore.Enums;
 
-namespace WordleGame.Utils
+namespace WordleCore.Utils
 {
 	internal static class WordleGameUtils
 	{

@@ -1,6 +1,6 @@
-﻿using WordleGame.Enums;
+﻿using WordleCore.Enums;
 
-namespace WordleGame.Models
+namespace WordleCore.Models
 {
 	public class WordleResponse
 	{
