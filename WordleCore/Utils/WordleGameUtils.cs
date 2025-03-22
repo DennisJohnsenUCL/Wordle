@@ -8,11 +8,12 @@ namespace WordleCore.Utils
 		private static string[]? previousWordles;
 		private static Random? rng;
 
-		public static HashSet<string> LoadAllowedWords() => [.. File.ReadAllLines(@"Data\allowed_words.txt")];
+		public static HashSet<string> LoadAllowedWords() =>
+			[.. WordleCoreUtils.LoadEmbeddedTxt("WordleCore.Data.allowed_words.txt")];
 
 		private static void LoadPreviousWordles()
 		{
-			previousWordles = File.ReadAllLines(@"Data\previous_wordles.txt");
+			previousWordles = WordleCoreUtils.LoadEmbeddedTxt("WordleCore.Data.previous_wordles.txt");
 		}
 
 		public static string GetRandomWordle()
