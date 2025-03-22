@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <Folder Include="Data\" />
+	<InternalsVisibleTo Include="WordleCore.Tests" />
   </ItemGroup>
 
 </Project>
