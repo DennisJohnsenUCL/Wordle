@@ -14,5 +14,8 @@ namespace WordleCore.Utils
 
 			return reader.ReadToEnd();
 		}
+
+		internal static string[] LoadEmbeddedTxt(string resourceName) =>
+			LoadEmbeddedResource(resourceName).Split(['\n', '\r']);
 	}
 }
