@@ -7,7 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Data\" />
+    <None Remove="Data\allowed_words.txt" />
+    <None Remove="Data\previous_wordles.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Data\allowed_words.txt" />
+    <EmbeddedResource Include="Data\previous_wordles.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
 	<InternalsVisibleTo Include="WordleCore.Tests" />
   </ItemGroup>
 
