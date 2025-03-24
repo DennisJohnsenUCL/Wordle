@@ -4,11 +4,11 @@ namespace WordleCore.Utils
 {
 	internal static class WordleGameUtils
 	{
-		public static readonly HashSet<string> allowedWords = LoadAllowedWords();
+		internal static readonly HashSet<string> allowedWords = LoadAllowedWords();
 		internal static string[]? previousWordles;
 		private static Random? rng;
 
-		public static HashSet<string> LoadAllowedWords() =>
+		internal static HashSet<string> LoadAllowedWords() =>
 			[.. WordleCoreUtils.LoadEmbeddedTxt("WordleCore.Data.allowed_words.txt")];
 
 		internal static void LoadPreviousWordles()
@@ -16,14 +16,14 @@ namespace WordleCore.Utils
 			previousWordles = WordleCoreUtils.LoadEmbeddedTxt("WordleCore.Data.previous_wordles.txt");
 		}
 
-		public static string GetRandomWordle()
+		internal static string GetRandomWordle()
 		{
 			if (null == previousWordles) LoadPreviousWordles();
 			if (null == rng) rng = new();
 			return previousWordles![rng.Next(0, previousWordles.Length)];
 		}
 
-		public static Correctness[] GetCorrectnesses(string wordle, string wordleGuess)
+		internal static Correctness[] GetCorrectnesses(string wordle, string wordleGuess)
 		{
 			Correctness[] correctness = new Correctness[5];
 
@@ -31,8 +31,8 @@ namespace WordleCore.Utils
 			{
 				if (wordleGuess[i] == wordle[i]) correctness[i] = Correctness.Correct;
 				else if (!wordle.Contains(wordleGuess[i])) correctness[i] = Correctness.Absent;
-				//>> I don't think this will work if there are also Correct of the same letter?
 				else if (wordle.Count(x => x == wordleGuess[i]) >= wordleGuess[..(i + 1)].Count(x => x == wordleGuess[i])) correctness[i] = Correctness.Present;
+				else correctness[i] = Correctness.Absent;
 			}
 
 			return correctness;

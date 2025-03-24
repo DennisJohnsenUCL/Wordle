@@ -81,5 +81,59 @@ namespace WordleCore.Tests
 
             Assert.IsTrue(expected.SequenceEqual(actual));
         }
+
+        [TestMethod]
+        public void GetCorrectnesses_Books_Kazoo_ReturnsPAAPP()
+        {
+            var actual = WordleGameUtils.GetCorrectnesses("BOOKS", "KAZOO");
+            Correctness[] expected = [Correctness.Present, Correctness.Absent, Correctness.Absent, Correctness.Present, Correctness.Present];
+
+            Assert.IsTrue(expected.SequenceEqual(actual));
+        }
+
+        [TestMethod]
+        public void GetCorrectnesses_Total_Tools_ReturnsCCAPA()
+        {
+            var actual = WordleGameUtils.GetCorrectnesses("TOTAL", "TOOLS");
+            Correctness[] expected = [Correctness.Correct, Correctness.Correct, Correctness.Absent, Correctness.Present, Correctness.Absent];
+
+            Assert.IsTrue(expected.SequenceEqual(actual));
+        }
+
+        [TestMethod]
+        public void GetCorrectnesses_Total_Tarot_ReturnsCPAPP()
+        {
+            var actual = WordleGameUtils.GetCorrectnesses("TOTAL", "TAROT");
+            Correctness[] expected = [Correctness.Correct, Correctness.Present, Correctness.Absent, Correctness.Present, Correctness.Present];
+
+            Assert.IsTrue(expected.SequenceEqual(actual));
+        }
+
+        [TestMethod]
+        public void GetCorrectnesses_Level_Leave_ReturnsCCAPP()
+        {
+            var actual = WordleGameUtils.GetCorrectnesses("LEVEL", "LEAVE");
+            Correctness[] expected = [Correctness.Correct, Correctness.Correct, Correctness.Absent, Correctness.Present, Correctness.Present];
+
+            Assert.IsTrue(expected.SequenceEqual(actual));
+        }
+
+        [TestMethod]
+        public void GetCorrectnesses_Leave_Level_ReturnsCCPPA()
+        {
+            var actual = WordleGameUtils.GetCorrectnesses("LEAVE", "LEVEL");
+            Correctness[] expected = [Correctness.Correct, Correctness.Correct, Correctness.Present, Correctness.Present, Correctness.Absent];
+
+            Assert.IsTrue(expected.SequenceEqual(actual));
+        }
+
+        [TestMethod]
+        public void GetCorrectnesses_Total_Potoo_ReturnsPCCAA()
+        {
+            var actual = WordleGameUtils.GetCorrectnesses("TOTAL", "POTOO");
+            Correctness[] expected = [Correctness.Absent, Correctness.Correct, Correctness.Correct, Correctness.Absent, Correctness.Absent];
+
+            Assert.IsTrue(expected.SequenceEqual(actual));
+        }
     }
 }
