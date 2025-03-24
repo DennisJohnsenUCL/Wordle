@@ -5,13 +5,13 @@ namespace WordleCore.Utils
 	internal static class WordleGameUtils
 	{
 		public static readonly HashSet<string> allowedWords = LoadAllowedWords();
-		private static string[]? previousWordles;
+		internal static string[]? previousWordles;
 		private static Random? rng;
 
 		public static HashSet<string> LoadAllowedWords() =>
 			[.. WordleCoreUtils.LoadEmbeddedTxt("WordleCore.Data.allowed_words.txt")];
 
-		private static void LoadPreviousWordles()
+		internal static void LoadPreviousWordles()
 		{
 			previousWordles = WordleCoreUtils.LoadEmbeddedTxt("WordleCore.Data.previous_wordles.txt");
 		}
