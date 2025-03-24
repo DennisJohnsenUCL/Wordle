@@ -9,7 +9,7 @@ namespace WordleCore.Utils
 			var assembly = Assembly.GetExecutingAssembly();
 
 			using var stream = assembly.GetManifestResourceStream(resourceName);
-			if (null == stream) throw new FileNotFoundException($"Resource {resourceName} not found.");
+			if (null == stream) throw new InvalidOperationException($"Resource {resourceName} not found.");
 			using var reader = new StreamReader(stream);
 
 			return reader.ReadToEnd();
