@@ -7,7 +7,7 @@ namespace WordleCore.Tests
     public sealed class WordleGameUtilsTests
     {
         [TestMethod]
-        public void LoadAllowedWords_ReturnsPreviousWordles()
+        public void LoadAllowedWords_ReturnsAllowedWords()
         {
             var allowedWords = WordleGameUtils.LoadAllowedWords();
 
@@ -67,19 +67,19 @@ namespace WordleCore.Tests
         [TestMethod]
         public void GetCorrectnesses_AllCorrect_ReturnsAllCorrect()
         {
-            var correctnesses = WordleGameUtils.GetCorrectnesses("CIGAR", "CIGAR");
-            var expected = Enumerable.Repeat(Correctness.Correct, 5);
+            var actual = WordleGameUtils.GetCorrectnesses("CIGAR", "CIGAR");
+            Correctness[] expected = [.. Enumerable.Repeat(Correctness.Correct, 5)];
 
-            Assert.AreEqual(expected, correctnesses);
+            Assert.IsTrue(expected.SequenceEqual(actual));
         }
 
         [TestMethod]
         public void GetCorrectnesses_AllAbsent_ReturnsAllAbsent()
         {
-            var correctnesses = WordleGameUtils.GetCorrectnesses("CIGAR", "BOOKS");
-            var expected = Enumerable.Repeat(Correctness.Absent, 5);
+            var actual = WordleGameUtils.GetCorrectnesses("CIGAR", "BOOKS");
+            Correctness[] expected = [.. Enumerable.Repeat(Correctness.Absent, 5)];
 
-            Assert.AreEqual(expected, correctnesses);
+            Assert.IsTrue(expected.SequenceEqual(actual));
         }
     }
 }
