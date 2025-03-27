@@ -6,6 +6,12 @@ namespace WordleCore.Tests
     [TestClass]
     public sealed class WordleGameUtilsTests
     {
+        [ClassInitialize]
+        public static void ClassInitialize(TestContext _)
+        {
+            WordleGameUtils.previousWordles = null;
+        }
+
         [TestMethod]
         public void LoadAllowedWords_ReturnsAllowedWords()
         {
