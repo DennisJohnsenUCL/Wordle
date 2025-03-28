@@ -12,7 +12,7 @@ namespace WordleCore.Tests
         {
             WordleGame wordleGame = new("CIGAR", 6);
 
-            Assert.AreEqual("CRANE", wordleGame.Wordle);
+            Assert.AreEqual("CIGAR", wordleGame.Wordle);
             Assert.AreEqual(6, wordleGame.Guesses);
         }
 
