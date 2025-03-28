@@ -174,7 +174,7 @@ namespace WordleCore.Tests
         }
 
         [TestMethod]
-        public void GetCorrectnesses_Total_Potoo_ReturnsPCCAA()
+        public void GetCorrectnesses_Total_Potoo_ReturnsACCAA()
         {
             var actual = WordleGameUtils.GetCorrectnesses("TOTAL", "POTOO");
             Correctness[] expected = [Correctness.Absent, Correctness.Correct, Correctness.Correct, Correctness.Absent, Correctness.Absent];

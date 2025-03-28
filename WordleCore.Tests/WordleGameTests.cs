@@ -116,5 +116,72 @@ namespace WordleCore.Tests
 
             Assert.ThrowsException<WordleGameAlreadyStartedException>(action);
         }
+
+        [TestMethod]
+        public void GuessWordle_GameNotYetStarted_ThrowsException()
+        {
+            WordleGame wordleGame = new();
+            var action = () => wordleGame.GuessWordle("CIGAR");
+
+            Assert.ThrowsException<WordleGameNotOnGoingException>(action);
+        }
+
+        [TestMethod]
+        public void GuessWordle_GameOver_ThrowsException()
+        {
+            WordleGame wordleGame = new(1);
+            wordleGame.Start();
+            wordleGame.GuessWordle("POTOO");
+
+            var action = () => wordleGame.GuessWordle("CIGAR");
+
+            Assert.ThrowsException<WordleGameNotOnGoingException>(action);
+        }
+
+        [TestMethod]
+        public void GuessWordle_GameCompleted_ThrowsException()
+        {
+            WordleGame wordleGame = new("CIGAR");
+            wordleGame.Start();
+            wordleGame.GuessWordle("CIGAR");
+
+            var action = () => wordleGame.GuessWordle("POTOO");
+
+            Assert.ThrowsException<WordleGameNotOnGoingException>(action);
+        }
+
+        [TestMethod]
+        public void GuessWordle_GameOngoing_ReducesGuessesBy1()
+        {
+            WordleGame wordleGame = new("CIGAR", 2);
+            wordleGame.Start();
+            wordleGame.GuessWordle("POTOO");
+
+            Assert.AreEqual(1, wordleGame.GuessesLeft);
+        }
+
+        [TestMethod]
+        public void GuessWordle_GameOngoing_ReturnsCorrectChars()
+        {
+            WordleGame wordleGame = new("CIGAR", 2);
+            wordleGame.Start();
+
+            char[] expected = ['P', 'O', 'T', 'O', 'O'];
+            char[] actual = wordleGame.GuessWordle("POTOO").Chars;
+
+            Assert.IsTrue(actual.SequenceEqual(expected));
+        }
+
+        [TestMethod]
+        public void GuessWordle_GameOngoing_ReturnsCorrectCorrectnesses()
+        {
+            WordleGame wordleGame = new("TOTAL", 2);
+            wordleGame.Start();
+
+            Correctness[] expected = [Correctness.Absent, Correctness.Correct, Correctness.Correct, Correctness.Absent, Correctness.Absent,];
+            Correctness[] actual = wordleGame.GuessWordle("POTOO").Correctness;
+
+            Assert.IsTrue(actual.SequenceEqual(expected));
+        }
     }
 }
