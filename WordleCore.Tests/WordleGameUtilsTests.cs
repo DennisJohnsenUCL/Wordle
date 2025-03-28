@@ -33,6 +33,14 @@ namespace WordleCore.Tests
         }
 
         [TestMethod]
+        public void AllowedWords_IsLoaded_ContainsOnly5LetterWords()
+        {
+            var allowedWords = WordleGameUtils.LoadAllowedWords();
+
+            Assert.IsTrue(allowedWords.All(x => x.Length == 5));
+        }
+
+        [TestMethod]
         public void PreviousWordles_IsNotLoaded_IsNull()
         {
             Assert.IsNull(WordleGameUtils.previousWordles);
@@ -63,11 +71,43 @@ namespace WordleCore.Tests
         }
 
         [TestMethod]
+        public void PreviousWordles_IsLoaded_ContainsOnly5LetterWords()
+        {
+            WordleGameUtils.LoadPreviousWordles();
+
+            Assert.IsTrue(WordleGameUtils.previousWordles!.All(x => x.Length == 5));
+        }
+
+        [TestMethod]
+        public void PreviousWordles_AreAllAllowed()
+        {
+            WordleGameUtils.LoadPreviousWordles();
+
+            Assert.IsTrue(WordleGameUtils.previousWordles!.All(WordleGameUtils.allowedWords.Contains));
+        }
+
+        [TestMethod]
         public void GetRandomWordle_GetsPreviousWordle()
         {
             var randomWordle = WordleGameUtils.GetRandomWordle();
 
             Assert.IsTrue(WordleGameUtils.previousWordles!.Contains(randomWordle));
+        }
+
+        [TestMethod]
+        public void GetRandomWordle_Gets5LetterWord()
+        {
+            var randomWordle = WordleGameUtils.GetRandomWordle();
+
+            Assert.IsTrue(randomWordle.Length == 5);
+        }
+
+        [TestMethod]
+        public void GetRandomWordle_GetsAllowedWords()
+        {
+            var randomWordle = WordleGameUtils.GetRandomWordle();
+
+            Assert.IsTrue(WordleGameUtils.allowedWords.Contains(randomWordle));
         }
 
         [TestMethod]

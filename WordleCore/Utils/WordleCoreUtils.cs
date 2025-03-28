@@ -16,6 +16,6 @@ namespace WordleCore.Utils
 		}
 
 		internal static string[] LoadEmbeddedTxt(string resourceName) =>
-			LoadEmbeddedResource(resourceName).Split(['\n', '\r']);
+			LoadEmbeddedResource(resourceName).Split(['\n', '\r'], StringSplitOptions.RemoveEmptyEntries);
 	}
 }
