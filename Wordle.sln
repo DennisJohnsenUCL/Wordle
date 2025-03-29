@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordleCore", "WordleCore\Wo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordleCore.Tests", "WordleCore.Tests\WordleCore.Tests.csproj", "{51EFB937-BF22-4241-8072-F8BD75E108D9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wordle_Console", "Wordle_Console\Wordle_Console.csproj", "{6363AEA5-1A5D-4A2E-983F-CF001BA462FB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{51EFB937-BF22-4241-8072-F8BD75E108D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{51EFB937-BF22-4241-8072-F8BD75E108D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{51EFB937-BF22-4241-8072-F8BD75E108D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6363AEA5-1A5D-4A2E-983F-CF001BA462FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6363AEA5-1A5D-4A2E-983F-CF001BA462FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6363AEA5-1A5D-4A2E-983F-CF001BA462FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6363AEA5-1A5D-4A2E-983F-CF001BA462FB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
