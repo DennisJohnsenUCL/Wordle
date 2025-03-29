@@ -181,5 +181,16 @@ namespace WordleCore.Tests
 
             Assert.IsTrue(expected.SequenceEqual(actual));
         }
+
+        //>> This test fails because the last O in pinto is counted to label the first o in potoo correct
+        //>> This is wrong since the correct O eats the O in pinto, leaving none left to mark present
+        [TestMethod]
+        public void GetCorrectnesses_Pinto_Potoo_ReturnsCAPAC()
+        {
+            var actual = WordleGameUtils.GetCorrectnesses("PINTO", "POTOO");
+            Correctness[] expected = [Correctness.Correct, Correctness.Absent, Correctness.Present, Correctness.Absent, Correctness.Correct];
+
+            Assert.IsTrue(expected.SequenceEqual(actual));
+        }
     }
 }

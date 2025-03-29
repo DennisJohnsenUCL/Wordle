@@ -24,6 +24,7 @@ namespace WordleCore.Utils
 		}
 
 		//>> Returns wrong Correctness if Present before Correct guess
+		//>> To mark present should only count Wordle letters that are not marked correct later on in the sequence
 		internal static Correctness[] GetCorrectnesses(string wordle, string wordleGuess)
 		{
 			Correctness[] correctness = new Correctness[5];
