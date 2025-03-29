@@ -1,4 +1,5 @@
 ﻿using WordleCore;
+using WordleCore.Enums;
 
 namespace Wordle_Console
 {
@@ -27,5 +28,12 @@ namespace Wordle_Console
             else if (k == 3) { Environment.Exit(0); }
             else { }
         }
+
+        internal static Dictionary<Correctness, ConsoleColor> CorrectnessColors = new()
+        {
+            { Correctness.Correct, ConsoleColor.Green },
+            { Correctness.Absent, ConsoleColor.Red },
+            { Correctness.Present, ConsoleColor.Yellow }
+        };
     }
 }
