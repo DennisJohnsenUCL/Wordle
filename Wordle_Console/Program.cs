@@ -25,7 +25,7 @@ namespace Wordle_Console
 
                 while (wordleGame.GuessesLeft > 0)
                 {
-                    //>> Create a method using ReadKey to block take inputs and block enter while not proper Wordle guess
+                    //>> Create a method using ReadKey to take inputs and block enter while not proper Wordle guess
                     string guess = (Console.ReadLine() ?? "").ToUpper();
                     var wordleResponse = wordleGame.GuessWordle(guess);
                     Console.SetCursorPosition(0, Console.CursorTop - 1);
@@ -37,9 +37,17 @@ namespace Wordle_Console
                     Console.WriteLine();
                     Console.ResetColor();
 
-                    if (guess.ToUpper().ToCharArray().SequenceEqual(wordleResponse.Chars))
+                    if (wordleGame.GameState == GameState.Completed)
                     {
                         Console.WriteLine("You guessed the right word!\n");
+                        Console.WriteLine("Press any key to continue");
+                        Console.ReadKey(true);
+                        break;
+                    }
+
+                    if (wordleGame.GameState == GameState.Failed)
+                    {
+                        Console.WriteLine("You did not guess the right word!\n");
                         Console.WriteLine("Press any key to continue");
                         Console.ReadKey(true);
                         break;
