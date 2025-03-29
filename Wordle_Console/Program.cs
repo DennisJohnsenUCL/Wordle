@@ -12,20 +12,26 @@ namespace Wordle_Console
             Console.WriteLine("2: Start a game of Wordle with custom options");
             Console.WriteLine("3: Exit");
 
-            char k = Console.ReadKey().KeyChar;
+            char k = Console.ReadKey(true).KeyChar;
 
-            if (k == 1)
+            if (k == '1')
             {
                 WordleGame wordleGame = new();
                 wordleGame.Start();
                 Console.WriteLine("Enter your guess");
-                string guess = Console.ReadLine() ?? "";
+                string guess = (Console.ReadLine() ?? "").ToUpper();
                 var wordleResponse = wordleGame.GuessWordle(guess);
-                Console.WriteLine(wordleResponse);
+                Console.SetCursorPosition(0, Console.CursorTop - 1);
+                for (int i = 0; i < 5; i++)
+                {
+                    Console.ForegroundColor = CorrectnessColors[wordleResponse.Correctness[i]];
+                    Console.Write(wordleResponse.Chars[i]);
+                }
+                Console.ResetColor();
 
             }
-            else if (k == 2) { }
-            else if (k == 3) { Environment.Exit(0); }
+            else if (k == '2') { }
+            else if (k == '3') { Environment.Exit(0); }
             else { }
         }
 
