@@ -23,6 +23,7 @@ namespace WordleCore.Utils
 			return previousWordles![rng.Next(0, previousWordles.Length)];
 		}
 
+		//>> Returns wrong Correctness if Present before Correct guess
 		internal static Correctness[] GetCorrectnesses(string wordle, string wordleGuess)
 		{
 			Correctness[] correctness = new Correctness[5];

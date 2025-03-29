@@ -16,19 +16,35 @@ namespace Wordle_Console
 
             if (k == '1')
             {
+                Console.Clear();
                 WordleGame wordleGame = new();
                 wordleGame.Start();
-                Console.WriteLine("Enter your guess");
-                string guess = (Console.ReadLine() ?? "").ToUpper();
-                var wordleResponse = wordleGame.GuessWordle(guess);
-                Console.SetCursorPosition(0, Console.CursorTop - 1);
-                for (int i = 0; i < 5; i++)
-                {
-                    Console.ForegroundColor = CorrectnessColors[wordleResponse.Correctness[i]];
-                    Console.Write(wordleResponse.Chars[i]);
-                }
-                Console.ResetColor();
+                Console.WriteLine($"Wordle game started, you have {wordleGame.GuessesLeft} guesses to guess {wordleGame.Wordle}\n");
 
+                Console.WriteLine("Enter your guess");
+
+                while (wordleGame.GuessesLeft > 0)
+                {
+                    //>> Create a method using ReadKey to block take inputs and block enter while not proper Wordle guess
+                    string guess = (Console.ReadLine() ?? "").ToUpper();
+                    var wordleResponse = wordleGame.GuessWordle(guess);
+                    Console.SetCursorPosition(0, Console.CursorTop - 1);
+                    for (int i = 0; i < 5; i++)
+                    {
+                        Console.ForegroundColor = CorrectnessColors[wordleResponse.Correctness[i]];
+                        Console.Write(wordleResponse.Chars[i]);
+                    }
+                    Console.WriteLine();
+                    Console.ResetColor();
+
+                    if (guess.ToUpper().ToCharArray().SequenceEqual(wordleResponse.Chars))
+                    {
+                        Console.WriteLine("You guessed the right word!\n");
+                        Console.WriteLine("Press any key to continue");
+                        Console.ReadKey(true);
+                        break;
+                    }
+                }
             }
             else if (k == '2') { }
             else if (k == '3') { Environment.Exit(0); }
