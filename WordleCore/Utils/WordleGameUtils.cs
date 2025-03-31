@@ -27,6 +27,9 @@ namespace WordleCore.Utils
 		//>> To mark present should only count Wordle letters that are not marked correct later on in the sequence
 		//>> Mark all correct and totally absent first, then separate loop for present?
 		//>> That way can look ahead, or only calculate present based on remaining letters
+		//>> - wordle[..i+1].count x where x equals same letter at same index in wordleguess (.where - .count)
+		//>> Precalcuate all the counts for each loop
+		//>> Differentiate between absent and over count
 		internal static Correctness[] GetCorrectnesses(string wordle, string wordleGuess)
 		{
 			Correctness[] correctness = new Correctness[5];

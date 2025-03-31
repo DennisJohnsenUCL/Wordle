@@ -7,6 +7,8 @@ namespace WordleCore
 {
 	public class WordleGame
 	{
+		//>> Add a property for absent letters
+		//>> Add to it after every guess
 		public string Wordle { get; }
 		public int Guesses { get; }
 		public int GuessesLeft { get; private set; }

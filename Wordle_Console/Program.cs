@@ -7,6 +7,16 @@ namespace Wordle_Console
     {
         static void Main()
         {
+            //>> Method for displaying menu and taking input
+            //>> class model for options
+            //>> pass to game controller class
+            //>> Store list of absent word in game? Or in game controller? Prob game bc reuse for gui
+            //>> ^ Necessitates differentiation total absent and absent over count
+            //>> Increase text size
+            //>> Frame game content
+            //>> Rewrite invalid input when pressing !1-3
+            //>> Print alphabet at bottom of console. use Get and SetCursorPosition to jump down and back
+
             Console.WriteLine("Press a key to pick an option:");
             Console.WriteLine("1: Start a new game of Wordle");
             Console.WriteLine("2: Start a game of Wordle with custom options");
@@ -59,6 +69,8 @@ namespace Wordle_Console
             else { }
         }
 
+        //>> Add a key for over count
+        //>> Change color for absent & over count to grey?
         internal static Dictionary<Correctness, ConsoleColor> CorrectnessColors = new()
         {
             { Correctness.Correct, ConsoleColor.Green },
