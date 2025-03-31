@@ -178,7 +178,7 @@ namespace WordleCore.Tests
             WordleGame wordleGame = new("TOTAL", 2);
             wordleGame.Start();
 
-            Correctness[] expected = [Correctness.Absent, Correctness.Correct, Correctness.Correct, Correctness.Absent, Correctness.Absent,];
+            Correctness[] expected = [Correctness.Absent, Correctness.Correct, Correctness.Correct, Correctness.OverCount, Correctness.OverCount];
             Correctness[] actual = wordleGame.GuessWordle("POTOO").Correctness;
 
             Assert.IsTrue(actual.SequenceEqual(expected));
