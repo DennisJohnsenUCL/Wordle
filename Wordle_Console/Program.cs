@@ -12,10 +12,8 @@ namespace Wordle_Console
             //>> class model for options
             //>> pass to game controller class
             //>> Store list of absent word in game? Or in game controller? Prob game bc reuse for gui
-            //>> ^ Necessitates differentiation total absent and absent over count
             //>> Increase text size
             //>> Frame game content
-            //>> Rewrite invalid input when pressing !1-3
             //>> Print alphabet at bottom of console. use Get and SetCursorPosition to jump down and back
             //>> Use backgroundcolor instead of foregroundcolor?
 
@@ -86,11 +84,19 @@ namespace Wordle_Console
                 else if (k == '3') { Environment.Exit(0); }
                 else
                 {
-                    //>> Print invalid input
+                    PrintInvalidInput(k);
                 }
             }
-
             return wordleOptions;
+        }
+
+        internal static void PrintInvalidInput(char k)
+        {
+            var (left, top) = Console.GetCursorPosition();
+
+            Console.SetCursorPosition(left, top + 3);
+            Console.WriteLine("Invalid input " + k);
+            Console.SetCursorPosition(left, top);
         }
 
         internal static Dictionary<Correctness, ConsoleColor> CorrectnessColors = new()
