@@ -70,8 +70,6 @@ namespace Wordle_Console
             else { }
         }
 
-        //>> Add a key for over count
-        //>> Change color for absent & over count to grey?
         internal static Dictionary<Correctness, ConsoleColor> CorrectnessColors = new()
         {
             { Correctness.Correct, ConsoleColor.Green },
