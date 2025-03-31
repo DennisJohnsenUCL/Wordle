@@ -11,8 +11,9 @@ namespace WordleCore
 		//>> Add to it after every guess
 		public string Wordle { get; }
 		public int Guesses { get; }
-		public int GuessesLeft { get; private set; }
-		public GameState GameState { get; private set; }
+		public int GuessesLeft { get; private set; } = 0;
+		public GameState GameState { get; private set; } = GameState.NotStarted;
+		public HashSet<char> Absent { get; private set; } = [];
 
 		public WordleGame() : this(WordleGameUtils.GetRandomWordle(), 6) { }
 		public WordleGame(string wordle) : this(wordle, 6) { }
@@ -25,8 +26,6 @@ namespace WordleCore
 
 			Wordle = wordle;
 			Guesses = guesses;
-			GuessesLeft = 0;
-			GameState = GameState.NotStarted;
 		}
 
 		public void Start()
