@@ -46,13 +46,21 @@ namespace WordleCore
 
 			char[] chars = wordleGuess.ToCharArray();
 
-			foreach (char c in chars) if (!Wordle.Contains(c)) Absent.Add(c);
-
 			Correctness[] correctness = WordleGameUtils.GetCorrectnesses(Wordle, wordleGuess);
 
 			GuessesLeft--;
+
 			SetGameState(wordleGuess);
+			AddToAbsent(chars, correctness);
 			return new WordleResponse(chars, correctness);
+		}
+
+		internal void AddToAbsent(char[] chars, Correctness[] correctness)
+		{
+			for (int i = 0; i < correctness.Length; i++)
+			{
+				if (correctness[i] == Correctness.Absent) Absent.Add(chars[i]);
+			}
 		}
 
 		internal void SetGameState(string wordleGuess)
