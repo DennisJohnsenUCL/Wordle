@@ -46,17 +46,19 @@ namespace WordleCore
 
 			char[] chars = wordleGuess.ToCharArray();
 
-			if (wordleGuess == Wordle)
-			{
-				GameState = GameState.Completed;
-				return new WordleResponse(chars, [.. Enumerable.Repeat(Correctness.Correct, 5)]);
-			}
+			foreach (char c in chars) if (!Wordle.Contains(c)) Absent.Add(c);
 
 			Correctness[] correctness = WordleGameUtils.GetCorrectnesses(Wordle, wordleGuess);
 
 			GuessesLeft--;
-			if (GuessesLeft == 0) GameState = GameState.Failed;
+			SetGameState(wordleGuess);
 			return new WordleResponse(chars, correctness);
+		}
+
+		internal void SetGameState(string wordleGuess)
+		{
+			if (Wordle == wordleGuess) GameState = GameState.Completed;
+			else if (GuessesLeft == 0) GameState = GameState.Failed;
 		}
 
 		public override string ToString()
