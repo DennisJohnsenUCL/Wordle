@@ -16,6 +16,7 @@ namespace Wordle_Console
             //>> Frame game content
             //>> Rewrite invalid input when pressing !1-3
             //>> Print alphabet at bottom of console. use Get and SetCursorPosition to jump down and back
+            //>> Use backgroundcolor instead of foregroundcolor?
 
             Console.WriteLine("Press a key to pick an option:");
             Console.WriteLine("1: Start a new game of Wordle");

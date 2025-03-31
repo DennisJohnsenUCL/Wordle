@@ -23,12 +23,6 @@ namespace WordleCore.Utils
 			return previousWordles![rng.Next(0, previousWordles.Length)];
 		}
 
-		//>> Returns wrong Correctness if Present before Correct guess
-		//>> To mark present should only count Wordle letters that are not marked correct later on in the sequence
-		//>> Mark all correct and totally absent first, then separate loop for present?
-		//>> That way can look ahead, or only calculate present based on remaining letters
-		//>> - wordle[..i+1].count x where x equals same letter at same index in wordleguess (.where - .count)
-		//>> Precalcuate all the counts for each loop
 		//>> Differentiate between absent and over count
 		internal static Correctness[] GetCorrectnesses(string wordle, string wordleGuess)
 		{
@@ -36,9 +30,14 @@ namespace WordleCore.Utils
 
 			for (int i = 0; i < wordleGuess.Length; i++)
 			{
-				if (wordleGuess[i] == wordle[i]) correctness[i] = Correctness.Correct;
-				else if (!wordle.Contains(wordleGuess[i])) correctness[i] = Correctness.Absent;
-				else if (wordle.Count(x => x == wordleGuess[i]) >= wordleGuess[..(i + 1)].Count(x => x == wordleGuess[i])) correctness[i] = Correctness.Present;
+				if (wordleGuess[i] == wordle[i]) { correctness[i] = Correctness.Correct; continue; }
+				else if (!wordle.Contains(wordleGuess[i])) { correctness[i] = Correctness.Absent; continue; }
+
+				int total = wordle.Count(x => x == wordleGuess[i]);
+				int correctAfter = wordle.Where((x, j) => j > i && x == wordleGuess[i] && x == wordleGuess[j]).Count();
+				int countUpTo = wordleGuess[..(i + 1)].Count(x => x == wordleGuess[i]);
+
+				if (total - correctAfter >= countUpTo) correctness[i] = Correctness.Present;
 				else correctness[i] = Correctness.Absent;
 			}
 
