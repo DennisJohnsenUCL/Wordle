@@ -76,6 +76,7 @@ namespace Wordle_Console
         {
             { Correctness.Correct, ConsoleColor.Green },
             { Correctness.Absent, ConsoleColor.Red },
+            { Correctness.OverCount, ConsoleColor.Red },
             { Correctness.Present, ConsoleColor.Yellow }
         };
     }

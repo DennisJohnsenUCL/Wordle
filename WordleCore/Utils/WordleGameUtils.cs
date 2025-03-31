@@ -23,7 +23,6 @@ namespace WordleCore.Utils
 			return previousWordles![rng.Next(0, previousWordles.Length)];
 		}
 
-		//>> Differentiate between absent and over count
 		internal static Correctness[] GetCorrectnesses(string wordle, string wordleGuess)
 		{
 			Correctness[] correctness = new Correctness[5];
@@ -38,7 +37,7 @@ namespace WordleCore.Utils
 				int countUpTo = wordleGuess[..(i + 1)].Count(x => x == wordleGuess[i]);
 
 				if (total - correctAfter >= countUpTo) correctness[i] = Correctness.Present;
-				else correctness[i] = Correctness.Absent;
+				else correctness[i] = Correctness.OverCount;
 			}
 
 			return correctness;
