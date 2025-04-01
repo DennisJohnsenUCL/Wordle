@@ -1,6 +1,8 @@
-﻿using Wordle_Console.Models;
+﻿using System.Text;
+using Wordle_Console.Models;
 using WordleCore;
 using WordleCore.Enums;
+using WordleCore.Utils;
 
 namespace Wordle_Console
 {
@@ -8,22 +10,17 @@ namespace Wordle_Console
     {
         static void Main()
         {
-            //>> Method for displaying menu and taking input
-            //>> class model for options
             //>> pass to game controller class
-            //>> Store list of absent word in game? Or in game controller? Prob game bc reuse for gui
-            //>> Increase text size
             //>> Frame game content
             //>> Print alphabet at bottom of console. use Get and SetCursorPosition to jump down and back
-            //>> Use backgroundcolor instead of foregroundcolor?
 
             var wordleOptions = GetWordleOptions();
-            Console.Clear();
 
             //>> Pass wordleOptions here to a method and return wordleGame
-            WordleGame wordleGame = new();
+            var wordleGame = GetWordleGameFromOptions(wordleOptions);
 
             wordleGame.Start();
+            Console.Clear();
             Console.WriteLine($"Wordle game started, you have {wordleGame.GuessesLeft} guesses to guess {wordleGame.Wordle}\n");
 
             Console.WriteLine("Enter your guess");
@@ -31,7 +28,8 @@ namespace Wordle_Console
             while (wordleGame.GuessesLeft > 0)
             {
                 //>> Create a method using ReadKey to take inputs and block enter while not proper Wordle guess
-                string guess = (Console.ReadLine() ?? "").ToUpper();
+                string guess = GetWordleGuessInput();
+                Console.WriteLine();
                 var wordleResponse = wordleGame.GuessWordle(guess);
                 Console.SetCursorPosition(0, Console.CursorTop - 1);
                 for (int i = 0; i < 5; i++)
@@ -60,8 +58,9 @@ namespace Wordle_Console
             }
         }
 
-        internal static WordleOptions GetWordleOptions()
+        private static WordleOptions GetWordleOptions()
         {
+            Console.Clear();
             Console.WriteLine("Press a key to pick an option:");
             Console.WriteLine("1: Start a new game of Wordle");
             Console.WriteLine("2: Start a game of Wordle with custom options");
@@ -72,14 +71,16 @@ namespace Wordle_Console
             while (wordleOptions == null)
             {
                 char k = Console.ReadKey(true).KeyChar;
-
                 if (k == '1')
                 {
                     wordleOptions = new WordleOptions();
                 }
                 else if (k == '2')
                 {
-                    //>> Take inputs
+                    string? wordle = GetWordleOptionInput();
+                    int? guesses = GetGuessesInput();
+
+                    wordleOptions = new WordleOptions(wordle, guesses);
                 }
                 else if (k == '3') { Environment.Exit(0); }
                 else
@@ -90,7 +91,81 @@ namespace Wordle_Console
             return wordleOptions;
         }
 
-        internal static void PrintInvalidInput(char k)
+        //>> Print warnings about invalid inputs and not allowed words and wrong lengths
+        private static string? GetWordleOptionInput()
+        {
+            Console.Clear();
+            Console.WriteLine("Enter a valid Wordle for your game:");
+
+            var sb = new StringBuilder();
+
+            while (true)
+            {
+                var k = Console.ReadKey(true);
+                if (char.IsLetter(k.KeyChar) && sb.Length < 5)
+                {
+                    sb.Append(char.ToUpper(k.KeyChar));
+                    Console.Write(char.ToUpper(k.KeyChar));
+                }
+                else if (k.Key == ConsoleKey.Enter && sb.Length == 5 && WordleGameUtils.allowedWords.Contains(sb.ToString())) return sb.ToString();
+                else if (k.Key == ConsoleKey.Enter && sb.Length == 0) return null;
+                else if (k.Key == ConsoleKey.Backspace && sb.Length > 0)
+                {
+                    sb.Remove(sb.Length - 1, 1);
+                    Console.Write("\b \b");
+                }
+            }
+        }
+
+        //>> Print warnings about invalid inputs and not allowed words and wrong lengths
+        private static string GetWordleGuessInput()
+        {
+            var sb = new StringBuilder();
+
+            while (true)
+            {
+                var k = Console.ReadKey(true);
+                if (char.IsLetter(k.KeyChar) && sb.Length < 5)
+                {
+                    sb.Append(char.ToUpper(k.KeyChar));
+                    Console.Write(char.ToUpper(k.KeyChar));
+                }
+                else if (k.Key == ConsoleKey.Enter && sb.Length == 5 && WordleGameUtils.allowedWords.Contains(sb.ToString())) return sb.ToString();
+                else if (k.Key == ConsoleKey.Backspace && sb.Length > 0)
+                {
+                    sb.Remove(sb.Length - 1, 1);
+                    Console.Write("\b \b");
+                }
+            }
+        }
+
+        //>> Print warnings
+        private static int? GetGuessesInput()
+        {
+            Console.Clear();
+            Console.WriteLine("Enter a valid amount of guesses for your game:");
+
+            var sb = new StringBuilder();
+
+            while (true)
+            {
+                var k = Console.ReadKey(true);
+                if (char.IsDigit(k.KeyChar))
+                {
+                    sb.Append(k.KeyChar);
+                    Console.Write(k.KeyChar);
+                }
+                else if (k.Key == ConsoleKey.Enter && int.TryParse(sb.ToString(), out int guesses)) return guesses;
+                else if (k.Key == ConsoleKey.Enter && sb.Length == 0) return null;
+                else if (k.Key == ConsoleKey.Backspace && sb.Length > 0)
+                {
+                    sb.Remove(sb.Length - 1, 1);
+                    Console.Write("\b \b");
+                }
+            }
+        }
+
+        private static void PrintInvalidInput(char k)
         {
             var (left, top) = Console.GetCursorPosition();
 
@@ -99,7 +174,16 @@ namespace Wordle_Console
             Console.SetCursorPosition(left, top);
         }
 
-        internal static Dictionary<Correctness, ConsoleColor> CorrectnessColors = new()
+        //>> Make this prettier
+        private static WordleGame GetWordleGameFromOptions(WordleOptions wordleOptions)
+        {
+            if (wordleOptions.Wordle != null && wordleOptions.Guesses != null) return new WordleGame(wordleOptions.Wordle, (int)wordleOptions.Guesses);
+            else if (wordleOptions.Wordle != null) return new WordleGame(wordleOptions.Wordle);
+            else if (wordleOptions.Guesses != null) return new WordleGame((int)wordleOptions.Guesses);
+            else return new WordleGame();
+        }
+
+        private static Dictionary<Correctness, ConsoleColor> CorrectnessColors = new()
         {
             { Correctness.Correct, ConsoleColor.Green },
             { Correctness.Absent, ConsoleColor.Red },

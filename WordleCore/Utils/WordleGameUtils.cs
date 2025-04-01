@@ -2,9 +2,9 @@
 
 namespace WordleCore.Utils
 {
-	internal static class WordleGameUtils
+	public static class WordleGameUtils
 	{
-		internal static readonly HashSet<string> allowedWords = LoadAllowedWords();
+		public static readonly HashSet<string> allowedWords = LoadAllowedWords();
 		internal static string[]? previousWordles;
 		private static Random? rng;
 
