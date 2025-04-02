@@ -2,6 +2,7 @@
 using Wordle_Console.Models;
 using WordleCore;
 using WordleCore.Enums;
+using WordleCore.Models;
 using WordleCore.Utils;
 
 namespace Wordle_Console
@@ -14,46 +15,63 @@ namespace Wordle_Console
             //>> Frame game content
             //>> Print alphabet at bottom of console. use Get and SetCursorPosition to jump down and back
 
-            var wordleOptions = GetWordleOptions();
-
-            var wordleGame = GetWordleGameFromOptions(wordleOptions);
-
-            wordleGame.Start();
-            Console.Clear();
-            Console.WriteLine($"Wordle game started, you have {wordleGame.GuessesLeft} guesses to guess {wordleGame.Wordle}\n");
-
-            Console.WriteLine("Enter your guess");
-
-            while (wordleGame.GuessesLeft > 0)
+            while (true)
             {
-                string guess = GetWordleGuessInput();
-                Console.WriteLine();
-                var wordleResponse = wordleGame.GuessWordle(guess);
-                Console.SetCursorPosition(0, Console.CursorTop - 1);
-                for (int i = 0; i < 5; i++)
-                {
-                    Console.ForegroundColor = CorrectnessColors[wordleResponse.Correctness[i]];
-                    Console.Write(wordleResponse.Chars[i]);
-                }
-                Console.WriteLine();
-                Console.ResetColor();
+                Console.Clear();
 
-                if (wordleGame.GameState == GameState.Completed)
-                {
-                    Console.WriteLine("\nYou guessed the right word!\n");
-                    Console.WriteLine("Press any key to continue");
-                    Console.ReadKey(true);
-                    break;
-                }
+                var wordleOptions = GetWordleOptions();
 
-                if (wordleGame.GameState == GameState.Failed)
+                var wordleGame = GetWordleGameFromOptions(wordleOptions);
+
+                wordleGame.Start();
+                Console.Clear();
+                Console.WriteLine($"Wordle game started, you have {wordleGame.GuessesLeft} guesses to guess {wordleGame.Wordle}\n");
+
+                Console.WriteLine("Enter your guess");
+
+                while (wordleGame.GuessesLeft > 0)
                 {
-                    Console.WriteLine("\nYou did not guess the right word!\n");
-                    Console.WriteLine("Press any key to continue");
-                    Console.ReadKey(true);
-                    break;
+                    string guess = GetWordleGuessInput();
+
+                    var wordleResponse = wordleGame.GuessWordle(guess);
+
+                    PrintWordleGuessCorrectness(wordleResponse);
+
+                    if (IsGameEnded(wordleGame.GameState)) break;
                 }
             }
+        }
+
+        private static void PrintWordleGuessCorrectness(WordleResponse wordleResponse)
+        {
+            Console.SetCursorPosition(0, Console.CursorTop - 1);
+            for (int i = 0; i < 5; i++)
+            {
+                Console.ForegroundColor = CorrectnessColors[wordleResponse.Correctness[i]];
+                Console.Write(wordleResponse.Chars[i]);
+            }
+            Console.WriteLine();
+            Console.ResetColor();
+        }
+
+        private static bool IsGameEnded(GameState gameState)
+        {
+            if (gameState == GameState.Completed)
+            {
+                Console.WriteLine("\nYou guessed the right word!\n");
+                Console.WriteLine("Press any key to continue");
+                Console.ReadKey(true);
+                return true;
+            }
+
+            if (gameState == GameState.Failed)
+            {
+                Console.WriteLine("\nYou did not guess the right word!\n");
+                Console.WriteLine("Press any key to continue");
+                Console.ReadKey(true);
+                return true;
+            }
+            return false;
         }
 
         private static WordleOptions GetWordleOptions()
@@ -133,7 +151,7 @@ namespace Wordle_Console
                     sb.Append(char.ToUpper(k.KeyChar));
                     Console.Write(char.ToUpper(k.KeyChar));
                 }
-                else if (k.Key == ConsoleKey.Enter && IsValidWordle()) return sb.ToString();
+                else if (k.Key == ConsoleKey.Enter && IsValidWordle()) { Console.WriteLine(); return sb.ToString(); }
                 else if (k.Key == ConsoleKey.Backspace && sb.Length > 0)
                 {
                     sb.Remove(sb.Length - 1, 1);
