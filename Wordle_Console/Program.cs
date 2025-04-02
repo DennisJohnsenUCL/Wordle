@@ -16,7 +16,6 @@ namespace Wordle_Console
 
             var wordleOptions = GetWordleOptions();
 
-            //>> Pass wordleOptions here to a method and return wordleGame
             var wordleGame = GetWordleGameFromOptions(wordleOptions);
 
             wordleGame.Start();
@@ -27,7 +26,6 @@ namespace Wordle_Console
 
             while (wordleGame.GuessesLeft > 0)
             {
-                //>> Create a method using ReadKey to take inputs and block enter while not proper Wordle guess
                 string guess = GetWordleGuessInput();
                 Console.WriteLine();
                 var wordleResponse = wordleGame.GuessWordle(guess);
@@ -107,13 +105,19 @@ namespace Wordle_Console
                     sb.Append(char.ToUpper(k.KeyChar));
                     Console.Write(char.ToUpper(k.KeyChar));
                 }
-                else if (k.Key == ConsoleKey.Enter && sb.Length == 5 && WordleGameUtils.allowedWords.Contains(sb.ToString())) return sb.ToString();
+                //>> Also make a method for checking against allowedWords, and make allowedWords internal
+                else if (k.Key == ConsoleKey.Enter && IsValidWordle()) return sb.ToString();
                 else if (k.Key == ConsoleKey.Enter && sb.Length == 0) return null;
                 else if (k.Key == ConsoleKey.Backspace && sb.Length > 0)
                 {
                     sb.Remove(sb.Length - 1, 1);
                     Console.Write("\b \b");
                 }
+            }
+
+            bool IsValidWordle()
+            {
+                return sb.Length == 5 && WordleGameUtils.allowedWords.Contains(sb.ToString());
             }
         }
 
@@ -130,12 +134,17 @@ namespace Wordle_Console
                     sb.Append(char.ToUpper(k.KeyChar));
                     Console.Write(char.ToUpper(k.KeyChar));
                 }
-                else if (k.Key == ConsoleKey.Enter && sb.Length == 5 && WordleGameUtils.allowedWords.Contains(sb.ToString())) return sb.ToString();
+                else if (k.Key == ConsoleKey.Enter && IsValidWordle()) return sb.ToString();
                 else if (k.Key == ConsoleKey.Backspace && sb.Length > 0)
                 {
                     sb.Remove(sb.Length - 1, 1);
                     Console.Write("\b \b");
                 }
+            }
+
+            bool IsValidWordle()
+            {
+                return sb.Length == 5 && WordleGameUtils.allowedWords.Contains(sb.ToString());
             }
         }
 
