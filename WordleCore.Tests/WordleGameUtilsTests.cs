@@ -49,7 +49,7 @@ namespace WordleCore.Tests
         [TestMethod]
         public void IsAllowedWord_NotAllowedWord_ReturnsFalse()
         {
-            Assert.IsTrue(WordleGameUtils.IsAllowedWord("AAAAA"));
+            Assert.IsFalse(WordleGameUtils.IsAllowedWord("AAAAA"));
         }
 
         [TestMethod]
