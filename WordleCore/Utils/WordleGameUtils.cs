@@ -4,7 +4,7 @@ namespace WordleCore.Utils
 {
 	public static class WordleGameUtils
 	{
-		public static readonly HashSet<string> allowedWords = LoadAllowedWords();
+		internal static readonly HashSet<string> allowedWords = LoadAllowedWords();
 		internal static string[]? previousWordles;
 		private static Random? rng;
 
@@ -15,6 +15,8 @@ namespace WordleCore.Utils
 		{
 			previousWordles = WordleCoreUtils.LoadEmbeddedTxt("WordleCore.Data.previous_wordles.txt");
 		}
+
+		public static bool IsAllowedWord(string word) => allowedWords.Contains(word);
 
 		internal static string GetRandomWordle()
 		{

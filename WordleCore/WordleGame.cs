@@ -20,7 +20,7 @@ namespace WordleCore
 		{
 			if (wordle.Length != 5) throw new WordleWrongLengthException("The Wordle must be 5 letters");
 			if (guesses < 1) throw new NoGuessesException("The amount of guesses must be greater than 0");
-			if (!WordleGameUtils.allowedWords.Contains(wordle)) throw new WordleNotAllowedWordException("The Wordle is not in the list of allowed words");
+			if (!WordleGameUtils.IsAllowedWord(wordle)) throw new WordleNotAllowedWordException("The Wordle is not in the list of allowed words");
 
 			Wordle = wordle;
 			Guesses = guesses;
@@ -40,7 +40,7 @@ namespace WordleCore
 		{
 			if (GameState != GameState.Ongoing) throw new WordleGameNotOnGoingException("This game is not currently ongoing");
 			if (wordleGuess.Length != 5) throw new WordleGuessWrongLengthException("Wordle guesses must be 5 letters");
-			if (!WordleGameUtils.allowedWords.Contains(wordleGuess)) throw new WordleNotAllowedWordException("The guessed word is not in the list of allowed words");
+			if (!WordleGameUtils.IsAllowedWord(wordleGuess)) throw new WordleNotAllowedWordException("The guessed word is not in the list of allowed words");
 
 			char[] chars = wordleGuess.ToCharArray();
 

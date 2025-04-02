@@ -105,7 +105,6 @@ namespace Wordle_Console
                     sb.Append(char.ToUpper(k.KeyChar));
                     Console.Write(char.ToUpper(k.KeyChar));
                 }
-                //>> Also make a method for checking against allowedWords, and make allowedWords internal
                 else if (k.Key == ConsoleKey.Enter && IsValidWordle()) return sb.ToString();
                 else if (k.Key == ConsoleKey.Enter && sb.Length == 0) return null;
                 else if (k.Key == ConsoleKey.Backspace && sb.Length > 0)
@@ -117,7 +116,7 @@ namespace Wordle_Console
 
             bool IsValidWordle()
             {
-                return sb.Length == 5 && WordleGameUtils.allowedWords.Contains(sb.ToString());
+                return sb.Length == 5 && WordleGameUtils.IsAllowedWord(sb.ToString());
             }
         }
 
@@ -144,7 +143,7 @@ namespace Wordle_Console
 
             bool IsValidWordle()
             {
-                return sb.Length == 5 && WordleGameUtils.allowedWords.Contains(sb.ToString());
+                return sb.Length == 5 && WordleGameUtils.IsAllowedWord(sb.ToString());
             }
         }
 

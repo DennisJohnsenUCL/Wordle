@@ -41,6 +41,18 @@ namespace WordleCore.Tests
         }
 
         [TestMethod]
+        public void IsAllowedWord_AllowedWord_ReturnsTrue()
+        {
+            Assert.IsTrue(WordleGameUtils.IsAllowedWord("CIGAR"));
+        }
+
+        [TestMethod]
+        public void IsAllowedWord_NotAllowedWord_ReturnsFalse()
+        {
+            Assert.IsTrue(WordleGameUtils.IsAllowedWord("AAAAA"));
+        }
+
+        [TestMethod]
         public void PreviousWordles_IsNotLoaded_IsNull()
         {
             Assert.IsNull(WordleGameUtils.previousWordles);
