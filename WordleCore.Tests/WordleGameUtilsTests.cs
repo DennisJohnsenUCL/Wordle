@@ -23,13 +23,13 @@ namespace WordleCore.Tests
         [TestMethod]
         public void AllowedWords_IsLoaded_ContainsAllowedWords()
         {
-            Assert.IsTrue(WordleGameUtils.allowedWords.Contains("ROSSA"));
+            Assert.IsTrue(WordleGameUtils._allowedWords.Contains("ROSSA"));
         }
 
         [TestMethod]
         public void AllowedWords_IsLoaded_ContainsOnlyAllowedWords()
         {
-            Assert.IsFalse(WordleGameUtils.allowedWords.Contains("TRUCKS"));
+            Assert.IsFalse(WordleGameUtils._allowedWords.Contains("TRUCKS"));
         }
 
         [TestMethod]
@@ -95,7 +95,7 @@ namespace WordleCore.Tests
         {
             WordleGameUtils.LoadPreviousWordles();
 
-            Assert.IsTrue(WordleGameUtils.previousWordles!.All(WordleGameUtils.allowedWords.Contains));
+            Assert.IsTrue(WordleGameUtils.previousWordles!.All(WordleGameUtils._allowedWords.Contains));
         }
 
         [TestMethod]
@@ -119,7 +119,7 @@ namespace WordleCore.Tests
         {
             var randomWordle = WordleGameUtils.GetRandomWordle();
 
-            Assert.IsTrue(WordleGameUtils.allowedWords.Contains(randomWordle));
+            Assert.IsTrue(WordleGameUtils._allowedWords.Contains(randomWordle));
         }
 
         [TestMethod]
