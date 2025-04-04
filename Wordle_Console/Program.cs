@@ -65,9 +65,9 @@ namespace Wordle_Console
 
             foreach (char c in "QWERTYUIOP\n ASDFGHJKL\n ZXCVBNM")
             {
-                if (wordleGame.LetterHints.Absent.Contains(c)) Console.ForegroundColor = ConsoleColor.Red;
-                else if (wordleGame.LetterHints.Present.Contains(c)) Console.ForegroundColor = ConsoleColor.DarkYellow;
-                else if (wordleGame.LetterHints.Correct.Contains(c)) Console.ForegroundColor = ConsoleColor.Green;
+                if (wordleGame.LetterHints.Absent.Contains(c)) Console.ForegroundColor = CorrectnessColors[Correctness.Absent];
+                else if (wordleGame.LetterHints.Present.Contains(c)) Console.ForegroundColor = CorrectnessColors[Correctness.Present];
+                else if (wordleGame.LetterHints.Correct.Contains(c)) Console.ForegroundColor = CorrectnessColors[Correctness.Correct];
                 else Console.ForegroundColor = ConsoleColor.White;
                 Console.Write(c);
             }
@@ -248,7 +248,7 @@ namespace Wordle_Console
             { Correctness.Correct, ConsoleColor.Green },
             { Correctness.Absent, ConsoleColor.Red },
             { Correctness.OverCount, ConsoleColor.Red },
-            { Correctness.Present, ConsoleColor.Yellow }
+            { Correctness.Present, ConsoleColor.DarkYellow }
         };
     }
 }
