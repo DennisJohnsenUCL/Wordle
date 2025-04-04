@@ -53,7 +53,7 @@ namespace WordleCore
 			return new WordleResponse(chars, correctness);
 		}
 
-		internal void AddToAbsent(char[] chars, Correctness[] correctness)
+		private void AddToAbsent(char[] chars, Correctness[] correctness)
 		{
 			for (int i = 0; i < correctness.Length; i++)
 			{

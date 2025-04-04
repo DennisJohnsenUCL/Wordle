@@ -183,5 +183,44 @@ namespace WordleCore.Tests
 
             Assert.IsTrue(actual.SequenceEqual(expected));
         }
+
+        [TestMethod]
+        public void AddToAbsent_WordleGuess_AbsentLettersAdded()
+        {
+            WordleGame wordleGame = new("CIGAR", 2);
+            wordleGame.Start();
+
+            var wordleResponse = wordleGame.GuessWordle("CRANE");
+
+            for (int i = 0; i < wordleResponse.Chars.Length; i++)
+            {
+                if (wordleResponse.Correctness[i] == Correctness.Absent)
+                {
+                    Assert.IsTrue(wordleGame.Absent.Contains(wordleResponse.Chars[i]));
+                }
+            }
+        }
+
+        [TestMethod]
+        public void AddToAbsent_WordleGuess_CorrectNotAdded()
+        {
+            WordleGame wordleGame = new("CIGAR", 2);
+            wordleGame.Start();
+
+            var _ = wordleGame.GuessWordle("CRANE");
+
+            Assert.IsFalse(wordleGame.Absent.Contains('C'));
+        }
+
+        [TestMethod]
+        public void AddToAbsent_WordleGuess_NotGuessedNotAdded()
+        {
+            WordleGame wordleGame = new("CIGAR", 2);
+            wordleGame.Start();
+
+            var _ = wordleGame.GuessWordle("CRANE");
+
+            Assert.IsFalse(wordleGame.Absent.Contains('P'));
+        }
     }
 }

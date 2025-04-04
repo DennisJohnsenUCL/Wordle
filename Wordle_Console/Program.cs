@@ -36,10 +36,41 @@ namespace Wordle_Console
                     var wordleResponse = wordleGame.GuessWordle(guess);
 
                     PrintWordleGuessCorrectness(wordleResponse);
+                    PrintAlphabet(wordleGame);
 
                     if (IsGameEnded(wordleGame.GameState)) break;
                 }
             }
+        }
+
+        private static void ClearAlphabet()
+        {
+            (int left, int top) = Console.GetCursorPosition();
+
+            for (int i = 2; i <= 5; i++)
+            {
+                Console.SetCursorPosition(left, top + i);
+                Console.Write(new string(' ', Console.WindowWidth));
+            }
+
+            Console.SetCursorPosition(left, top);
+        }
+
+        private static void PrintAlphabet(WordleGame wordleGame)
+        {
+            (int left, int top) = Console.GetCursorPosition();
+
+            ClearAlphabet();
+
+            Console.SetCursorPosition(left, top + 3);
+
+            foreach (char c in "QWERTYUIOP\n ASDFGHJKL\n ZXCVBNM")
+            {
+                Console.ForegroundColor = wordleGame.Absent.Contains(c) ? ConsoleColor.Red : ConsoleColor.White;
+                Console.Write(c);
+            }
+            Console.ResetColor();
+            Console.SetCursorPosition(left, top);
         }
 
         private static void PrintWordleGuessCorrectness(WordleResponse wordleResponse)
@@ -58,6 +89,7 @@ namespace Wordle_Console
         {
             if (gameState == GameState.Completed)
             {
+                ClearAlphabet();
                 Console.WriteLine("\nYou guessed the right word!\n");
                 Console.WriteLine("Press any key to continue");
                 Console.ReadKey(true);
@@ -66,6 +98,7 @@ namespace Wordle_Console
 
             if (gameState == GameState.Failed)
             {
+                ClearAlphabet();
                 Console.WriteLine("\nYou did not guess the right word!\n");
                 Console.WriteLine("Press any key to continue");
                 Console.ReadKey(true);
