@@ -13,7 +13,6 @@ namespace Wordle_Console
         {
             //>> pass to game controller class
             //>> Frame game content
-            //>> Print alphabet at bottom of console. use Get and SetCursorPosition to jump down and back
 
             while (true)
             {
@@ -233,7 +232,6 @@ namespace Wordle_Console
             Console.SetCursorPosition(left, top);
         }
 
-        //>> Make this prettier
         private static WordleGame GetWordleGameFromOptions(WordleOptions wordleOptions)
         {
             if (wordleOptions.Wordle != null && wordleOptions.Guesses != null) return new WordleGame(wordleOptions.Wordle, (int)wordleOptions.Guesses);
