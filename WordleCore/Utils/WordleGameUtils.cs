@@ -1,11 +1,12 @@
-﻿using WordleCore.Enums;
+﻿using System.Collections.Immutable;
+using WordleCore.Enums;
 
 namespace WordleCore.Utils
 {
 	public static class WordleGameUtils
 	{
-		internal static readonly HashSet<string> _allowedWords = LoadAllowedWords();
-		internal static readonly Lazy<string[]> _previousWordles = new(() => WordleCoreUtils.LoadEmbeddedTxt("WordleCore.Data.previous_wordles.txt"));
+		internal static readonly IReadOnlySet<string> _allowedWords = LoadAllowedWords();
+		internal static readonly Lazy<ImmutableArray<string>> _previousWordles = new(() => [.. WordleCoreUtils.LoadEmbeddedTxt("WordleCore.Data.previous_wordles.txt")]);
 		private static readonly Random _rng = new();
 
 		internal static HashSet<string> LoadAllowedWords() =>
