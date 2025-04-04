@@ -6,12 +6,6 @@ namespace WordleCore.Tests
     [TestClass]
     public sealed class WordleGameUtilsTests
     {
-        [ClassInitialize]
-        public static void ClassInitialize(TestContext _)
-        {
-            WordleGameUtils.previousWordles = null;
-        }
-
         [TestMethod]
         public void LoadAllowedWords_ReturnsAllowedWords()
         {
@@ -53,49 +47,27 @@ namespace WordleCore.Tests
         }
 
         [TestMethod]
-        public void PreviousWordles_IsNotLoaded_IsNull()
-        {
-            Assert.IsNull(WordleGameUtils.previousWordles);
-        }
-
-        [TestMethod]
-        public void PreviousWordles_IsLoaded_IsNotNull()
-        {
-            WordleGameUtils.LoadPreviousWordles();
-
-            Assert.IsNotNull(WordleGameUtils.previousWordles);
-        }
-
-        [TestMethod]
         public void PreviousWordles_IsLoaded_ContainsPreviousWordles()
         {
-            WordleGameUtils.LoadPreviousWordles();
-
-            Assert.IsTrue(WordleGameUtils.previousWordles!.Contains("CIGAR"));
+            Assert.IsTrue(WordleGameUtils._previousWordles.Value.Contains("CIGAR"));
         }
 
         [TestMethod]
         public void PreviousWordles_IsLoaded_ContainsOnlyPreviousWordles()
         {
-            WordleGameUtils.LoadPreviousWordles();
-
-            Assert.IsFalse(WordleGameUtils.previousWordles!.Contains("CIGARS"));
+            Assert.IsFalse(WordleGameUtils._previousWordles.Value.Contains("CIGARS"));
         }
 
         [TestMethod]
         public void PreviousWordles_IsLoaded_ContainsOnly5LetterWords()
         {
-            WordleGameUtils.LoadPreviousWordles();
-
-            Assert.IsTrue(WordleGameUtils.previousWordles!.All(x => x.Length == 5));
+            Assert.IsTrue(WordleGameUtils._previousWordles.Value.All(x => x.Length == 5));
         }
 
         [TestMethod]
         public void PreviousWordles_AreAllAllowed()
         {
-            WordleGameUtils.LoadPreviousWordles();
-
-            Assert.IsTrue(WordleGameUtils.previousWordles!.All(WordleGameUtils._allowedWords.Contains));
+            Assert.IsTrue(WordleGameUtils._previousWordles.Value.All(WordleGameUtils._allowedWords.Contains));
         }
 
         [TestMethod]
@@ -103,7 +75,7 @@ namespace WordleCore.Tests
         {
             var randomWordle = WordleGameUtils.GetRandomWordle();
 
-            Assert.IsTrue(WordleGameUtils.previousWordles!.Contains(randomWordle));
+            Assert.IsTrue(WordleGameUtils._previousWordles.Value.Contains(randomWordle));
         }
 
         [TestMethod]

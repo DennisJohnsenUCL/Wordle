@@ -21,7 +21,7 @@ namespace WordleCore.Tests
         {
             WordleGame wordleGame = new();
 
-            Assert.IsTrue(WordleGameUtils.previousWordles!.Contains(wordleGame.Wordle));
+            Assert.IsTrue(WordleGameUtils._previousWordles.Value.Contains(wordleGame.Wordle));
             Assert.AreEqual(6, wordleGame.Guesses);
         }
 
@@ -38,7 +38,7 @@ namespace WordleCore.Tests
         {
             WordleGame wordleGame = new(6);
 
-            Assert.IsTrue(WordleGameUtils.previousWordles!.Contains(wordleGame.Wordle));
+            Assert.IsTrue(WordleGameUtils._previousWordles.Value.Contains(wordleGame.Wordle));
         }
 
         [TestMethod]
