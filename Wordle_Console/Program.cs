@@ -65,7 +65,10 @@ namespace Wordle_Console
 
             foreach (char c in "QWERTYUIOP\n ASDFGHJKL\n ZXCVBNM")
             {
-                Console.ForegroundColor = wordleGame.Absent.Contains(c) ? ConsoleColor.Red : ConsoleColor.White;
+                if (wordleGame.LetterHints.Absent.Contains(c)) Console.ForegroundColor = ConsoleColor.Red;
+                else if (wordleGame.LetterHints.Present.Contains(c)) Console.ForegroundColor = ConsoleColor.DarkYellow;
+                else if (wordleGame.LetterHints.Correct.Contains(c)) Console.ForegroundColor = ConsoleColor.Green;
+                else Console.ForegroundColor = ConsoleColor.White;
                 Console.Write(c);
             }
             Console.ResetColor();

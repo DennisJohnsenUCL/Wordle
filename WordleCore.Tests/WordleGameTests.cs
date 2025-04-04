@@ -185,42 +185,18 @@ namespace WordleCore.Tests
         }
 
         [TestMethod]
-        public void AddToAbsent_WordleGuess_AbsentLettersAdded()
+        public void AddToLetterHints_WordleGuess_LettersAddedCorrectly()
         {
             WordleGame wordleGame = new("CIGAR", 2);
             wordleGame.Start();
 
-            var wordleResponse = wordleGame.GuessWordle("CRANE");
+            wordleGame.GuessWordle("CRANE");
 
-            for (int i = 0; i < wordleResponse.Chars.Length; i++)
-            {
-                if (wordleResponse.Correctness[i] == Correctness.Absent)
-                {
-                    Assert.IsTrue(wordleGame.Absent.Contains(wordleResponse.Chars[i]));
-                }
-            }
-        }
-
-        [TestMethod]
-        public void AddToAbsent_WordleGuess_CorrectNotAdded()
-        {
-            WordleGame wordleGame = new("CIGAR", 2);
-            wordleGame.Start();
-
-            var _ = wordleGame.GuessWordle("CRANE");
-
-            Assert.IsFalse(wordleGame.Absent.Contains('C'));
-        }
-
-        [TestMethod]
-        public void AddToAbsent_WordleGuess_NotGuessedNotAdded()
-        {
-            WordleGame wordleGame = new("CIGAR", 2);
-            wordleGame.Start();
-
-            var _ = wordleGame.GuessWordle("CRANE");
-
-            Assert.IsFalse(wordleGame.Absent.Contains('P'));
+            Assert.IsTrue(wordleGame.LetterHints.Absent.Contains('N'));
+            Assert.IsTrue(wordleGame.LetterHints.Absent.Contains('E'));
+            Assert.IsTrue(wordleGame.LetterHints.Present.Contains('R'));
+            Assert.IsTrue(wordleGame.LetterHints.Present.Contains('A'));
+            Assert.IsTrue(wordleGame.LetterHints.Correct.Contains('C'));
         }
     }
 }
