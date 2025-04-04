@@ -11,7 +11,7 @@ namespace WordleCore
 		public int Guesses { get; }
 		public int GuessesLeft { get; private set; } = 0;
 		public GameState GameState { get; private set; } = GameState.NotStarted;
-		public HashSet<char> Absent { get; private set; } = [];
+		public LetterHints LetterHints { get; } = new();
 
 		public WordleGame() : this(WordleGameUtils.GetRandomWordle(), 6) { }
 		public WordleGame(string wordle) : this(wordle, 6) { }
@@ -49,16 +49,14 @@ namespace WordleCore
 			GuessesLeft--;
 
 			SetGameState(wordleGuess);
-			AddToAbsent(chars, correctness);
-			return new WordleResponse(chars, correctness);
+			WordleResponse wordleResponse = new(chars, correctness);
+			AddToLetterHints(wordleResponse);
+			return wordleResponse;
 		}
 
-		private void AddToAbsent(char[] chars, Correctness[] correctness)
+		private void AddToLetterHints(WordleResponse wordleResponse)
 		{
-			for (int i = 0; i < correctness.Length; i++)
-			{
-				if (correctness[i] == Correctness.Absent) Absent.Add(chars[i]);
-			}
+			LetterHints.AddHintsFromResponse(wordleResponse);
 		}
 
 		internal void SetGameState(string wordleGuess)
