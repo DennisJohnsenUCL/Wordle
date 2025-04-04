@@ -35,7 +35,7 @@ namespace Wordle_Console
                     var wordleResponse = wordleGame.GuessWordle(guess);
 
                     PrintWordleGuessCorrectness(wordleResponse);
-                    PrintAlphabet(wordleGame);
+                    PrintAlphabet(wordleGame.LetterHints);
 
                     if (IsGameEnded(wordleGame.GameState)) break;
                 }
@@ -55,7 +55,7 @@ namespace Wordle_Console
             Console.SetCursorPosition(left, top);
         }
 
-        private static void PrintAlphabet(WordleGame wordleGame)
+        private static void PrintAlphabet(LetterHints letterHints)
         {
             (int left, int top) = Console.GetCursorPosition();
 
@@ -65,9 +65,9 @@ namespace Wordle_Console
 
             foreach (char c in "QWERTYUIOP\n ASDFGHJKL\n ZXCVBNM")
             {
-                if (wordleGame.LetterHints.Absent.Contains(c)) Console.ForegroundColor = CorrectnessColors[Correctness.Absent];
-                else if (wordleGame.LetterHints.Present.Contains(c)) Console.ForegroundColor = CorrectnessColors[Correctness.Present];
-                else if (wordleGame.LetterHints.Correct.Contains(c)) Console.ForegroundColor = CorrectnessColors[Correctness.Correct];
+                if (letterHints.Absent.Contains(c)) Console.ForegroundColor = CorrectnessColors[Correctness.Absent];
+                else if (letterHints.Present.Contains(c)) Console.ForegroundColor = CorrectnessColors[Correctness.Present];
+                else if (letterHints.Correct.Contains(c)) Console.ForegroundColor = CorrectnessColors[Correctness.Correct];
                 else Console.ForegroundColor = ConsoleColor.White;
                 Console.Write(c);
             }
@@ -243,7 +243,7 @@ namespace Wordle_Console
             else return new WordleGame();
         }
 
-        private static Dictionary<Correctness, ConsoleColor> CorrectnessColors = new()
+        private static readonly Dictionary<Correctness, ConsoleColor> CorrectnessColors = new()
         {
             { Correctness.Correct, ConsoleColor.Green },
             { Correctness.Absent, ConsoleColor.Red },
