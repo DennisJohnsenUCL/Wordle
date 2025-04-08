@@ -6,13 +6,15 @@ namespace Wordle_Console
 {
     public class Renderer : IRenderer
     {
+        private (int left, int top) _alphabetPosition;
+
         public void ClearAlphabet()
         {
             (int left, int top) = Console.GetCursorPosition();
 
-            for (int i = 2; i <= 5; i++)
+            for (int i = 0; i < 3; i++)
             {
-                Console.SetCursorPosition(left, top + i);
+                Console.SetCursorPosition(_alphabetPosition.left, _alphabetPosition.top + i);
                 Console.Write(new string(' ', Console.WindowWidth));
             }
 
@@ -23,9 +25,10 @@ namespace Wordle_Console
         {
             (int left, int top) = Console.GetCursorPosition();
 
-            ClearAlphabet();
+            if (_alphabetPosition != default) ClearAlphabet();
+            _alphabetPosition = (left, top + 3);
 
-            Console.SetCursorPosition(left, top + 3);
+            Console.SetCursorPosition(_alphabetPosition.left, _alphabetPosition.top);
 
             foreach (char c in "QWERTYUIOP\n ASDFGHJKL\n ZXCVBNM")
             {
