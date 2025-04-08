@@ -1,11 +1,12 @@
-﻿using WordleCore.Enums;
+﻿using Wordle_Console.Interfaces;
+using WordleCore.Enums;
 using WordleCore.Models;
 
 namespace Wordle_Console
 {
-    internal class Renderer
+    public class Renderer : IRenderer
     {
-        internal void ClearAlphabet()
+        public void ClearAlphabet()
         {
             (int left, int top) = Console.GetCursorPosition();
 
@@ -18,7 +19,7 @@ namespace Wordle_Console
             Console.SetCursorPosition(left, top);
         }
 
-        internal void PrintAlphabet(LetterHints hints)
+        public void PrintAlphabet(LetterHints hints)
         {
             (int left, int top) = Console.GetCursorPosition();
 
@@ -38,7 +39,7 @@ namespace Wordle_Console
             Console.SetCursorPosition(left, top);
         }
 
-        internal void PrintWordleGuessCorrectness(WordleResponse response)
+        public void PrintWordleGuessCorrectness(WordleResponse response)
         {
             Console.SetCursorPosition(0, Console.CursorTop - 1);
             for (int i = 0; i < 5; i++)
@@ -50,7 +51,7 @@ namespace Wordle_Console
             Console.ResetColor();
         }
 
-        internal static readonly Dictionary<Correctness, ConsoleColor> _colors = new()
+        private static readonly Dictionary<Correctness, ConsoleColor> _colors = new()
         {
             { Correctness.Correct, ConsoleColor.Green },
             { Correctness.Absent, ConsoleColor.Red },

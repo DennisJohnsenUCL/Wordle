@@ -1,4 +1,5 @@
-﻿using Wordle_Console.Models;
+﻿using Wordle_Console.Interfaces;
+using Wordle_Console.Models;
 using WordleCore;
 using WordleCore.Enums;
 
@@ -6,10 +7,10 @@ namespace Wordle_Console
 {
     internal class GameController
     {
-        private readonly InputHandler _inputHandler;
-        private readonly Renderer _renderer;
+        private readonly IInputHandler _inputHandler;
+        private readonly IRenderer _renderer;
 
-        internal GameController(InputHandler inputHandler, Renderer renderer)
+        internal GameController(IInputHandler inputHandler, IRenderer renderer)
         {
             _inputHandler = inputHandler;
             _renderer = renderer;

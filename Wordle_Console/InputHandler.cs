@@ -1,12 +1,13 @@
 ﻿using System.Text;
+using Wordle_Console.Interfaces;
 using Wordle_Console.Models;
 using WordleCore.Utils;
 
 namespace Wordle_Console
 {
-    internal class InputHandler
+    internal class InputHandler : IInputHandler
     {
-        internal WordleOptions GetWordleOptions()
+        public WordleOptions GetWordleOptions()
         {
             Console.Clear();
             Console.WriteLine("Press a key to pick an option:");
@@ -40,7 +41,7 @@ namespace Wordle_Console
         }
 
         //>> Print warnings about invalid inputs and not allowed words and wrong lengths
-        internal static string? GetWordleOptionInput()
+        private static string? GetWordleOptionInput()
         {
             Console.Clear();
             Console.WriteLine("Enter a valid Wordle for your game:");
@@ -71,7 +72,7 @@ namespace Wordle_Console
         }
 
         //>> Print warnings about invalid inputs and not allowed words and wrong lengths
-        internal string GetWordleGuessInput()
+        public string GetWordleGuessInput()
         {
             var sb = new StringBuilder();
 
@@ -98,7 +99,7 @@ namespace Wordle_Console
         }
 
         //>> Print warnings
-        internal static int? GetGuessesInput()
+        private static int? GetGuessesInput()
         {
             Console.Clear();
             Console.WriteLine("Enter a valid amount of guesses for your game:");
@@ -123,7 +124,7 @@ namespace Wordle_Console
             }
         }
 
-        internal static void PrintInvalidInput(char k)
+        private static void PrintInvalidInput(char k)
         {
             var (left, top) = Console.GetCursorPosition();
 
