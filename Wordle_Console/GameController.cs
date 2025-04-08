@@ -6,8 +6,14 @@ namespace Wordle_Console
 {
     internal class GameController
     {
-        private readonly InputHandler _inputHandler = new();
-        private readonly Renderer _renderer = new();
+        private readonly InputHandler _inputHandler;
+        private readonly Renderer _renderer;
+
+        internal GameController(InputHandler inputHandler, Renderer renderer)
+        {
+            _inputHandler = inputHandler;
+            _renderer = renderer;
+        }
 
         internal void Run()
         {

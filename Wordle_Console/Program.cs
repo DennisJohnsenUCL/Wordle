@@ -11,7 +11,9 @@
             //>> Use dependency injection? With interfaces
             //>> Set up mock tests?
 
-            var controller = new GameController();
+            var inputHandler = new InputHandler();
+            var renderer = new Renderer();
+            var controller = new GameController(inputHandler, renderer);
             controller.Run();
         }
     }
