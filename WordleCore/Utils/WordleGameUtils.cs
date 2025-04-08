@@ -16,6 +16,7 @@ namespace WordleCore.Utils
 
 		internal static string GetRandomWordle() => _previousWordles.Value[_rng.Next(0, _previousWordles.Value.Length)];
 
+		//>> Move to WordleGame?
 		internal static Correctness[] GetCorrectnesses(string wordle, string wordleGuess)
 		{
 			Correctness[] correctness = new Correctness[5];
