@@ -18,7 +18,7 @@ namespace Wordle_Console
             Console.SetCursorPosition(left, top);
         }
 
-        internal void PrintAlphabet(LetterHints letterHints)
+        internal void PrintAlphabet(LetterHints hints)
         {
             (int left, int top) = Console.GetCursorPosition();
 
@@ -28,9 +28,9 @@ namespace Wordle_Console
 
             foreach (char c in "QWERTYUIOP\n ASDFGHJKL\n ZXCVBNM")
             {
-                if (letterHints.Absent.Contains(c)) Console.ForegroundColor = CorrectnessColors[Correctness.Absent];
-                else if (letterHints.Present.Contains(c)) Console.ForegroundColor = CorrectnessColors[Correctness.Present];
-                else if (letterHints.Correct.Contains(c)) Console.ForegroundColor = CorrectnessColors[Correctness.Correct];
+                if (hints.Absent.Contains(c)) Console.ForegroundColor = _colors[Correctness.Absent];
+                else if (hints.Present.Contains(c)) Console.ForegroundColor = _colors[Correctness.Present];
+                else if (hints.Correct.Contains(c)) Console.ForegroundColor = _colors[Correctness.Correct];
                 else Console.ForegroundColor = ConsoleColor.White;
                 Console.Write(c);
             }
@@ -38,19 +38,19 @@ namespace Wordle_Console
             Console.SetCursorPosition(left, top);
         }
 
-        internal void PrintWordleGuessCorrectness(WordleResponse wordleResponse)
+        internal void PrintWordleGuessCorrectness(WordleResponse response)
         {
             Console.SetCursorPosition(0, Console.CursorTop - 1);
             for (int i = 0; i < 5; i++)
             {
-                Console.ForegroundColor = CorrectnessColors[wordleResponse.Correctness[i]];
-                Console.Write(wordleResponse.Chars[i]);
+                Console.ForegroundColor = _colors[response.Correctness[i]];
+                Console.Write(response.Chars[i]);
             }
             Console.WriteLine();
             Console.ResetColor();
         }
 
-        internal static readonly Dictionary<Correctness, ConsoleColor> CorrectnessColors = new()
+        internal static readonly Dictionary<Correctness, ConsoleColor> _colors = new()
         {
             { Correctness.Correct, ConsoleColor.Green },
             { Correctness.Absent, ConsoleColor.Red },

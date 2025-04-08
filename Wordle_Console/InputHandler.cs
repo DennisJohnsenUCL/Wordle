@@ -14,21 +14,21 @@ namespace Wordle_Console
             Console.WriteLine("2: Start a game of Wordle with custom options");
             Console.WriteLine("3: Exit");
 
-            WordleOptions? wordleOptions = null;
+            WordleOptions? options = null;
 
-            while (wordleOptions == null)
+            while (options == null)
             {
                 char k = Console.ReadKey(true).KeyChar;
                 if (k == '1')
                 {
-                    wordleOptions = new WordleOptions();
+                    options = new WordleOptions();
                 }
                 else if (k == '2')
                 {
                     string? wordle = GetWordleOptionInput();
                     int? guesses = GetGuessesInput();
 
-                    wordleOptions = new WordleOptions(wordle, guesses);
+                    options = new WordleOptions(wordle, guesses);
                 }
                 else if (k == '3') { Environment.Exit(0); }
                 else
@@ -36,7 +36,7 @@ namespace Wordle_Console
                     PrintInvalidInput(k);
                 }
             }
-            return wordleOptions;
+            return options;
         }
 
         //>> Print warnings about invalid inputs and not allowed words and wrong lengths

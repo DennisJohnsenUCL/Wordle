@@ -15,33 +15,33 @@ namespace Wordle_Console
             {
                 Console.Clear();
 
-                var wordleOptions = _inputHandler.GetWordleOptions();
+                var options = _inputHandler.GetWordleOptions();
 
-                var wordleGame = GetWordleGameFromOptions(wordleOptions);
+                var game = GetWordleGameFromOptions(options);
 
-                wordleGame.Start();
+                game.Start();
                 Console.Clear();
-                Console.WriteLine($"Wordle game started, you have {wordleGame.GuessesLeft} guesses to guess {wordleGame.Wordle}\n");
+                Console.WriteLine($"Wordle game started, you have {game.GuessesLeft} guesses to guess {game.Wordle}\n");
 
                 Console.WriteLine("Enter your guess");
 
-                while (wordleGame.GuessesLeft > 0)
+                while (game.GuessesLeft > 0)
                 {
                     string guess = _inputHandler.GetWordleGuessInput();
 
-                    var wordleResponse = wordleGame.GuessWordle(guess);
+                    var response = game.GuessWordle(guess);
 
-                    _renderer.PrintWordleGuessCorrectness(wordleResponse);
-                    _renderer.PrintAlphabet(wordleGame.LetterHints);
+                    _renderer.PrintWordleGuessCorrectness(response);
+                    _renderer.PrintAlphabet(game.LetterHints);
 
-                    if (IsGameEnded(wordleGame.GameState)) break;
+                    if (IsGameEnded(game.GameState)) break;
                 }
             }
         }
 
-        private bool IsGameEnded(GameState gameState)
+        private bool IsGameEnded(GameState state)
         {
-            if (gameState == GameState.Completed)
+            if (state == GameState.Completed)
             {
                 _renderer.ClearAlphabet();
                 Console.WriteLine("\nYou guessed the right word!\n");
@@ -50,7 +50,7 @@ namespace Wordle_Console
                 return true;
             }
 
-            if (gameState == GameState.Failed)
+            if (state == GameState.Failed)
             {
                 _renderer.ClearAlphabet();
                 Console.WriteLine("\nYou did not guess the right word!\n");
@@ -61,11 +61,11 @@ namespace Wordle_Console
             return false;
         }
 
-        private static WordleGame GetWordleGameFromOptions(WordleOptions wordleOptions)
+        private static WordleGame GetWordleGameFromOptions(WordleOptions options)
         {
-            if (wordleOptions.Wordle != null && wordleOptions.Guesses != null) return new WordleGame(wordleOptions.Wordle, (int)wordleOptions.Guesses);
-            else if (wordleOptions.Wordle != null) return new WordleGame(wordleOptions.Wordle);
-            else if (wordleOptions.Guesses != null) return new WordleGame((int)wordleOptions.Guesses);
+            if (options.Wordle != null && options.Guesses != null) return new WordleGame(options.Wordle, (int)options.Guesses);
+            else if (options.Wordle != null) return new WordleGame(options.Wordle);
+            else if (options.Guesses != null) return new WordleGame((int)options.Guesses);
             else return new WordleGame();
         }
     }

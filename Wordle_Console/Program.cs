@@ -4,7 +4,6 @@
     {
         private static void Main()
         {
-            //>> pass to game controller class
             //>> Frame game content
             //>> For InputHandler: Separate out into common methods
             //>> For all Models: Assess whether they should be structs, records, or struct record
