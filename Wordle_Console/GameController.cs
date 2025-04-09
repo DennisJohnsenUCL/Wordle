@@ -27,10 +27,8 @@ namespace Wordle_Console
                 var game = GetWordleGameFromOptions(options);
 
                 game.Start();
-                Console.Clear();
-                Console.WriteLine($"Wordle game started, you have {game.GuessesLeft} guesses to guess {game.Wordle}\n");
 
-                Console.WriteLine("Enter your guess");
+                _renderer.PrintGameStart(game.GuessesLeft, game.Wordle);
 
                 while (game.GuessesLeft > 0)
                 {

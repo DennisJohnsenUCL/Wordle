@@ -6,6 +6,7 @@ namespace Wordle_Console.Interfaces
     {
         void PrintAlphabet(LetterHints hints);
         void PrintWordleGuessCorrectness(WordleResponse response);
+        void PrintGameStart(int guessesLeft, string wordle);
         void PrintGameCompleted();
         void PrintGameOver();
     }

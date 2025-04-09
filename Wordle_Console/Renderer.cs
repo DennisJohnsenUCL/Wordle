@@ -54,6 +54,13 @@ namespace Wordle_Console
             Console.ResetColor();
         }
 
+        public void PrintGameStart(int guessesLeft, string wordle)
+        {
+            Console.Clear();
+            Console.WriteLine($"Wordle game started, you have {guessesLeft} guesses to guess {wordle}\n");
+            Console.WriteLine("Enter your guess");
+        }
+
         public void PrintGameCompleted()
         {
             ClearAlphabet();
