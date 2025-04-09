@@ -50,19 +50,13 @@ namespace Wordle_Console
         {
             if (state == GameState.Completed)
             {
-                _renderer.ClearAlphabet();
-                Console.WriteLine("\nYou guessed the right word!\n");
-                Console.WriteLine("Press any key to continue");
-                Console.ReadKey(true);
+                _renderer.PrintGameCompleted();
                 return true;
             }
 
-            if (state == GameState.Failed)
+            else if (state == GameState.Failed)
             {
-                _renderer.ClearAlphabet();
-                Console.WriteLine("\nYou did not guess the right word!\n");
-                Console.WriteLine("Press any key to continue");
-                Console.ReadKey(true);
+                _renderer.PrintGameOver();
                 return true;
             }
             return false;

@@ -54,6 +54,22 @@ namespace Wordle_Console
             Console.ResetColor();
         }
 
+        public void PrintGameCompleted()
+        {
+            ClearAlphabet();
+            Console.WriteLine("\nYou guessed the right word!\n");
+            Console.WriteLine("Press any key to continue");
+            Console.ReadKey(true);
+        }
+
+        public void PrintGameOver()
+        {
+            ClearAlphabet();
+            Console.WriteLine("\nYou did not guess the right word!\n");
+            Console.WriteLine("Press any key to continue");
+            Console.ReadKey(true);
+        }
+
         private static readonly Dictionary<Correctness, ConsoleColor> _colors = new()
         {
             { Correctness.Correct, ConsoleColor.Green },

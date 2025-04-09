@@ -36,32 +36,32 @@ namespace WordleCore
 			else throw new WordleGameAlreadyStartedException("This game has already been started");
 		}
 
-		public WordleResponse GuessWordle(string wordleGuess)
+		public WordleResponse GuessWordle(string guess)
 		{
 			if (GameState != GameState.Ongoing) throw new WordleGameNotOnGoingException("This game is not currently ongoing");
-			if (wordleGuess.Length != 5) throw new WordleGuessWrongLengthException("Wordle guesses must be 5 letters");
-			if (!WordleGameUtils.IsAllowedWord(wordleGuess)) throw new WordleNotAllowedWordException("The guessed word is not in the list of allowed words");
+			if (guess.Length != 5) throw new WordleGuessWrongLengthException("Wordle guesses must be 5 letters");
+			if (!WordleGameUtils.IsAllowedWord(guess)) throw new WordleNotAllowedWordException("The guessed word is not in the list of allowed words");
 
-			char[] chars = wordleGuess.ToCharArray();
+			char[] chars = guess.ToCharArray();
 
-			Correctness[] correctness = WordleGameUtils.GetCorrectnesses(Wordle, wordleGuess);
+			Correctness[] correctness = WordleGameUtils.GetCorrectnesses(Wordle, guess);
 
 			GuessesLeft--;
 
-			SetGameState(wordleGuess);
-			WordleResponse wordleResponse = new(chars, correctness);
-			AddToLetterHints(wordleResponse);
-			return wordleResponse;
+			SetGameState(guess);
+			WordleResponse response = new(chars, correctness);
+			AddToLetterHints(response);
+			return response;
 		}
 
-		private void AddToLetterHints(WordleResponse wordleResponse)
+		private void AddToLetterHints(WordleResponse response)
 		{
-			LetterHints.AddHintsFromResponse(wordleResponse);
+			LetterHints.AddHintsFromResponse(response);
 		}
 
-		internal void SetGameState(string wordleGuess)
+		internal void SetGameState(string guess)
 		{
-			if (Wordle == wordleGuess) GameState = GameState.Completed;
+			if (Wordle == guess) GameState = GameState.Completed;
 			else if (GuessesLeft == 0) GameState = GameState.Failed;
 		}
 

@@ -7,5 +7,7 @@ namespace Wordle_Console.Interfaces
         void ClearAlphabet();
         void PrintAlphabet(LetterHints hints);
         void PrintWordleGuessCorrectness(WordleResponse response);
+        void PrintGameCompleted();
+        void PrintGameOver();
     }
 }
