@@ -8,7 +8,7 @@ namespace Wordle_Console
     {
         private (int left, int top) _alphabetPosition;
 
-        public void ClearAlphabet()
+        private void ClearAlphabet()
         {
             (int left, int top) = Console.GetCursorPosition();
 
