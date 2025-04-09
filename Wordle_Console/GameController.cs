@@ -20,8 +20,6 @@ namespace Wordle_Console
         {
             while (true)
             {
-                Console.Clear();
-
                 var options = _inputHandler.GetWordleOptions();
 
                 var game = GetWordleGameFromOptions(options);
