@@ -26,7 +26,7 @@ namespace Wordle_Console
                 }
                 else if (k == '2')
                 {
-                    string? wordle = GetWordleOptionInput();
+                    string? wordle = GetWordleInput();
                     int? guesses = GetGuessesInput();
 
                     options = new WordleOptions(wordle, guesses);
@@ -41,61 +41,36 @@ namespace Wordle_Console
         }
 
         //>> Print warnings about invalid inputs and not allowed words and wrong lengths
-        private static string? GetWordleOptionInput()
+        private static string? GetWordleInput()
         {
             Console.Clear();
             Console.WriteLine("Enter a valid Wordle for your game:");
 
             var sb = new StringBuilder();
-
-            while (true)
+            var rules = new InputValidationRules()
             {
-                var k = Console.ReadKey(true);
-                if (char.IsLetter(k.KeyChar) && sb.Length < 5)
-                {
-                    sb.Append(char.ToUpper(k.KeyChar));
-                    Console.Write(char.ToUpper(k.KeyChar));
-                }
-                else if (k.Key == ConsoleKey.Enter && IsValidWordle()) return sb.ToString();
-                else if (k.Key == ConsoleKey.Enter && sb.Length == 0) return null;
-                else if (k.Key == ConsoleKey.Backspace && sb.Length > 0)
-                {
-                    sb.Remove(sb.Length - 1, 1);
-                    Console.Write("\b \b");
-                }
-            }
+                AcceptChar = char.IsLetter,
+                CanSubmit = s => s.Length == 5 && WordleGameUtils.IsAllowedWord(s),
+                AllowEmpty = true
+            };
 
-            bool IsValidWordle()
-            {
-                return sb.Length == 5 && WordleGameUtils.IsAllowedWord(sb.ToString());
-            }
+            var s = GetControlledInput(rules);
+
+            if (s == "") return null;
+            else return s;
         }
 
         //>> Print warnings about invalid inputs and not allowed words and wrong lengths
         public string GetWordleGuessInput()
         {
             var sb = new StringBuilder();
-
-            while (true)
+            var rules = new InputValidationRules()
             {
-                var k = Console.ReadKey(true);
-                if (char.IsLetter(k.KeyChar) && sb.Length < 5)
-                {
-                    sb.Append(char.ToUpper(k.KeyChar));
-                    Console.Write(char.ToUpper(k.KeyChar));
-                }
-                else if (k.Key == ConsoleKey.Enter && IsValidWordle()) { Console.WriteLine(); return sb.ToString(); }
-                else if (k.Key == ConsoleKey.Backspace && sb.Length > 0)
-                {
-                    sb.Remove(sb.Length - 1, 1);
-                    Console.Write("\b \b");
-                }
-            }
+                AcceptChar = char.IsLetter,
+                CanSubmit = s => s.Length == 5 && WordleGameUtils.IsAllowedWord(s),
+            };
 
-            bool IsValidWordle()
-            {
-                return sb.Length == 5 && WordleGameUtils.IsAllowedWord(sb.ToString());
-            }
+            return GetControlledInput(rules);
         }
 
         //>> Print warnings
@@ -105,17 +80,37 @@ namespace Wordle_Console
             Console.WriteLine("Enter a valid amount of guesses for your game:");
 
             var sb = new StringBuilder();
+            var rules = new InputValidationRules()
+            {
+                AcceptChar = char.IsDigit,
+                CanSubmit = s => int.TryParse(s, out _),
+                AllowEmpty = true
+            };
+
+            var s = GetControlledInput(rules);
+
+            if (s == "") return null;
+            else return Convert.ToInt32(s);
+        }
+
+        private static string GetControlledInput(InputValidationRules rules)
+        {
+            var sb = new StringBuilder();
 
             while (true)
             {
                 var k = Console.ReadKey(true);
-                if (char.IsDigit(k.KeyChar))
+                if (rules.AcceptChar(k.KeyChar))
                 {
-                    sb.Append(k.KeyChar);
-                    Console.Write(k.KeyChar);
+                    sb.Append(char.ToUpper(k.KeyChar));
+                    Console.Write(char.ToUpper(k.KeyChar));
                 }
-                else if (k.Key == ConsoleKey.Enter && int.TryParse(sb.ToString(), out int guesses)) return guesses;
-                else if (k.Key == ConsoleKey.Enter && sb.Length == 0) return null;
+                else if (k.Key == ConsoleKey.Enter && sb.ToString() == "" && rules.AllowEmpty) return "";
+                else if (k.Key == ConsoleKey.Enter && rules.CanSubmit(sb.ToString()))
+                {
+                    Console.WriteLine();
+                    return sb.ToString();
+                }
                 else if (k.Key == ConsoleKey.Backspace && sb.Length > 0)
                 {
                     sb.Remove(sb.Length - 1, 1);
