@@ -1,16 +1,14 @@
 ﻿namespace Wordle_Console.Models
 {
-    internal class WordleOptions
+    internal record WordleOptions
     {
-        public string? Wordle { get; set; }
-        public int? Guesses { get; set; }
+        public string? Wordle { get; }
+        public int? Guesses { get; }
 
-        public WordleOptions(string? wordle, int? guesses)
+        public WordleOptions(string? wordle = null, int? guesses = null)
         {
             Wordle = wordle;
             Guesses = guesses;
         }
-
-        public WordleOptions() { }
     }
 }

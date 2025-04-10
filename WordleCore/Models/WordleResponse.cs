@@ -3,10 +3,11 @@ using WordleCore.Enums;
 
 namespace WordleCore.Models
 {
-	public class WordleResponse
+	public record WordleResponse
 	{
 		public ImmutableArray<char> Chars { get; }
 		public ImmutableArray<Correctness> Correctness { get; }
+
 		public WordleResponse(char[] chars, Correctness[] correctness)
 		{
 			Chars = [.. chars];
