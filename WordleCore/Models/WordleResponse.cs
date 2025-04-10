@@ -13,5 +13,11 @@ namespace WordleCore.Models
 			Chars = [.. chars];
 			Correctness = [.. correctness];
 		}
+
+		public void Deconstruct(out ImmutableArray<char> chars, out ImmutableArray<Correctness> correctness)
+		{
+			chars = Chars;
+			correctness = Correctness;
+		}
 	}
 }

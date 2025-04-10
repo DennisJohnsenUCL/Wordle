@@ -44,11 +44,13 @@ namespace Wordle_Console
 
         public void PrintWordleGuessCorrectness(WordleResponse response)
         {
+            var (chars, correctness) = response;
+
             Console.SetCursorPosition(0, Console.CursorTop - 1);
             for (int i = 0; i < 5; i++)
             {
-                Console.ForegroundColor = _colors[response.Correctness[i]];
-                Console.Write(response.Chars[i]);
+                Console.ForegroundColor = _colors[correctness[i]];
+                Console.Write(chars[i]);
             }
             Console.WriteLine();
             Console.ResetColor();

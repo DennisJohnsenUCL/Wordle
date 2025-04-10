@@ -60,9 +60,11 @@ namespace Wordle_Console
 
         private static WordleGame GetWordleGameFromOptions(WordleOptions options)
         {
-            if (options.Wordle != null && options.Guesses != null) return new WordleGame(options.Wordle, (int)options.Guesses);
-            else if (options.Wordle != null) return new WordleGame(options.Wordle);
-            else if (options.Guesses != null) return new WordleGame((int)options.Guesses);
+            var (wordle, guesses) = options;
+
+            if (wordle != null && guesses != null) return new WordleGame(wordle, (int)guesses);
+            else if (wordle != null) return new WordleGame(wordle);
+            else if (guesses != null) return new WordleGame((int)guesses);
             else return new WordleGame();
         }
     }

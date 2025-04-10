@@ -10,5 +10,11 @@
             Wordle = wordle;
             Guesses = guesses;
         }
+
+        public void Deconstruct(out string? wordle, out int? guesses)
+        {
+            wordle = Wordle;
+            guesses = Guesses;
+        }
     }
 }
