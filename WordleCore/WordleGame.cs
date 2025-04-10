@@ -13,9 +13,12 @@ namespace WordleCore
 		public GameState GameState { get; private set; } = GameState.NotStarted;
 		public LetterHints LetterHints { get; } = new();
 
-		public WordleGame() : this(WordleGameUtils.GetRandomWordle(), 6) { }
-		public WordleGame(string wordle) : this(wordle, 6) { }
-		public WordleGame(int guesses) : this(WordleGameUtils.GetRandomWordle(), guesses) { }
+		private const int _defaultGuesses = 6;
+		private static string GetRandomWordle() => WordleGameUtils.GetRandomWordle();
+
+		public WordleGame() : this(GetRandomWordle(), _defaultGuesses) { }
+		public WordleGame(string wordle) : this(wordle, _defaultGuesses) { }
+		public WordleGame(int guesses) : this(GetRandomWordle(), guesses) { }
 		public WordleGame(string wordle, int guesses)
 		{
 			if (wordle.Length != 5) throw new WordleWrongLengthException("The Wordle must be 5 letters");

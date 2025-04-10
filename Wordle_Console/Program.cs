@@ -7,6 +7,7 @@
             var inputHandler = new InputHandler();
             var renderer = new Renderer();
             var controller = new GameController(inputHandler, renderer);
+
             controller.Run();
         }
     }

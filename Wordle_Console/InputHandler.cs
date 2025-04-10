@@ -46,7 +46,6 @@ namespace Wordle_Console
             Console.Clear();
             Console.WriteLine("Enter a valid Wordle for your game:");
 
-            var sb = new StringBuilder();
             var rules = new InputValidationRules()
             {
                 AcceptChar = (c, s) => char.IsLetter(c) && s.Length < 5,
@@ -63,7 +62,6 @@ namespace Wordle_Console
         //>> Print warnings about invalid inputs and not allowed words and wrong lengths
         public string GetWordleGuessInput()
         {
-            var sb = new StringBuilder();
             var rules = new InputValidationRules()
             {
                 AcceptChar = (c, s) => char.IsLetter(c) && s.Length < 5,
@@ -79,7 +77,6 @@ namespace Wordle_Console
             Console.Clear();
             Console.WriteLine("Enter a valid amount of guesses for your game:");
 
-            var sb = new StringBuilder();
             var rules = new InputValidationRules()
             {
                 AcceptChar = (c, _) => char.IsDigit(c),

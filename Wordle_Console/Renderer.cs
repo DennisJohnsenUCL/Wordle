@@ -7,6 +7,7 @@ namespace Wordle_Console
     public class Renderer : IRenderer
     {
         private (int left, int top) _alphabetPosition;
+        private static readonly string alphabet = "QWERTYUIOP\n ASDFGHJKL\n ZXCVBNM";
 
         private void ClearAlphabet()
         {
@@ -30,7 +31,7 @@ namespace Wordle_Console
 
             Console.SetCursorPosition(_alphabetPosition.left, _alphabetPosition.top);
 
-            foreach (char c in "QWERTYUIOP\n ASDFGHJKL\n ZXCVBNM")
+            foreach (char c in alphabet)
             {
                 if (hints.Absent.Contains(c)) Console.ForegroundColor = _colors[Correctness.Absent];
                 else if (hints.Present.Contains(c)) Console.ForegroundColor = _colors[Correctness.Present];
