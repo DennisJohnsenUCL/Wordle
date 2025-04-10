@@ -4,9 +4,7 @@
     {
         private static void Main()
         {
-            //>> For InputHandler: Separate out into common methods
             //>> For all Models: Assess whether they should be structs, records, or struct record
-            //>> Set up mock tests?
 
             var inputHandler = new InputHandler();
             var renderer = new Renderer();

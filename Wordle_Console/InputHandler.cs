@@ -49,7 +49,7 @@ namespace Wordle_Console
             var sb = new StringBuilder();
             var rules = new InputValidationRules()
             {
-                AcceptChar = char.IsLetter,
+                AcceptChar = (c, s) => char.IsLetter(c) && s.Length < 5,
                 CanSubmit = s => s.Length == 5 && WordleGameUtils.IsAllowedWord(s),
                 AllowEmpty = true
             };
@@ -66,7 +66,7 @@ namespace Wordle_Console
             var sb = new StringBuilder();
             var rules = new InputValidationRules()
             {
-                AcceptChar = char.IsLetter,
+                AcceptChar = (c, s) => char.IsLetter(c) && s.Length < 5,
                 CanSubmit = s => s.Length == 5 && WordleGameUtils.IsAllowedWord(s),
             };
 
@@ -82,7 +82,7 @@ namespace Wordle_Console
             var sb = new StringBuilder();
             var rules = new InputValidationRules()
             {
-                AcceptChar = char.IsDigit,
+                AcceptChar = (c, _) => char.IsDigit(c),
                 CanSubmit = s => int.TryParse(s, out _),
                 AllowEmpty = true
             };
@@ -100,16 +100,18 @@ namespace Wordle_Console
             while (true)
             {
                 var k = Console.ReadKey(true);
-                if (rules.AcceptChar(k.KeyChar))
+                var s = sb.ToString();
+
+                if (rules.AcceptChar(k.KeyChar, s))
                 {
                     sb.Append(char.ToUpper(k.KeyChar));
                     Console.Write(char.ToUpper(k.KeyChar));
                 }
-                else if (k.Key == ConsoleKey.Enter && sb.ToString() == "" && rules.AllowEmpty) return "";
-                else if (k.Key == ConsoleKey.Enter && rules.CanSubmit(sb.ToString()))
+                else if (k.Key == ConsoleKey.Enter && s == "" && rules.AllowEmpty) return "";
+                else if (k.Key == ConsoleKey.Enter && rules.CanSubmit(s))
                 {
                     Console.WriteLine();
-                    return sb.ToString();
+                    return s;
                 }
                 else if (k.Key == ConsoleKey.Backspace && sb.Length > 0)
                 {
