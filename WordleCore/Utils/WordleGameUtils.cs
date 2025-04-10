@@ -7,16 +7,15 @@ namespace WordleCore.Utils
 	{
 		internal static readonly IReadOnlySet<string> _allowedWords = LoadAllowedWords();
 		internal static readonly Lazy<ImmutableArray<string>> _previousWordles = new(() => [.. WordleCoreUtils.LoadEmbeddedTxt("WordleCore.Data.previous_wordles.txt")]);
-		private static readonly Random _rng = new();
+		private static readonly Lazy<Random> _rng = new(() => new Random());
 
 		internal static HashSet<string> LoadAllowedWords() =>
 			[.. WordleCoreUtils.LoadEmbeddedTxt("WordleCore.Data.allowed_words.txt")];
 
 		public static bool IsAllowedWord(string word) => _allowedWords.Contains(word);
 
-		internal static string GetRandomWordle() => _previousWordles.Value[_rng.Next(0, _previousWordles.Value.Length)];
+		internal static string GetRandomWordle() => _previousWordles.Value[_rng.Value.Next(0, _previousWordles.Value.Length)];
 
-		//>> Move to WordleGame?
 		internal static Correctness[] GetCorrectnesses(string wordle, string wordleGuess)
 		{
 			Correctness[] correctness = new Correctness[5];
