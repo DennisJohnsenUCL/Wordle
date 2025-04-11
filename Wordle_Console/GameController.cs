@@ -16,29 +16,24 @@ namespace Wordle_Console
             _renderer = renderer;
         }
 
-        internal void Run()
+        internal void Run(WordleOptions options)
         {
-            while (true)
+            var game = GetWordleGameFromOptions(options);
+
+            game.Start();
+
+            _renderer.PrintGameStart(game.GuessesLeft, game.Wordle);
+
+            while (game.GuessesLeft > 0)
             {
-                var options = _inputHandler.GetWordleOptions();
+                string guess = _inputHandler.GetWordleGuessInput();
 
-                var game = GetWordleGameFromOptions(options);
+                var response = game.GuessWordle(guess);
 
-                game.Start();
+                _renderer.PrintWordleGuessCorrectness(response);
+                _renderer.PrintAlphabet(game.LetterHints);
 
-                _renderer.PrintGameStart(game.GuessesLeft, game.Wordle);
-
-                while (game.GuessesLeft > 0)
-                {
-                    string guess = _inputHandler.GetWordleGuessInput();
-
-                    var response = game.GuessWordle(guess);
-
-                    _renderer.PrintWordleGuessCorrectness(response);
-                    _renderer.PrintAlphabet(game.LetterHints);
-
-                    if (IsGameEnded(game.GameState)) break;
-                }
+                if (IsGameEnded(game.GameState)) break;
             }
         }
 

@@ -19,6 +19,7 @@ namespace Wordle_Console
                 Console.Write(new string(' ', Console.WindowWidth));
             }
 
+            _alphabetPosition = default;
             Console.SetCursorPosition(left, top);
         }
 
