@@ -1,4 +1,7 @@
-﻿namespace Wordle_Console
+﻿using Wordle_Console.Core;
+using Wordle_Console.IO;
+
+namespace Wordle_Console
 {
     public class Program
     {
