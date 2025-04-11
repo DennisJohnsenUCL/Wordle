@@ -3,7 +3,7 @@ using Wordle_Console.Interfaces;
 using Wordle_Console.Models;
 using WordleCore.Utils;
 
-namespace Wordle_Console
+namespace Wordle_Console.IO
 {
     internal class InputHandler : IInputHandler
     {

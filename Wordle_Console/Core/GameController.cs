@@ -2,7 +2,7 @@
 using WordleCore;
 using WordleCore.Enums;
 
-namespace Wordle_Console
+namespace Wordle_Console.Core
 {
     internal class GameController
     {

@@ -2,7 +2,7 @@
 using Wordle_Console.Models;
 using WordleCore;
 
-namespace Wordle_Console
+namespace Wordle_Console.Core
 {
     internal class AppController
     {

@@ -2,7 +2,7 @@
 using WordleCore.Enums;
 using WordleCore.Models;
 
-namespace Wordle_Console
+namespace Wordle_Console.IO
 {
     public class Renderer : IRenderer
     {
