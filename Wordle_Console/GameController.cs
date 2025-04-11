@@ -1,5 +1,4 @@
 ﻿using Wordle_Console.Interfaces;
-using Wordle_Console.Models;
 using WordleCore;
 using WordleCore.Enums;
 
@@ -7,33 +6,33 @@ namespace Wordle_Console
 {
     internal class GameController
     {
+        private readonly WordleGame _game;
         private readonly IInputHandler _inputHandler;
         private readonly IRenderer _renderer;
 
-        internal GameController(IInputHandler inputHandler, IRenderer renderer)
+        internal GameController(WordleGame game, IInputHandler inputHandler, IRenderer renderer)
         {
+            _game = game;
             _inputHandler = inputHandler;
             _renderer = renderer;
         }
 
-        internal void Run(WordleOptions options)
+        internal void Run()
         {
-            var game = GetWordleGameFromOptions(options);
+            _game.Start();
 
-            game.Start();
+            _renderer.PrintGameStart(_game.GuessesLeft, _game.Wordle);
 
-            _renderer.PrintGameStart(game.GuessesLeft, game.Wordle);
-
-            while (game.GuessesLeft > 0)
+            while (_game.GuessesLeft > 0)
             {
                 string guess = _inputHandler.GetWordleGuessInput();
 
-                var response = game.GuessWordle(guess);
+                var response = _game.GuessWordle(guess);
 
                 _renderer.PrintWordleGuessCorrectness(response);
-                _renderer.PrintAlphabet(game.LetterHints);
+                _renderer.PrintAlphabet(_game.LetterHints);
 
-                if (IsGameEnded(game.GameState)) break;
+                if (IsGameEnded(_game.GameState)) break;
             }
         }
 
@@ -51,16 +50,6 @@ namespace Wordle_Console
                 return true;
             }
             return false;
-        }
-
-        private static WordleGame GetWordleGameFromOptions(WordleOptions options)
-        {
-            var (wordle, guesses) = options;
-
-            if (wordle != null && guesses != null) return new WordleGame(wordle, (int)guesses);
-            else if (wordle != null) return new WordleGame(wordle);
-            else if (guesses != null) return new WordleGame((int)guesses);
-            else return new WordleGame();
         }
     }
 }

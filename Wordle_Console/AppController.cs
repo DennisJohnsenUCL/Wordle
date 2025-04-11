@@ -1,4 +1,6 @@
 ﻿using Wordle_Console.Interfaces;
+using Wordle_Console.Models;
+using WordleCore;
 
 namespace Wordle_Console
 {
@@ -19,10 +21,22 @@ namespace Wordle_Console
             {
                 var options = _inputHandler.GetWordleOptions();
 
-                var gameController = new GameController(_inputHandler, _renderer);
+                var game = GetWordleGameFromOptions(options);
 
-                gameController.Run(options);
+                var gameController = new GameController(game, _inputHandler, _renderer);
+
+                gameController.Run();
             }
+        }
+
+        private static WordleGame GetWordleGameFromOptions(WordleOptions options)
+        {
+            var (wordle, guesses) = options;
+
+            if (wordle != null && guesses != null) return new WordleGame(wordle, (int)guesses);
+            else if (wordle != null) return new WordleGame(wordle);
+            else if (guesses != null) return new WordleGame((int)guesses);
+            else return new WordleGame();
         }
     }
 }
