@@ -30,12 +30,14 @@
         {
             SuspendLayout();
             // 
-            // Form1
+            // MenuForm
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(12F, 30F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
-            Name = "Form1";
+            ClientSize = new Size(744, 461);
+            Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            Margin = new Padding(5, 6, 5, 6);
+            Name = "MenuForm";
             Text = "Wordle";
             ResumeLayout(false);
         }
