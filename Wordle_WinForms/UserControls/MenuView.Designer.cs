@@ -41,6 +41,7 @@
             DefaultGameButton.TabIndex = 0;
             DefaultGameButton.Text = "Play Wordle";
             DefaultGameButton.UseVisualStyleBackColor = true;
+            DefaultGameButton.Click += DefaultGameButton_Click;
             // 
             // CustomGameButton
             // 
@@ -50,6 +51,7 @@
             CustomGameButton.TabIndex = 1;
             CustomGameButton.Text = "Custom game";
             CustomGameButton.UseVisualStyleBackColor = true;
+            CustomGameButton.Click += CustomGameButton_Click;
             // 
             // ExitButton
             // 

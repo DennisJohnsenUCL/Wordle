@@ -13,10 +13,13 @@ namespace Wordle_WinForms
         private void InitializeViews()
         {
             var menuView = new MenuView();
+            var gameView = new GameView();
 
             menuView.Dock = DockStyle.Fill;
+            gameView.Dock = DockStyle.Fill;
 
             Controls.Add(menuView);
+            Controls.Add(gameView);
 
             menuView.BringToFront();
         }
