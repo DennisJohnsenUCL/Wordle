@@ -15,15 +15,11 @@
         {
             base.OnPaint(e);
 
-            using Pen pen = new(Color.Black, 2);
-            float halfPen = pen.Width / 2f;
-            e.Graphics.DrawRectangle(
-                pen,
-                halfPen,
-                halfPen,
-                ClientSize.Width - pen.Width,
-                ClientSize.Height - pen.Width
-            );
+            ControlPaint.DrawBorder(e.Graphics, ClientRectangle,
+                Color.Black, 2, ButtonBorderStyle.Solid,
+                Color.Black, 2, ButtonBorderStyle.Solid,
+                Color.Black, 2, ButtonBorderStyle.Solid,
+                Color.Black, 2, ButtonBorderStyle.Solid);
         }
     }
 }
