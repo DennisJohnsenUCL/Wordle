@@ -4,7 +4,10 @@
     {
         public LetterLabel()
         {
+            TextAlign = ContentAlignment.MiddleCenter;
             BackColor = Color.White;
+            Size = new Size(40, 40);
+            Font = new Font(Font.FontFamily, 20f, FontStyle.Bold);
         }
 
         protected override void OnPaint(PaintEventArgs e)
