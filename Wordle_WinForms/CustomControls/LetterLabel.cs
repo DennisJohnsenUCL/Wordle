@@ -1,18 +1,25 @@
 ﻿namespace Wordle_WinForms.CustomControls
 {
-    internal class LetterLabel : Label
+    public class LetterLabel : Label
     {
         public LetterLabel()
         {
-            BackColor = Color.LightGray;
+            BackColor = Color.White;
         }
 
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
 
-            using Pen pen = new(Color.Black, 1);
-            e.Graphics.DrawRectangle(pen, 0, 0, ClientSize.Width - 1, ClientSize.Height - 1);
+            using Pen pen = new(Color.Black, 2);
+            float halfPen = pen.Width / 2f;
+            e.Graphics.DrawRectangle(
+                pen,
+                halfPen,
+                halfPen,
+                ClientSize.Width - pen.Width,
+                ClientSize.Height - pen.Width
+            );
         }
     }
 }
