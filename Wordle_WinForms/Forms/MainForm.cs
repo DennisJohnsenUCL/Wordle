@@ -35,7 +35,7 @@ namespace Wordle_WinForms
         {
             menuView.StartGame += (s, e) =>
             {
-                WordleOptions options = e.Options;
+                var options = e.Options;
                 var game = GetWordleGameFromOptions(options);
                 gameView.StartGame(game);
                 gameView.BringToFront();
