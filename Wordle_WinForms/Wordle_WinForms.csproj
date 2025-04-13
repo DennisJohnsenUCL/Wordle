@@ -5,9 +5,14 @@
     <TargetFramework>net8.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
+	<SupportedOSPlatformVersion>6.1</SupportedOSPlatformVersion>
     <ImplicitUsings>enable</ImplicitUsings>
 	<ApplicationHighDpiMode>SystemAware</ApplicationHighDpiMode>
 	<ForceDesignerDpiUnaware>true</ForceDesignerDpiUnaware>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\WordleCore\WordleCore.csproj" />
+  </ItemGroup>
 
 </Project>

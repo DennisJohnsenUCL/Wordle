@@ -1,4 +1,6 @@
 using Wordle_WinForms.UserControls;
+using WordleCore;
+using WordleCore.Models;
 
 namespace Wordle_WinForms
 {
@@ -33,6 +35,9 @@ namespace Wordle_WinForms
         {
             menuView.StartGame += (s, e) =>
             {
+                WordleOptions options = e.Options;
+                var game = GetWordleGameFromOptions(options);
+                gameView.StartGame(game);
                 gameView.BringToFront();
             };
 
@@ -40,6 +45,16 @@ namespace Wordle_WinForms
             {
                 optionsView.BringToFront();
             };
+        }
+
+        private static WordleGame GetWordleGameFromOptions(WordleOptions options)
+        {
+            var (wordle, guesses) = options;
+
+            if (wordle != null && guesses != null) return new WordleGame(wordle, (int)guesses);
+            else if (wordle != null) return new WordleGame(wordle);
+            else if (guesses != null) return new WordleGame((int)guesses);
+            else return new WordleGame();
         }
     }
 }

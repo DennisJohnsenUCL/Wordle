@@ -1,8 +1,11 @@
-﻿namespace Wordle_WinForms.UserControls
+﻿using Wordle_WinForms.Events;
+using WordleCore.Models;
+
+namespace Wordle_WinForms.UserControls
 {
     public partial class MenuView : UserControl
     {
-        public event EventHandler StartGame = delegate { };
+        public event EventHandler<StartGameEventArgs> StartGame = delegate { };
         public event EventHandler GoToOptions = delegate { };
 
         public MenuView()
@@ -12,7 +15,8 @@
 
         private void DefaultGameButton_Click(object sender, EventArgs e)
         {
-            StartGame.Invoke(this, EventArgs.Empty);
+            var options = new WordleOptions();
+            StartGame.Invoke(this, new StartGameEventArgs(options));
         }
 
         private void CustomGameButton_Click(object sender, EventArgs e)

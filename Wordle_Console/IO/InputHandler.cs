@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using Wordle_Console.Interfaces;
 using Wordle_Console.Models;
+using WordleCore.Models;
 using WordleCore.Utils;
 
 namespace Wordle_Console.IO

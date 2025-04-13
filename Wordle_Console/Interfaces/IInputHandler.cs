@@ -1,4 +1,4 @@
-﻿using Wordle_Console.Models;
+﻿using WordleCore.Models;
 
 namespace Wordle_Console.Interfaces
 {

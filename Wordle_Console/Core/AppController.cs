@@ -1,6 +1,6 @@
 ﻿using Wordle_Console.Interfaces;
-using Wordle_Console.Models;
 using WordleCore;
+using WordleCore.Models;
 
 namespace Wordle_Console.Core
 {
