@@ -9,6 +9,7 @@
             Size = new Size(40, 40);
             Font = new Font(Font.FontFamily, 20f, FontStyle.Bold);
             AutoSize = false;
+            Padding = new Padding(4, 0, 0, 4);
         }
 
         protected override void OnPaint(PaintEventArgs e)
