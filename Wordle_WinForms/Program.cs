@@ -2,6 +2,9 @@ namespace Wordle_WinForms
 {
     internal static class Program
     {
+        //>> Deal with screen size / DPI / resolution things
+        //>> Add named methods for events down the line, and unsub in Dispose
+
         /// <summary>
         ///  The main entry point for the application.
         /// </summary>
