@@ -1,14 +1,14 @@
-﻿namespace Wordle_WinForms
+﻿namespace Wordle_WinForms.UserControls
 {
-    partial class MenuForm
+    partial class MenuView
     {
-        /// <summary>
-        ///  Required designer variable.
+        /// <summary> 
+        /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        ///  Clean up any resources being used.
+        /// <summary> 
+        /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
@@ -20,11 +20,11 @@
             base.Dispose(disposing);
         }
 
-        #region Windows Form Designer generated code
+        #region Component Designer generated code
 
-        /// <summary>
-        ///  Required method for Designer support - do not modify
-        ///  the contents of this method with the code editor.
+        /// <summary> 
+        /// Required method for Designer support - do not modify 
+        /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
         {
@@ -61,18 +61,17 @@
             ExitButton.UseVisualStyleBackColor = true;
             ExitButton.Click += ExitButton_Click;
             // 
-            // MenuForm
+            // MenuView
             // 
             AutoScaleDimensions = new SizeF(12F, 30F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(744, 461);
             Controls.Add(ExitButton);
             Controls.Add(CustomGameButton);
             Controls.Add(DefaultGameButton);
-            Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            Font = new Font("Segoe UI", 16F);
             Margin = new Padding(5, 6, 5, 6);
-            Name = "MenuForm";
-            Text = "Wordle";
+            Name = "MenuView";
+            Size = new Size(744, 461);
             ResumeLayout(false);
         }
 

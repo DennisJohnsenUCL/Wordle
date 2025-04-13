@@ -1,8 +1,8 @@
-namespace Wordle_WinForms
+﻿namespace Wordle_WinForms.UserControls
 {
-    public partial class MenuForm : Form
+    public partial class MenuView : UserControl
     {
-        public MenuForm()
+        public MenuView()
         {
             InitializeComponent();
         }
