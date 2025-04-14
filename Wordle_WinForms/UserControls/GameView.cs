@@ -45,7 +45,7 @@ namespace Wordle_WinForms.UserControls
             var c = e.KeyCode;
 
             if (c >= Keys.A && c <= Keys.Z) HandleKeyPress((char)k);
-            if (k == Keys.Enter) HandleEnterPress();
+            else if (k == Keys.Enter) HandleEnterPress();
             else if (k == Keys.Back) HandleBackPress();
         }
 
@@ -70,7 +70,9 @@ namespace Wordle_WinForms.UserControls
                     var response = _game.GuessWordle(guess);
                     PrintWordleGuessCorrectness(response);
 
-                    StartNewRow();
+                    if (_game.GameState == GameState.Completed) { _activeRow = null; }
+                    else if (_game.GameState == GameState.Failed) { _activeRow = null; }
+                    else { StartNewRow(); }
                 }
             }
         }

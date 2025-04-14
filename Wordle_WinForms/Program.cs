@@ -5,6 +5,8 @@ namespace Wordle_WinForms
         //>> Deal with screen size / DPI / resolution things
         //>> Add named methods for events down the line, and unsub in Dispose
         //>> Make a factory class for CreateWordleGameFromOptions, use in both places that have the method
+        //>> Animate letters when invalid word
+        //>> Align wordle flow panel vertical distance with horizontal
 
         /// <summary>
         ///  The main entry point for the application.
