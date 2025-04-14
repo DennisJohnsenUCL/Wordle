@@ -24,6 +24,7 @@ namespace Wordle_WinForms.UserControls
         {
             _game = game;
             _game.Start();
+            WordleLabel.Text = _game.Wordle;
             StartNewRow();
         }
 
@@ -31,10 +32,12 @@ namespace Wordle_WinForms.UserControls
         {
             if (_activeRow != null)
             {
-                for (int i = 0; i < response.Chars.Length; i++)
+                var (chars, correctness) = response;
+
+                for (int i = 0; i < chars.Length; i++)
                 {
-                    _activeRow.Controls[i].Text = response.Chars[i].ToString();
-                    _activeRow.Controls[i].BackColor = _colors[response.Correctness[i]];
+                    _activeRow.Controls[i].Text = chars[i].ToString();
+                    _activeRow.Controls[i].BackColor = _colors[correctness[i]];
                 }
             }
         }
@@ -70,8 +73,16 @@ namespace Wordle_WinForms.UserControls
                     var response = _game.GuessWordle(guess);
                     PrintWordleGuessCorrectness(response);
 
-                    if (_game.GameState == GameState.Completed) { _activeRow = null; }
-                    else if (_game.GameState == GameState.Failed) { _activeRow = null; }
+                    if (_game.GameState == GameState.Completed)
+                    {
+                        _activeRow = null;
+                        ShowGameCompleted();
+                    }
+                    else if (_game.GameState == GameState.Failed)
+                    {
+                        _activeRow = null;
+                        ShowGameFailed();
+                    }
                     else { StartNewRow(); }
                 }
             }
@@ -86,6 +97,18 @@ namespace Wordle_WinForms.UserControls
                     if (_activeRow.Controls[i].Text != "") { _activeRow.Controls[i].Text = ""; break; }
                 }
             }
+        }
+
+        private void ShowGameCompleted()
+        {
+            _gameOverMessage.Text = $"You guessed the Wordle!";
+            WordleRowsFlowPanel.Controls.Add(_gameOverMessage);
+        }
+
+        private void ShowGameFailed()
+        {
+            _gameOverMessage.Text = $"Better luck next time!\nThe wordle was {_game!.Wordle}";
+            WordleRowsFlowPanel.Controls.Add(_gameOverMessage);
         }
 
         private string GetRow()
@@ -121,6 +144,13 @@ namespace Wordle_WinForms.UserControls
             { Correctness.Absent, Color.Red },
             { Correctness.OverCount, Color.Red },
             { Correctness.Present, Color.Yellow }
+        };
+
+        private readonly Label _gameOverMessage = new()
+        {
+            AutoSize = true,
+            Margin = new Padding(5),
+            Font = new Font(DefaultFont.FontFamily, 14)
         };
     }
 }

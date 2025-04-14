@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             WordleRowsFlowPanel = new FlowLayoutPanel();
+            WordleLabel = new Label();
             SuspendLayout();
             // 
             // WordleRowsFlowPanel
@@ -40,10 +41,19 @@
             WordleRowsFlowPanel.Size = new Size(244, 400);
             WordleRowsFlowPanel.TabIndex = 0;
             // 
+            // WordleLabel
+            // 
+            WordleLabel.AutoSize = true;
+            WordleLabel.Location = new Point(657, 6);
+            WordleLabel.Name = "WordleLabel";
+            WordleLabel.Size = new Size(0, 30);
+            WordleLabel.TabIndex = 1;
+            // 
             // GameView
             // 
             AutoScaleDimensions = new SizeF(12F, 30F);
             AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(WordleLabel);
             Controls.Add(WordleRowsFlowPanel);
             Font = new Font("Segoe UI", 16F);
             Margin = new Padding(5, 6, 5, 6);
@@ -51,10 +61,12 @@
             Size = new Size(744, 461);
             KeyDown += GameView_KeyDown;
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
 
         private FlowLayoutPanel WordleRowsFlowPanel;
+        private Label WordleLabel;
     }
 }
