@@ -35,9 +35,9 @@
             // 
             WordleRowsFlowPanel.AutoScroll = true;
             WordleRowsFlowPanel.FlowDirection = FlowDirection.TopDown;
-            WordleRowsFlowPanel.Location = new Point(258, 28);
+            WordleRowsFlowPanel.Location = new Point(250, 28);
             WordleRowsFlowPanel.Name = "WordleRowsFlowPanel";
-            WordleRowsFlowPanel.Size = new Size(228, 400);
+            WordleRowsFlowPanel.Size = new Size(244, 400);
             WordleRowsFlowPanel.TabIndex = 0;
             // 
             // GameView
@@ -49,6 +49,7 @@
             Margin = new Padding(5, 6, 5, 6);
             Name = "GameView";
             Size = new Size(744, 461);
+            KeyDown += GameView_KeyDown;
             ResumeLayout(false);
         }
 

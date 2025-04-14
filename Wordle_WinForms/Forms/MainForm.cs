@@ -6,7 +6,6 @@ namespace Wordle_WinForms
 {
     public partial class MainForm : Form
     {
-
         private readonly MenuView menuView = new();
         private readonly GameView gameView = new();
         private readonly OptionsView optionsView = new();
@@ -37,6 +36,7 @@ namespace Wordle_WinForms
             {
                 var options = e.Options;
                 var game = GetWordleGameFromOptions(options);
+                gameView.Focus();
                 gameView.StartGame(game);
                 gameView.BringToFront();
             };

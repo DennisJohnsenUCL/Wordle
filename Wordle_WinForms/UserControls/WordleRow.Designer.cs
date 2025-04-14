@@ -94,11 +94,11 @@
             // 
             AutoScaleDimensions = new SizeF(12F, 30F);
             AutoScaleMode = AutoScaleMode.Font;
-            Controls.Add(LetterLabel5);
-            Controls.Add(LetterLabel4);
-            Controls.Add(LetterLabel3);
-            Controls.Add(LetterLabel2);
             Controls.Add(LetterLabel1);
+            Controls.Add(LetterLabel2);
+            Controls.Add(LetterLabel3);
+            Controls.Add(LetterLabel4);
+            Controls.Add(LetterLabel5);
             Font = new Font("Segoe UI", 16F);
             Margin = new Padding(5, 6, 5, 6);
             Name = "WordleRow";

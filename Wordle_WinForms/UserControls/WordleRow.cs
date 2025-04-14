@@ -5,6 +5,8 @@
         public WordleRow()
         {
             InitializeComponent();
+            TabStop = false;
+            SetStyle(ControlStyles.Selectable, false);
         }
     }
 }
