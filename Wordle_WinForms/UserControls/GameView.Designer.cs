@@ -30,6 +30,7 @@
         {
             WordleRowsFlowPanel = new FlowLayoutPanel();
             WordleLabel = new Label();
+            GuessesLabel = new Label();
             SuspendLayout();
             // 
             // WordleRowsFlowPanel
@@ -49,10 +50,20 @@
             WordleLabel.Size = new Size(0, 30);
             WordleLabel.TabIndex = 1;
             // 
+            // GuessesLabel
+            // 
+            GuessesLabel.AutoSize = true;
+            GuessesLabel.Font = new Font("Segoe UI", 12F);
+            GuessesLabel.Location = new Point(512, 58);
+            GuessesLabel.Name = "GuessesLabel";
+            GuessesLabel.Size = new Size(0, 21);
+            GuessesLabel.TabIndex = 2;
+            // 
             // GameView
             // 
             AutoScaleDimensions = new SizeF(12F, 30F);
             AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(GuessesLabel);
             Controls.Add(WordleLabel);
             Controls.Add(WordleRowsFlowPanel);
             Font = new Font("Segoe UI", 16F);
@@ -68,5 +79,6 @@
 
         private FlowLayoutPanel WordleRowsFlowPanel;
         private Label WordleLabel;
+        private Label GuessesLabel;
     }
 }

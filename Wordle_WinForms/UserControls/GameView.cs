@@ -75,13 +75,11 @@ namespace Wordle_WinForms.UserControls
 
                     if (_game.GameState == GameState.Completed)
                     {
-                        _activeRow = null;
-                        ShowGameCompleted();
+                        HandleGameOver($"You guessed the Wordle\nWith {_game!.GuessesLeft} guesses to spare");
                     }
                     else if (_game.GameState == GameState.Failed)
                     {
-                        _activeRow = null;
-                        ShowGameFailed();
+                        HandleGameOver($"Better luck next time!\nThe wordle was {_game!.Wordle}");
                     }
                     else { StartNewRow(); }
                 }
@@ -99,15 +97,11 @@ namespace Wordle_WinForms.UserControls
             }
         }
 
-        private void ShowGameCompleted()
+        private void HandleGameOver(string message)
         {
-            _gameOverMessage.Text = $"You guessed the Wordle!";
-            WordleRowsFlowPanel.Controls.Add(_gameOverMessage);
-        }
-
-        private void ShowGameFailed()
-        {
-            _gameOverMessage.Text = $"Better luck next time!\nThe wordle was {_game!.Wordle}";
+            GuessesLabel.Text = "";
+            _activeRow = null;
+            _gameOverMessage.Text = message;
             WordleRowsFlowPanel.Controls.Add(_gameOverMessage);
         }
 
@@ -129,6 +123,7 @@ namespace Wordle_WinForms.UserControls
             var row = new WordleRow();
             WordleRowsFlowPanel.Controls.Add(row);
             _activeRow = row;
+            GuessesLabel.Text = $"You have {_game!.GuessesLeft} guesses left";
         }
 
         protected override bool ProcessDialogKey(Keys keyData)
