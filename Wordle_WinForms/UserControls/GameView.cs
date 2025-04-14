@@ -1,4 +1,5 @@
-﻿using Wordle_WinForms.CustomControls;
+﻿using System.Text;
+using Wordle_WinForms.CustomControls;
 using WordleCore;
 using WordleCore.Enums;
 using WordleCore.Models;
@@ -23,9 +24,7 @@ namespace Wordle_WinForms.UserControls
         {
             _game = game;
             _game.Start();
-            var row = new WordleRow();
-            WordleRowsFlowPanel.Controls.Add(row);
-            _activeRow = row;
+            StartNewRow();
         }
 
         private void PrintWordleGuessCorrectness(WordleResponse response)
@@ -70,10 +69,10 @@ namespace Wordle_WinForms.UserControls
                 {
                     var response = _game.GuessWordle(guess);
                     PrintWordleGuessCorrectness(response);
+
+                    StartNewRow();
                 }
             }
-
-            string GetRow() { return "guess"; }
         }
 
         private void HandleBackPress()
@@ -85,6 +84,26 @@ namespace Wordle_WinForms.UserControls
                     if (_activeRow.Controls[i].Text != "") { _activeRow.Controls[i].Text = ""; break; }
                 }
             }
+        }
+
+        private string GetRow()
+        {
+            var sb = new StringBuilder();
+            if (_activeRow != null)
+            {
+                foreach (LetterLabel control in _activeRow.Controls)
+                {
+                    sb.Append(control.Text);
+                }
+            }
+            return sb.ToString();
+        }
+
+        private void StartNewRow()
+        {
+            var row = new WordleRow();
+            WordleRowsFlowPanel.Controls.Add(row);
+            _activeRow = row;
         }
 
         protected override bool ProcessDialogKey(Keys keyData)
