@@ -59,6 +59,13 @@ namespace Wordle_WinForms.UserControls
             MessageBox.Show(e.KeyData.ToString());
         }
 
+        protected override bool ProcessDialogKey(Keys keyData)
+        {
+            if (keyData == Keys.Tab)
+                return true;
+            return base.ProcessDialogKey(keyData);
+        }
+
         private static readonly Dictionary<Correctness, Color> _colors = new()
         {
             { Correctness.Correct, Color.Green },
