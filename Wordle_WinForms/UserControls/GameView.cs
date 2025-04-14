@@ -18,6 +18,7 @@ namespace Wordle_WinForms.UserControls
             InitializeComponent();
             SetStyle(ControlStyles.Selectable, true);
             TabStop = true;
+            WordleRowsFlowPanel.TabStop = false;
         }
 
         public void StartGame(WordleGame game)
