@@ -31,6 +31,7 @@
             WordleRowsFlowPanel = new FlowLayoutPanel();
             WordleLabel = new Label();
             GuessesLabel = new Label();
+            BackButton = new Button();
             SuspendLayout();
             // 
             // WordleRowsFlowPanel
@@ -59,10 +60,22 @@
             GuessesLabel.Size = new Size(0, 21);
             GuessesLabel.TabIndex = 2;
             // 
+            // BackButton
+            // 
+            BackButton.Location = new Point(3, 3);
+            BackButton.Name = "BackButton";
+            BackButton.Size = new Size(71, 43);
+            BackButton.TabIndex = 3;
+            BackButton.TabStop = false;
+            BackButton.Text = "Back";
+            BackButton.UseVisualStyleBackColor = true;
+            BackButton.Click += Button1_Click;
+            // 
             // GameView
             // 
             AutoScaleDimensions = new SizeF(12F, 30F);
             AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(BackButton);
             Controls.Add(GuessesLabel);
             Controls.Add(WordleLabel);
             Controls.Add(WordleRowsFlowPanel);
@@ -80,5 +93,6 @@
         private FlowLayoutPanel WordleRowsFlowPanel;
         private Label WordleLabel;
         private Label GuessesLabel;
+        private Button BackButton;
     }
 }

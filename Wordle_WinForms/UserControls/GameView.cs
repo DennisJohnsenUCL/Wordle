@@ -12,12 +12,16 @@ namespace Wordle_WinForms.UserControls
         private WordleRow? _activeRow = null;
         private WordleGame? _game = null;
 
+        public event EventHandler GoBack = delegate { };
+
         public GameView()
         {
             InitializeComponent();
             SetStyle(ControlStyles.Selectable, true);
             TabStop = true;
             WordleRowsFlowPanel.TabStop = false;
+
+            GoBack += (s, e) => Reset();
         }
 
         public void StartGame(WordleGame game)
@@ -26,6 +30,15 @@ namespace Wordle_WinForms.UserControls
             _game.Start();
             WordleLabel.Text = _game.Wordle;
             StartNewRow();
+        }
+
+        private void Reset()
+        {
+            _game = null;
+            _activeRow = null;
+            WordleRowsFlowPanel.Controls.Clear();
+            GuessesLabel.Text = "";
+            _gameOverMessage.Text = "";
         }
 
         private void PrintWordleGuessCorrectness(WordleResponse response)
@@ -157,5 +170,10 @@ namespace Wordle_WinForms.UserControls
             Margin = new Padding(5),
             Font = new Font(DefaultFont.FontFamily, 14)
         };
+
+        private void Button1_Click(object sender, EventArgs e)
+        {
+            GoBack.Invoke(this, e);
+        }
     }
 }

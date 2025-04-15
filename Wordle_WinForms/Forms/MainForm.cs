@@ -43,7 +43,14 @@ namespace Wordle_WinForms
 
             menuView.GoToOptions += (s, e) =>
             {
+                optionsView.Focus();
                 optionsView.BringToFront();
+            };
+
+            gameView.GoBack += (s, e) =>
+            {
+                menuView.Focus();
+                menuView.BringToFront();
             };
         }
 
