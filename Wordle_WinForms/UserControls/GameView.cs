@@ -19,7 +19,6 @@ namespace Wordle_WinForms.UserControls
             InitializeComponent();
             SetStyle(ControlStyles.Selectable, true);
             TabStop = true;
-            WordleRowsFlowPanel.TabStop = false;
 
             GoBack += (s, e) => Reset();
         }
@@ -39,6 +38,7 @@ namespace Wordle_WinForms.UserControls
             WordleRowsFlowPanel.Controls.Clear();
             GuessesLabel.Text = "";
             _gameOverMessage.Text = "";
+            NewGameButton.Visible = false;
         }
 
         private void PrintWordleGuessCorrectness(WordleResponse response)
@@ -87,6 +87,7 @@ namespace Wordle_WinForms.UserControls
                     PrintWordleGuessCorrectness(response);
 
                     if (!IsGameOver()) StartNewRow();
+                    else NewGameButton.Visible = true;
                 }
             }
         }
@@ -171,9 +172,16 @@ namespace Wordle_WinForms.UserControls
             Font = new Font(DefaultFont.FontFamily, 14)
         };
 
-        private void Button1_Click(object sender, EventArgs e)
+        private void BackButton_Click(object sender, EventArgs e)
         {
             GoBack?.Invoke(this, e);
+        }
+
+        private void NewGameButton_Click(object sender, EventArgs e)
+        {
+            Reset();
+            StartGame(new WordleGame());
+            ActiveControl = null;
         }
     }
 }
