@@ -8,13 +8,13 @@ namespace Wordle_WinForms
         //>> Animate letters when invalid word
         //>> Animate row popping in
         //>> Align wordle flow panel vertical distance with horizontal
-        //>> Add label showing how many guesses are left
         //>> Add alphabet
         //>> Add Main Menu button when game over
         //>> Add options menu
         //>> Add new game shortcut when game over
         //>> Add game controller to handle all non-UI logic strictly, with events
         //>> Add a back button
+        //>> Find a better way to stop tabbing to other views (hide, close, dispose, whatever)
 
         /// <summary>
         ///  The main entry point for the application.

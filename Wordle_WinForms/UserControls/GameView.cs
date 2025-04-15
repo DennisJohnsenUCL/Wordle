@@ -65,7 +65,7 @@ namespace Wordle_WinForms.UserControls
 
         private void HandleEnterPress()
         {
-            if (_activeRow != null && _game != null)
+            if (_game != null)
             {
                 string guess = GetRow();
                 if (guess.Length == 5 && WordleGameUtils.IsAllowedWord(guess))
@@ -73,15 +73,7 @@ namespace Wordle_WinForms.UserControls
                     var response = _game.GuessWordle(guess);
                     PrintWordleGuessCorrectness(response);
 
-                    if (_game.GameState == GameState.Completed)
-                    {
-                        HandleGameOver($"You guessed the Wordle\nWith {_game!.GuessesLeft} guesses to spare");
-                    }
-                    else if (_game.GameState == GameState.Failed)
-                    {
-                        HandleGameOver($"Better luck next time!\nThe wordle was {_game!.Wordle}");
-                    }
-                    else { StartNewRow(); }
+                    if (!IsGameOver()) StartNewRow();
                 }
             }
         }
@@ -95,6 +87,24 @@ namespace Wordle_WinForms.UserControls
                     if (_activeRow.Controls[i].Text != "") { _activeRow.Controls[i].Text = ""; break; }
                 }
             }
+        }
+
+        private bool IsGameOver()
+        {
+            if (_game != null)
+            {
+                if (_game.GameState == GameState.Completed)
+                {
+                    HandleGameOver($"You guessed the Wordle\nWith {_game!.GuessesLeft} guesses to spare");
+                    return true;
+                }
+                else if (_game.GameState == GameState.Failed)
+                {
+                    HandleGameOver($"Better luck next time!\nThe wordle was {_game!.Wordle}");
+                    return true;
+                }
+            }
+            return false;
         }
 
         private void HandleGameOver(string message)
