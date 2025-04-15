@@ -5,8 +5,8 @@ namespace Wordle_WinForms.UserControls
 {
     public partial class MenuView : UserControl
     {
-        public event EventHandler<StartGameEventArgs> StartGame = delegate { };
-        public event EventHandler GoToOptions = delegate { };
+        public event EventHandler<StartGameEventArgs>? StartGame;
+        public event EventHandler? GoToOptions;
 
         public MenuView()
         {
@@ -16,12 +16,12 @@ namespace Wordle_WinForms.UserControls
         private void DefaultGameButton_Click(object sender, EventArgs e)
         {
             var options = new WordleOptions();
-            StartGame.Invoke(this, new StartGameEventArgs(options));
+            StartGame?.Invoke(this, new StartGameEventArgs(options));
         }
 
         private void CustomGameButton_Click(object sender, EventArgs e)
         {
-            GoToOptions.Invoke(this, EventArgs.Empty);
+            GoToOptions?.Invoke(this, EventArgs.Empty);
         }
 
         private void ExitButton_Click(object sender, EventArgs e)

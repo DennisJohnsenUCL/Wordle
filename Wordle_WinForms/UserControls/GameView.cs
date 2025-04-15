@@ -12,7 +12,7 @@ namespace Wordle_WinForms.UserControls
         private WordleRow? _activeRow = null;
         private WordleGame? _game = null;
 
-        public event EventHandler GoBack = delegate { };
+        public event EventHandler? GoBack;
 
         public GameView()
         {
@@ -173,7 +173,7 @@ namespace Wordle_WinForms.UserControls
 
         private void Button1_Click(object sender, EventArgs e)
         {
-            GoBack.Invoke(this, e);
+            GoBack?.Invoke(this, e);
         }
     }
 }
