@@ -28,21 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
-            WordleRowsFlowPanel = new FlowLayoutPanel();
             WordleLabel = new Label();
             GuessesLabel = new Label();
             BackButton = new Button();
             NewGameButton = new Button();
+            WordlePanel = new Wordle_WinForms.CustomControls.WordleFlowPanel();
             SuspendLayout();
-            // 
-            // WordleRowsFlowPanel
-            // 
-            WordleRowsFlowPanel.AutoScroll = true;
-            WordleRowsFlowPanel.FlowDirection = FlowDirection.TopDown;
-            WordleRowsFlowPanel.Location = new Point(250, 28);
-            WordleRowsFlowPanel.Name = "WordleRowsFlowPanel";
-            WordleRowsFlowPanel.Size = new Size(244, 400);
-            WordleRowsFlowPanel.TabIndex = 0;
             // 
             // WordleLabel
             // 
@@ -85,15 +76,24 @@
             NewGameButton.Visible = false;
             NewGameButton.Click += NewGameButton_Click;
             // 
+            // WordlePanel
+            // 
+            WordlePanel.AutoScroll = true;
+            WordlePanel.FlowDirection = FlowDirection.TopDown;
+            WordlePanel.Location = new Point(250, 28);
+            WordlePanel.Name = "WordleFlowPanel1";
+            WordlePanel.Size = new Size(244, 400);
+            WordlePanel.TabIndex = 5;
+            // 
             // GameView
             // 
             AutoScaleDimensions = new SizeF(12F, 30F);
             AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(WordlePanel);
             Controls.Add(NewGameButton);
             Controls.Add(BackButton);
             Controls.Add(GuessesLabel);
             Controls.Add(WordleLabel);
-            Controls.Add(WordleRowsFlowPanel);
             Font = new Font("Segoe UI", 16F);
             Margin = new Padding(5, 6, 5, 6);
             Name = "GameView";
@@ -104,11 +104,10 @@
         }
 
         #endregion
-
-        private FlowLayoutPanel WordleRowsFlowPanel;
         private Label WordleLabel;
         private Label GuessesLabel;
         private Button BackButton;
         private Button NewGameButton;
+        private CustomControls.WordleFlowPanel WordlePanel;
     }
 }

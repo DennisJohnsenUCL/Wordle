@@ -1,15 +1,11 @@
-﻿using System.Text;
-using Wordle_WinForms.CustomControls;
-using WordleCore;
+﻿using WordleCore;
 using WordleCore.Enums;
-using WordleCore.Models;
 using WordleCore.Utils;
 
 namespace Wordle_WinForms.UserControls
 {
     public partial class GameView : UserControl
     {
-        private WordleRow? _activeRow = null;
         private WordleGame? _game = null;
 
         public event EventHandler? GoBack;
@@ -34,25 +30,9 @@ namespace Wordle_WinForms.UserControls
         private void Reset()
         {
             _game = null;
-            _activeRow = null;
-            WordleRowsFlowPanel.Controls.Clear();
+            WordlePanel.Reset();
             GuessesLabel.Text = "";
-            _gameOverMessage.Text = "";
             NewGameButton.Visible = false;
-        }
-
-        private void PrintWordleGuessCorrectness(WordleResponse response)
-        {
-            if (_activeRow != null)
-            {
-                var (chars, correctness) = response;
-
-                for (int i = 0; i < chars.Length; i++)
-                {
-                    _activeRow.Controls[i].Text = chars[i].ToString();
-                    _activeRow.Controls[i].BackColor = _colors[correctness[i]];
-                }
-            }
         }
 
         private void GameView_KeyDown(object sender, KeyEventArgs e)
@@ -60,31 +40,21 @@ namespace Wordle_WinForms.UserControls
             var k = e.KeyData;
             var c = e.KeyCode;
 
-            if (c >= Keys.A && c <= Keys.Z) HandleKeyPress((char)k);
+            if (c >= Keys.A && c <= Keys.Z) WordlePanel.AddLetter((char)k);
             else if (k == Keys.Enter) HandleEnterPress();
-            else if (k == Keys.Back) HandleBackPress();
-        }
-
-        private void HandleKeyPress(char c)
-        {
-            if (_activeRow != null)
-            {
-                foreach (LetterLabel control in _activeRow.Controls)
-                {
-                    if (control.Text == "") { control.Text = c.ToString(); break; }
-                }
-            }
+            else if (k == Keys.Back) WordlePanel.RemoveLetter();
         }
 
         private void HandleEnterPress()
         {
             if (_game != null)
             {
-                string guess = GetRow();
+                string guess = WordlePanel.GetActiveWord();
                 if (guess.Length == 5 && WordleGameUtils.IsAllowedWord(guess))
                 {
-                    var response = _game.GuessWordle(guess);
-                    PrintWordleGuessCorrectness(response);
+                    var (chars, correctness) = _game.GuessWordle(guess);
+
+                    WordlePanel.PrintCorrectness([.. chars], [.. correctness.Select(x => _colors[x])]);
 
                     if (!IsGameOver()) StartNewRow();
                     else NewGameButton.Visible = true;
@@ -92,61 +62,26 @@ namespace Wordle_WinForms.UserControls
             }
         }
 
-        private void HandleBackPress()
-        {
-            if (_activeRow != null)
-            {
-                for (int i = _activeRow.Controls.Count - 1; i >= 0; i--)
-                {
-                    if (_activeRow.Controls[i].Text != "") { _activeRow.Controls[i].Text = ""; break; }
-                }
-            }
-        }
-
         private bool IsGameOver()
         {
-            if (_game != null)
+            if (_game?.GameState == GameState.Completed)
             {
-                if (_game.GameState == GameState.Completed)
-                {
-                    HandleGameOver($"You guessed the Wordle\nWith {_game!.GuessesLeft} guesses to spare");
-                    return true;
-                }
-                else if (_game.GameState == GameState.Failed)
-                {
-                    HandleGameOver($"Better luck next time!\nThe wordle was {_game!.Wordle}");
-                    return true;
-                }
+                GuessesLabel.Text = "";
+                WordlePanel.PrintMessage($"You guessed the Wordle\nWith {_game!.GuessesLeft} guesses to spare");
+                return true;
+            }
+            else if (_game?.GameState == GameState.Failed)
+            {
+                GuessesLabel.Text = "";
+                WordlePanel.PrintMessage($"Better luck next time!\nThe wordle was {_game!.Wordle}");
+                return true;
             }
             return false;
         }
 
-        private void HandleGameOver(string message)
-        {
-            GuessesLabel.Text = "";
-            _activeRow = null;
-            _gameOverMessage.Text = message;
-            WordleRowsFlowPanel.Controls.Add(_gameOverMessage);
-        }
-
-        private string GetRow()
-        {
-            var sb = new StringBuilder();
-            if (_activeRow != null)
-            {
-                foreach (LetterLabel control in _activeRow.Controls)
-                {
-                    sb.Append(control.Text);
-                }
-            }
-            return sb.ToString();
-        }
-
         private void StartNewRow()
         {
-            var row = new WordleRow();
-            WordleRowsFlowPanel.Controls.Add(row);
-            _activeRow = row;
+            WordlePanel.AddRow();
             GuessesLabel.Text = $"You have {_game!.GuessesLeft} guesses left";
         }
 
@@ -163,13 +98,6 @@ namespace Wordle_WinForms.UserControls
             { Correctness.Absent, Color.Red },
             { Correctness.OverCount, Color.Red },
             { Correctness.Present, Color.Yellow }
-        };
-
-        private readonly Label _gameOverMessage = new()
-        {
-            AutoSize = true,
-            Margin = new Padding(5),
-            Font = new Font(DefaultFont.FontFamily, 14)
         };
 
         private void BackButton_Click(object sender, EventArgs e)
