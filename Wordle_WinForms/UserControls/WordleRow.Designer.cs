@@ -39,7 +39,8 @@
             // 
             LetterLabel1.BackColor = Color.White;
             LetterLabel1.Font = new Font("Segoe UI", 20F, FontStyle.Bold);
-            LetterLabel1.Location = new Point(2, 2);
+            LetterLabel1.Location = new Point(1, 0);
+            LetterLabel1.Margin = new Padding(0);
             LetterLabel1.Name = "LetterLabel1";
             LetterLabel1.Padding = new Padding(3, 0, 0, 3);
             LetterLabel1.Size = new Size(40, 40);
@@ -50,7 +51,8 @@
             // 
             LetterLabel2.BackColor = Color.White;
             LetterLabel2.Font = new Font("Segoe UI", 20F, FontStyle.Bold);
-            LetterLabel2.Location = new Point(48, 2);
+            LetterLabel2.Location = new Point(47, 0);
+            LetterLabel2.Margin = new Padding(0);
             LetterLabel2.Name = "LetterLabel2";
             LetterLabel2.Padding = new Padding(3, 0, 0, 3);
             LetterLabel2.Size = new Size(40, 40);
@@ -61,7 +63,8 @@
             // 
             LetterLabel3.BackColor = Color.White;
             LetterLabel3.Font = new Font("Segoe UI", 20F, FontStyle.Bold);
-            LetterLabel3.Location = new Point(94, 2);
+            LetterLabel3.Location = new Point(93, 0);
+            LetterLabel3.Margin = new Padding(0);
             LetterLabel3.Name = "LetterLabel3";
             LetterLabel3.Padding = new Padding(3, 0, 0, 3);
             LetterLabel3.Size = new Size(40, 40);
@@ -72,7 +75,8 @@
             // 
             LetterLabel4.BackColor = Color.White;
             LetterLabel4.Font = new Font("Segoe UI", 20F, FontStyle.Bold);
-            LetterLabel4.Location = new Point(140, 2);
+            LetterLabel4.Location = new Point(139, 0);
+            LetterLabel4.Margin = new Padding(0);
             LetterLabel4.Name = "LetterLabel4";
             LetterLabel4.Padding = new Padding(3, 0, 0, 3);
             LetterLabel4.Size = new Size(40, 40);
@@ -83,7 +87,8 @@
             // 
             LetterLabel5.BackColor = Color.White;
             LetterLabel5.Font = new Font("Segoe UI", 20F, FontStyle.Bold);
-            LetterLabel5.Location = new Point(186, 2);
+            LetterLabel5.Location = new Point(185, 0);
+            LetterLabel5.Margin = new Padding(0);
             LetterLabel5.Name = "LetterLabel5";
             LetterLabel5.Padding = new Padding(3, 0, 0, 3);
             LetterLabel5.Size = new Size(40, 40);
@@ -100,9 +105,9 @@
             Controls.Add(LetterLabel4);
             Controls.Add(LetterLabel5);
             Font = new Font("Segoe UI", 16F);
-            Margin = new Padding(5, 6, 5, 6);
+            Margin = new Padding(0, 0, 0, 6);
             Name = "WordleRow";
-            Size = new Size(228, 44);
+            Size = new Size(226, 40);
             ResumeLayout(false);
         }
 

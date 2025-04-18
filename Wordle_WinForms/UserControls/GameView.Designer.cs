@@ -80,9 +80,9 @@
             // 
             WordlePanel.AutoScroll = true;
             WordlePanel.FlowDirection = FlowDirection.TopDown;
-            WordlePanel.Location = new Point(250, 28);
-            WordlePanel.Name = "WordleFlowPanel1";
-            WordlePanel.Size = new Size(244, 400);
+            WordlePanel.Location = new Point(259, 28);
+            WordlePanel.Name = "WordlePanel";
+            WordlePanel.Size = new Size(226, 400);
             WordlePanel.TabIndex = 5;
             // 
             // GameView
@@ -97,7 +97,7 @@
             Font = new Font("Segoe UI", 16F);
             Margin = new Padding(5, 6, 5, 6);
             Name = "GameView";
-            Size = new Size(744, 461);
+            Size = new Size(744, 460);
             KeyDown += GameView_KeyDown;
             ResumeLayout(false);
             PerformLayout();
