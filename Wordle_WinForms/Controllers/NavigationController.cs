@@ -1,6 +1,8 @@
-﻿namespace Wordle_WinForms.Controllers
+﻿using Wordle_WinForms.Interfaces;
+
+namespace Wordle_WinForms.Controllers
 {
-    public class NavigationController<TEnum> where TEnum : Enum
+    public class NavigationController<TEnum> : INavigationController<TEnum> where TEnum : Enum
     {
         private readonly Dictionary<TEnum, UserControl> _viewContainer = [];
 

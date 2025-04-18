@@ -1,3 +1,5 @@
+using Wordle_WinForms.Enums;
+using Wordle_WinForms.Interfaces;
 using Wordle_WinForms.UserControls;
 using WordleCore;
 using WordleCore.Models;
@@ -6,12 +8,14 @@ namespace Wordle_WinForms
 {
     public partial class MainForm : Form
     {
+        private readonly INavigationController<Views> _navigation;
         private readonly MenuView menuView = new();
         private readonly GameView gameView = new();
         private readonly OptionsView optionsView = new();
 
-        public MainForm()
+        public MainForm(INavigationController<Views> navigation)
         {
+            _navigation = navigation;
             InitializeComponent();
             InitializeViews();
             InitializeEvents();
@@ -27,7 +31,11 @@ namespace Wordle_WinForms
             Controls.Add(gameView);
             Controls.Add(optionsView);
 
-            menuView.BringToFront();
+            _navigation.Register(Views.menuView, menuView);
+            _navigation.Register(Views.optionsView, optionsView);
+            _navigation.Register(Views.gameView, gameView);
+
+            _navigation.NavigateTo(Views.menuView);
         }
 
         private void InitializeEvents()
@@ -36,21 +44,18 @@ namespace Wordle_WinForms
             {
                 var options = e.Options;
                 var game = GetWordleGameFromOptions(options);
-                gameView.Focus();
                 gameView.StartGame(game);
-                gameView.BringToFront();
+                _navigation.NavigateTo(Views.gameView);
             };
 
             menuView.GoToOptions += (s, e) =>
             {
-                optionsView.Focus();
-                optionsView.BringToFront();
+                _navigation.NavigateTo(Views.optionsView);
             };
 
             gameView.GoBack += (s, e) =>
             {
-                menuView.Focus();
-                menuView.BringToFront();
+                _navigation.NavigateTo(Views.menuView);
             };
         }
 
