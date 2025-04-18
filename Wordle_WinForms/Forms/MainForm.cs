@@ -9,13 +9,16 @@ namespace Wordle_WinForms
     public partial class MainForm : Form
     {
         private readonly INavigationController<Views> _navigation;
-        private readonly MenuView menuView = new();
-        private readonly GameView gameView = new();
-        private readonly OptionsView optionsView = new();
+        private readonly MenuView _menuView;
+        private readonly GameView _gameView;
+        private readonly OptionsView _optionsView = new();
 
         public MainForm(INavigationController<Views> navigation)
         {
             _navigation = navigation;
+            _menuView = new(_navigation);
+            _gameView = new(_navigation);
+
             InitializeComponent();
             InitializeViews();
             InitializeEvents();
@@ -23,39 +26,29 @@ namespace Wordle_WinForms
 
         private void InitializeViews()
         {
-            menuView.Dock = DockStyle.Fill;
-            gameView.Dock = DockStyle.Fill;
-            optionsView.Dock = DockStyle.Fill;
+            _menuView.Dock = DockStyle.Fill;
+            _gameView.Dock = DockStyle.Fill;
+            _optionsView.Dock = DockStyle.Fill;
 
-            Controls.Add(menuView);
-            Controls.Add(gameView);
-            Controls.Add(optionsView);
+            Controls.Add(_menuView);
+            Controls.Add(_gameView);
+            Controls.Add(_optionsView);
 
-            _navigation.Register(Views.menuView, menuView);
-            _navigation.Register(Views.optionsView, optionsView);
-            _navigation.Register(Views.gameView, gameView);
+            _navigation.Register(Views.menuView, _menuView);
+            _navigation.Register(Views.optionsView, _optionsView);
+            _navigation.Register(Views.gameView, _gameView);
 
             _navigation.NavigateTo(Views.menuView);
         }
 
         private void InitializeEvents()
         {
-            menuView.StartGame += (s, e) =>
+            _menuView.StartGame += (s, e) =>
             {
                 var options = e.Options;
                 var game = GetWordleGameFromOptions(options);
-                gameView.StartGame(game);
+                _gameView.StartGame(game);
                 _navigation.NavigateTo(Views.gameView);
-            };
-
-            menuView.GoToOptions += (s, e) =>
-            {
-                _navigation.NavigateTo(Views.optionsView);
-            };
-
-            gameView.GoBack += (s, e) =>
-            {
-                _navigation.NavigateTo(Views.menuView);
             };
         }
 

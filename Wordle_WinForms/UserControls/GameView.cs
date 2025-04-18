@@ -1,4 +1,6 @@
-﻿using WordleCore;
+﻿using Wordle_WinForms.Enums;
+using Wordle_WinForms.Interfaces;
+using WordleCore;
 using WordleCore.Enums;
 using WordleCore.Utils;
 
@@ -6,17 +8,16 @@ namespace Wordle_WinForms.UserControls
 {
     public partial class GameView : UserControl
     {
+        private readonly INavigationController<Views> _navigation;
         private WordleGame? _game = null;
 
-        public event EventHandler? GoBack;
-
-        public GameView()
+        public GameView(INavigationController<Views> navigation)
         {
+            _navigation = navigation;
+
             InitializeComponent();
             SetStyle(ControlStyles.Selectable, true);
             TabStop = true;
-
-            GoBack += (s, e) => Reset();
         }
 
         public void StartGame(WordleGame game)
@@ -102,7 +103,8 @@ namespace Wordle_WinForms.UserControls
 
         private void BackButton_Click(object sender, EventArgs e)
         {
-            GoBack?.Invoke(this, e);
+            Reset();
+            _navigation.NavigateTo(Views.menuView);
         }
 
         private void NewGameButton_Click(object sender, EventArgs e)
