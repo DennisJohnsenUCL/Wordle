@@ -28,11 +28,11 @@ namespace Wordle_WinForms.CustomControls
             _activeRow = row;
         }
 
-        public bool PrintCorrectness(char[] chars, Color[] colors)
+        public bool PrintCorrectness(IReadOnlyList<char> chars, IReadOnlyList<Color> colors)
         {
             if (_activeRow == null) return false;
 
-            for (int i = 0; i < chars.Length; i++)
+            for (int i = 0; i < chars.Count; i++)
             {
                 _activeRow.Controls[i].Text = chars[i].ToString();
                 _activeRow.Controls[i].BackColor = colors[i];

@@ -55,7 +55,7 @@ namespace Wordle_WinForms.UserControls
                 {
                     var (chars, correctness) = _game.GuessWordle(guess);
 
-                    WordlePanel.PrintCorrectness([.. chars], [.. correctness.Select(x => _colors[x])]);
+                    WordlePanel.PrintCorrectness(chars, [.. correctness.Select(x => _colors[x])]);
 
                     if (!IsGameOver()) StartNewRow();
                     else NewGameButton.Visible = true;
