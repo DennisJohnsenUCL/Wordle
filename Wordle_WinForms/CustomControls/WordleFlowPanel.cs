@@ -10,7 +10,8 @@ namespace Wordle_WinForms.CustomControls
         {
             AutoScroll = true;
             FlowDirection = FlowDirection.TopDown;
-            Size = new Size(226, 400);
+            Size = new Size(246, 400);
+            WrapContents = false;
         }
 
         public string GetActiveWord() => _activeRow?.GetWord() ?? "";
@@ -22,7 +23,7 @@ namespace Wordle_WinForms.CustomControls
         public void AddRow()
         {
             var row = new WordleRow();
-            Controls.Add(row);
+            AddAndScroll(row);
             _activeRow = row;
         }
 
@@ -35,7 +36,6 @@ namespace Wordle_WinForms.CustomControls
                 _activeRow.Controls[i].Text = chars[i].ToString();
                 _activeRow.Controls[i].BackColor = colors[i];
             }
-
             return true;
         }
 
@@ -49,7 +49,13 @@ namespace Wordle_WinForms.CustomControls
                 Font = new Font(DefaultFont.FontFamily, 14),
                 Text = message
             };
-            Controls.Add(label);
+            AddAndScroll(label);
+        }
+
+        private void AddAndScroll(Control control)
+        {
+            Controls.Add(control);
+            VerticalScroll.Value = VerticalScroll.Maximum;
         }
 
         public void Reset()

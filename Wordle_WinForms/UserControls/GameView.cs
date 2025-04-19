@@ -84,14 +84,6 @@ namespace Wordle_WinForms.UserControls
             GuessesLabel.Text = $"You have {_game!.GuessesLeft} guesses left";
         }
 
-        private static readonly Dictionary<Correctness, Color> _colors = new()
-        {
-            { Correctness.Correct, Color.Green },
-            { Correctness.Absent, Color.Red },
-            { Correctness.OverCount, Color.Red },
-            { Correctness.Present, Color.Yellow }
-        };
-
         private void BackButton_Click(object sender, EventArgs e)
         {
             Reset();
@@ -104,5 +96,13 @@ namespace Wordle_WinForms.UserControls
             StartGame(new WordleGame());
             ActiveControl = null;
         }
+
+        private static readonly Dictionary<Correctness, Color> _colors = new()
+        {
+            { Correctness.Correct, Color.Green },
+            { Correctness.Absent, Color.Red },
+            { Correctness.OverCount, Color.Red },
+            { Correctness.Present, Color.Yellow }
+        };
     }
 }

@@ -82,8 +82,9 @@
             WordlePanel.FlowDirection = FlowDirection.TopDown;
             WordlePanel.Location = new Point(259, 28);
             WordlePanel.Name = "WordlePanel";
-            WordlePanel.Size = new Size(226, 400);
+            WordlePanel.Size = new Size(246, 400);
             WordlePanel.TabIndex = 5;
+            WordlePanel.WrapContents = false;
             // 
             // GameView
             // 
