@@ -43,9 +43,10 @@
             BackButton.Location = new Point(3, 3);
             BackButton.Name = "BackButton";
             BackButton.Size = new Size(71, 43);
-            BackButton.TabIndex = 0;
+            BackButton.TabIndex = 3;
             BackButton.Text = "Back";
             BackButton.UseVisualStyleBackColor = true;
+            BackButton.Click += BackButton_Click;
             // 
             // WordleLabel
             // 
@@ -62,17 +63,21 @@
             StartGameButton.Location = new Point(308, 297);
             StartGameButton.Name = "StartGameButton";
             StartGameButton.Size = new Size(128, 40);
-            StartGameButton.TabIndex = 3;
+            StartGameButton.TabIndex = 2;
             StartGameButton.Text = "Start game";
             StartGameButton.UseVisualStyleBackColor = true;
+            StartGameButton.Click += StartGameButton_Click;
             // 
             // WordleTextBox
             // 
+            WordleTextBox.CharacterCasing = CharacterCasing.Upper;
             WordleTextBox.Location = new Point(392, 115);
             WordleTextBox.MaxLength = 5;
             WordleTextBox.Name = "WordleTextBox";
             WordleTextBox.Size = new Size(120, 36);
-            WordleTextBox.TabIndex = 4;
+            WordleTextBox.TabIndex = 0;
+            WordleTextBox.TextChanged += WordleTextBox_TextChanged;
+            WordleTextBox.Leave += WordleTextBox_Leave;
             // 
             // GuessesUpDown
             // 
@@ -81,7 +86,7 @@
             GuessesUpDown.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             GuessesUpDown.Name = "GuessesUpDown";
             GuessesUpDown.Size = new Size(120, 36);
-            GuessesUpDown.TabIndex = 5;
+            GuessesUpDown.TabIndex = 1;
             GuessesUpDown.Value = new decimal(new int[] { 6, 0, 0, 0 });
             // 
             // GuessesLabel

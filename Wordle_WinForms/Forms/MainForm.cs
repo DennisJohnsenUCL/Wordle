@@ -11,12 +11,13 @@ namespace Wordle_WinForms
         private readonly INavigationController<Views> _navigation;
         private readonly MenuView _menuView;
         private readonly GameView _gameView;
-        private readonly OptionsView _optionsView = new();
+        private readonly OptionsView _optionsView;
 
         public MainForm(INavigationController<Views> navigation)
         {
             _navigation = navigation;
             _menuView = new(_navigation);
+            _optionsView = new(_navigation);
             _gameView = new(_navigation);
 
             InitializeComponent();
@@ -43,13 +44,15 @@ namespace Wordle_WinForms
 
         private void InitializeEvents()
         {
-            _menuView.StartGame += (s, e) =>
-            {
-                var options = e.Options;
-                var game = GetWordleGameFromOptions(options);
-                _gameView.StartGame(game);
-                _navigation.NavigateTo(Views.gameView);
-            };
+            _menuView.StartGame += (s, e) => StartGame(e.Options);
+            _optionsView.StartGame += (s, e) => StartGame(e.Options);
+        }
+
+        private void StartGame(WordleOptions options)
+        {
+            var game = GetWordleGameFromOptions(options);
+            _gameView.StartGame(game);
+            _navigation.NavigateTo(Views.gameView);
         }
 
         private static WordleGame GetWordleGameFromOptions(WordleOptions options)
