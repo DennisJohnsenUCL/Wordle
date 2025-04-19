@@ -43,6 +43,19 @@ namespace Wordle_WinForms.UserControls
             InvalidWordleLabel.Text = "";
         }
 
+        private void Submit()
+        {
+            var validInput = ValidateWordle();
+
+            if (validInput)
+            {
+                var wordle = WordleTextBox.TextLength == 0 ? null : WordleTextBox.Text;
+                var options = new WordleOptions(wordle, (int)GuessesUpDown.Value);
+                StartGame?.Invoke(this, new StartGameEventArgs(options));
+                Reset();
+            }
+        }
+
         private void BackButton_Click(object sender, EventArgs e)
         {
             Reset();
@@ -56,20 +69,28 @@ namespace Wordle_WinForms.UserControls
 
         private void StartGameButton_Click(object sender, EventArgs e)
         {
-            var validInput = ValidateWordle();
-
-            if (validInput)
-            {
-                var wordle = WordleTextBox.TextLength == 0 ? null : WordleTextBox.Text;
-                var options = new WordleOptions(wordle, (int)GuessesUpDown.Value);
-                StartGame?.Invoke(this, new StartGameEventArgs(options));
-                Reset();
-            }
+            Submit();
         }
 
         private void WordleTextBox_Leave(object sender, EventArgs e)
         {
             ValidateWordle();
+        }
+
+        private void WordleTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyData == Keys.Enter)
+            {
+                ActiveControl = GuessesUpDown;
+            }
+        }
+
+        private void GuessesUpDown_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyData == Keys.Enter)
+            {
+                Submit();
+            }
         }
     }
 }

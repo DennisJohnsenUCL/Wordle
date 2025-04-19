@@ -77,6 +77,7 @@
             WordleTextBox.Size = new Size(120, 36);
             WordleTextBox.TabIndex = 0;
             WordleTextBox.TextChanged += WordleTextBox_TextChanged;
+            WordleTextBox.KeyDown += WordleTextBox_KeyDown;
             WordleTextBox.Leave += WordleTextBox_Leave;
             // 
             // GuessesUpDown
@@ -88,6 +89,7 @@
             GuessesUpDown.Size = new Size(120, 36);
             GuessesUpDown.TabIndex = 1;
             GuessesUpDown.Value = new decimal(new int[] { 6, 0, 0, 0 });
+            GuessesUpDown.KeyDown += GuessesUpDown_KeyDown;
             // 
             // GuessesLabel
             // 
