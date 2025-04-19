@@ -8,8 +8,6 @@ namespace Wordle_WinForms.CustomControls
 
         public WordleFlowPanel()
         {
-            SetStyle(ControlStyles.Selectable, false);
-            TabStop = false;
             AutoScroll = true;
             FlowDirection = FlowDirection.TopDown;
             Size = new Size(226, 400);

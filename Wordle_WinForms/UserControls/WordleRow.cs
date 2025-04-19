@@ -9,8 +9,9 @@ namespace Wordle_WinForms.UserControls
         {
             InitializeComponent();
             TabStop = false;
-            SetStyle(ControlStyles.Selectable, false);
         }
+
+        protected override void OnMouseDown(MouseEventArgs e) { }
 
         public string GetWord()
         {

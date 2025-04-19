@@ -4,7 +4,6 @@
     {
         public LetterLabel()
         {
-            SetStyle(ControlStyles.Selectable, false);
             TextAlign = ContentAlignment.MiddleCenter;
             BackColor = Color.White;
             Size = new Size(40, 40);

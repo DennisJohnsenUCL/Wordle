@@ -16,8 +16,6 @@ namespace Wordle_WinForms.UserControls
             _navigation = navigation;
 
             InitializeComponent();
-            SetStyle(ControlStyles.Selectable, true);
-            TabStop = true;
         }
 
         public void StartGame(WordleGame game)
@@ -84,13 +82,6 @@ namespace Wordle_WinForms.UserControls
         {
             WordlePanel.AddRow();
             GuessesLabel.Text = $"You have {_game!.GuessesLeft} guesses left";
-        }
-
-        protected override bool ProcessDialogKey(Keys keyData)
-        {
-            if (keyData == Keys.Tab)
-                return true;
-            return base.ProcessDialogKey(keyData);
         }
 
         private static readonly Dictionary<Correctness, Color> _colors = new()
