@@ -56,6 +56,7 @@
             WordleLabel.Size = new Size(89, 30);
             WordleLabel.TabIndex = 1;
             WordleLabel.Text = "Wordle:";
+            WordleLabel.Click += OptionsView_Click;
             // 
             // StartGameButton
             // 
@@ -99,6 +100,7 @@
             GuessesLabel.Size = new Size(96, 30);
             GuessesLabel.TabIndex = 6;
             GuessesLabel.Text = "Guesses:";
+            GuessesLabel.Click += OptionsView_Click;
             // 
             // InvalidWordleLabel
             // 
@@ -125,6 +127,7 @@
             Margin = new Padding(5, 6, 5, 6);
             Name = "OptionsView";
             Size = new Size(744, 461);
+            Click += OptionsView_Click;
             ((System.ComponentModel.ISupportInitialize)GuessesUpDown).EndInit();
             ResumeLayout(false);
             PerformLayout();

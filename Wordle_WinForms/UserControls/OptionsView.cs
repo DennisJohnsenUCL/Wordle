@@ -14,9 +14,7 @@ namespace Wordle_WinForms.UserControls
         public OptionsView(INavigationController<Views> navigation)
         {
             _navigation = navigation;
-
             InitializeComponent();
-            ActiveControl = WordleTextBox;
         }
 
         private bool ValidateWordle()
@@ -91,6 +89,11 @@ namespace Wordle_WinForms.UserControls
             {
                 Submit();
             }
+        }
+
+        private void OptionsView_Click(object sender, EventArgs e)
+        {
+            ActiveControl = InvalidWordleLabel;
         }
     }
 }
