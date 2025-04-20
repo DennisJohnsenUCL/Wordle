@@ -1,8 +1,8 @@
 using Wordle_WinForms.Enums;
 using Wordle_WinForms.Interfaces;
 using Wordle_WinForms.UserControls;
-using WordleCore;
 using WordleCore.Models;
+using WordleCore.Utils;
 
 namespace Wordle_WinForms
 {
@@ -50,19 +50,9 @@ namespace Wordle_WinForms
 
         private void StartGame(WordleOptions options)
         {
-            var game = GetWordleGameFromOptions(options);
+            var game = WordleGameUtils.GetWordleGameFromOptions(options);
             _gameView.StartGame(game);
             _navigation.NavigateTo(Views.gameView);
-        }
-
-        private static WordleGame GetWordleGameFromOptions(WordleOptions options)
-        {
-            var (wordle, guesses) = options;
-
-            if (wordle != null && guesses != null) return new WordleGame(wordle, (int)guesses);
-            else if (wordle != null) return new WordleGame(wordle);
-            else if (guesses != null) return new WordleGame((int)guesses);
-            else return new WordleGame();
         }
     }
 }

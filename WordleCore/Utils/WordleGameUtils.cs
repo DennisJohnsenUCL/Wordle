@@ -1,5 +1,6 @@
 ﻿using System.Collections.Immutable;
 using WordleCore.Enums;
+using WordleCore.Models;
 
 namespace WordleCore.Utils
 {
@@ -34,6 +35,16 @@ namespace WordleCore.Utils
 			}
 
 			return correctness;
+		}
+
+		public static WordleGame GetWordleGameFromOptions(WordleOptions options)
+		{
+			var (wordle, guesses) = options;
+
+			if (wordle != null && guesses != null) return new WordleGame(wordle, (int)guesses);
+			else if (wordle != null) return new WordleGame(wordle);
+			else if (guesses != null) return new WordleGame((int)guesses);
+			else return new WordleGame();
 		}
 	}
 }
