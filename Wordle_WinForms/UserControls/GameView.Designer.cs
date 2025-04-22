@@ -74,7 +74,6 @@
             newGameButton.TabStop = false;
             newGameButton.Text = "New game";
             newGameButton.UseVisualStyleBackColor = true;
-            newGameButton.Visible = false;
             newGameButton.Click += NewGameButton_Click;
             // 
             // wordlePanel
@@ -96,7 +95,6 @@
             alphabetPanel.Size = new Size(268, 79);
             alphabetPanel.TabIndex = 6;
             alphabetPanel.TabStop = false;
-            alphabetPanel.Visible = false;
             // 
             // GameView
             // 

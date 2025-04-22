@@ -30,10 +30,8 @@ namespace Wordle_WinForms.UserControls
         {
             _game = null;
             wordlePanel.Reset();
-            alphabetPanel.Visible = false;
             alphabetPanel.Reset();
             guessesLabel.Text = "";
-            newGameButton.Visible = false;
         }
 
         private void GameView_KeyDown(object sender, KeyEventArgs e)
@@ -58,10 +56,7 @@ namespace Wordle_WinForms.UserControls
                     wordlePanel.PrintCorrectness(response);
                     alphabetPanel.ColorizeAlphabet(_game.LetterHints);
 
-                    if (alphabetPanel.Visible == false) alphabetPanel.Visible = true;
-
                     if (!IsGameOver()) StartNewRow();
-                    else newGameButton.Visible = true;
                 }
             }
         }
