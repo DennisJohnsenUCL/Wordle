@@ -30,6 +30,8 @@ namespace Wordle_WinForms.UserControls
         {
             _game = null;
             WordlePanel.Reset();
+            AlphabetPanel1.Visible = false;
+            AlphabetPanel1.Reset();
             GuessesLabel.Text = "";
             NewGameButton.Visible = false;
         }
@@ -54,6 +56,8 @@ namespace Wordle_WinForms.UserControls
                     var (chars, correctness) = _game.GuessWordle(guess);
 
                     WordlePanel.PrintCorrectness(chars, [.. correctness.Select(x => _colors[x])]);
+                    AlphabetPanel1.ColorizeAlphabet(_game.LetterHints);
+                    AlphabetPanel1.Visible = true;
 
                     if (!IsGameOver()) StartNewRow();
                     else NewGameButton.Visible = true;

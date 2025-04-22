@@ -33,6 +33,7 @@
             BackButton = new Button();
             NewGameButton = new Button();
             WordlePanel = new Wordle_WinForms.CustomControls.WordleFlowPanel();
+            AlphabetPanel1 = new AlphabetPanel();
             SuspendLayout();
             // 
             // WordleLabel
@@ -86,10 +87,22 @@
             WordlePanel.TabIndex = 5;
             WordlePanel.WrapContents = false;
             // 
+            // AlphabetPanel1
+            // 
+            AlphabetPanel1.Font = new Font("Segoe UI", 16F);
+            AlphabetPanel1.Location = new Point(3, 217);
+            AlphabetPanel1.Margin = new Padding(0);
+            AlphabetPanel1.Name = "AlphabetPanel1";
+            AlphabetPanel1.Size = new Size(268, 79);
+            AlphabetPanel1.TabIndex = 6;
+            AlphabetPanel1.TabStop = false;
+            AlphabetPanel1.Visible = false;
+            // 
             // GameView
             // 
             AutoScaleDimensions = new SizeF(12F, 30F);
             AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(AlphabetPanel1);
             Controls.Add(WordlePanel);
             Controls.Add(NewGameButton);
             Controls.Add(BackButton);
@@ -110,5 +123,6 @@
         private Button BackButton;
         private Button NewGameButton;
         private CustomControls.WordleFlowPanel WordlePanel;
+        private AlphabetPanel AlphabetPanel1;
     }
 }
