@@ -24,7 +24,7 @@ namespace Wordle_WinForms.Controllers
 
         public void NavigateTo(TEnum key)
         {
-            if (_viewContainer.TryGetValue(key, out var view) && _viewContainer[key] != null)
+            if (_viewContainer.TryGetValue(key, out var view) && view != null)
             {
                 view.Visible = true;
                 view.Focus();
