@@ -1,4 +1,5 @@
 ﻿using Wordle_Console.Interfaces;
+using Wordle_Console.Utils;
 using WordleCore.Enums;
 using WordleCore.Models;
 
@@ -34,9 +35,9 @@ namespace Wordle_Console.IO
 
             foreach (char c in alphabet)
             {
-                if (hints.Absent.Contains(c)) Console.ForegroundColor = _colors[Correctness.Absent];
-                else if (hints.Present.Contains(c)) Console.ForegroundColor = _colors[Correctness.Present];
-                else if (hints.Correct.Contains(c)) Console.ForegroundColor = _colors[Correctness.Correct];
+                if (hints.Absent.Contains(c)) Console.ForegroundColor = ColorProvider.Colors[Correctness.Absent];
+                else if (hints.Present.Contains(c)) Console.ForegroundColor = ColorProvider.Colors[Correctness.Present];
+                else if (hints.Correct.Contains(c)) Console.ForegroundColor = ColorProvider.Colors[Correctness.Correct];
                 else Console.ForegroundColor = ConsoleColor.White;
                 Console.Write(c);
             }
@@ -51,7 +52,7 @@ namespace Wordle_Console.IO
             Console.SetCursorPosition(0, Console.CursorTop - 1);
             for (int i = 0; i < 5; i++)
             {
-                Console.ForegroundColor = _colors[correctness[i]];
+                Console.ForegroundColor = ColorProvider.Colors[correctness[i]];
                 Console.Write(chars[i]);
             }
             Console.WriteLine();
@@ -80,13 +81,5 @@ namespace Wordle_Console.IO
             Console.WriteLine("Press any key to continue");
             Console.ReadKey(true);
         }
-
-        private static readonly Dictionary<Correctness, ConsoleColor> _colors = new()
-        {
-            { Correctness.Correct, ConsoleColor.Green },
-            { Correctness.Absent, ConsoleColor.Red },
-            { Correctness.OverCount, ConsoleColor.Red },
-            { Correctness.Present, ConsoleColor.DarkYellow }
-        };
     }
 }
