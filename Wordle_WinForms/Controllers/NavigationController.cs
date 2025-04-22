@@ -6,8 +6,6 @@ namespace Wordle_WinForms.Controllers
     {
         private readonly Dictionary<TEnum, UserControl> _viewContainer = [];
 
-        public NavigationController() { }
-
         public bool Register(TEnum key, UserControl view)
         {
             if (view != null)
