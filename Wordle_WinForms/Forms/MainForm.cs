@@ -20,6 +20,9 @@ namespace Wordle_WinForms
             _optionsView = new(_navigation);
             _gameView = new(_navigation);
 
+            MaximizeBox = false;
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+
             InitializeComponent();
             InitializeViews();
             InitializeEvents();
