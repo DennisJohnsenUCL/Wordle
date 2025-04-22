@@ -57,7 +57,8 @@ namespace Wordle_WinForms.UserControls
 
                     WordlePanel.PrintCorrectness(chars, [.. correctness.Select(x => _colors[x])]);
                     AlphabetPanel1.ColorizeAlphabet(_game.LetterHints);
-                    AlphabetPanel1.Visible = true;
+
+                    if (AlphabetPanel1.Visible == false) AlphabetPanel1.Visible = true;
 
                     if (!IsGameOver()) StartNewRow();
                     else NewGameButton.Visible = true;
