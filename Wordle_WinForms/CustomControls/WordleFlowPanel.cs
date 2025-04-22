@@ -1,4 +1,6 @@
 ﻿using Wordle_WinForms.UserControls;
+using Wordle_WinForms.Utils;
+using WordleCore.Models;
 
 namespace Wordle_WinForms.CustomControls
 {
@@ -27,14 +29,16 @@ namespace Wordle_WinForms.CustomControls
             _activeRow = row;
         }
 
-        public bool PrintCorrectness(IReadOnlyList<char> chars, IReadOnlyList<Color> colors)
+        public bool PrintCorrectness(WordleResponse wordleResponse)
         {
             if (_activeRow == null) return false;
 
-            for (int i = 0; i < chars.Count; i++)
+            var (chars, correctness) = wordleResponse;
+
+            for (int i = 0; i < chars.Length; i++)
             {
                 _activeRow.Controls[i].Text = chars[i].ToString();
-                _activeRow.Controls[i].BackColor = colors[i];
+                _activeRow.Controls[i].BackColor = ColorProvider.Colors[correctness[i]];
             }
             return true;
         }

@@ -1,6 +1,5 @@
 ﻿using Wordle_WinForms.Enums;
 using Wordle_WinForms.Interfaces;
-using Wordle_WinForms.Utils;
 using WordleCore;
 using WordleCore.Enums;
 using WordleCore.Utils;
@@ -54,9 +53,9 @@ namespace Wordle_WinForms.UserControls
                 string guess = WordlePanel.GetActiveWord();
                 if (guess.Length == 5 && WordleGameUtils.IsAllowedWord(guess))
                 {
-                    var (chars, correctness) = _game.GuessWordle(guess);
+                    var response = _game.GuessWordle(guess);
 
-                    WordlePanel.PrintCorrectness(chars, [.. correctness.Select(x => ColorProvider.Colors[x])]);
+                    WordlePanel.PrintCorrectness(response);
                     AlphabetPanel1.ColorizeAlphabet(_game.LetterHints);
 
                     if (AlphabetPanel1.Visible == false) AlphabetPanel1.Visible = true;
