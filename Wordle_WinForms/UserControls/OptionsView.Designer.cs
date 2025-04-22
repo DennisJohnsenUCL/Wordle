@@ -40,7 +40,7 @@
             // 
             // backButton
             // 
-            backButton.Location = new Point(3, 3);
+            backButton.Location = new Point(5, 5);
             backButton.Name = "backButton";
             backButton.Size = new Size(71, 43);
             backButton.TabIndex = 3;
@@ -51,7 +51,7 @@
             // wordleLabel
             // 
             wordleLabel.AutoSize = true;
-            wordleLabel.Location = new Point(246, 118);
+            wordleLabel.Location = new Point(169, 81);
             wordleLabel.Name = "wordleLabel";
             wordleLabel.Size = new Size(89, 30);
             wordleLabel.TabIndex = 1;
@@ -61,7 +61,7 @@
             // startGameButton
             // 
             startGameButton.AutoSize = true;
-            startGameButton.Location = new Point(308, 297);
+            startGameButton.Location = new Point(231, 260);
             startGameButton.Name = "startGameButton";
             startGameButton.Size = new Size(128, 40);
             startGameButton.TabIndex = 2;
@@ -72,7 +72,7 @@
             // wordleTextBox
             // 
             wordleTextBox.CharacterCasing = CharacterCasing.Upper;
-            wordleTextBox.Location = new Point(392, 115);
+            wordleTextBox.Location = new Point(315, 78);
             wordleTextBox.MaxLength = 5;
             wordleTextBox.Name = "wordleTextBox";
             wordleTextBox.Size = new Size(120, 36);
@@ -83,7 +83,7 @@
             // 
             // guessesUpDown
             // 
-            guessesUpDown.Location = new Point(392, 199);
+            guessesUpDown.Location = new Point(315, 162);
             guessesUpDown.Maximum = new decimal(new int[] { 999, 0, 0, 0 });
             guessesUpDown.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             guessesUpDown.Name = "guessesUpDown";
@@ -95,7 +95,7 @@
             // guessesLabel
             // 
             guessesLabel.AutoSize = true;
-            guessesLabel.Location = new Point(246, 201);
+            guessesLabel.Location = new Point(169, 164);
             guessesLabel.Name = "guessesLabel";
             guessesLabel.Size = new Size(96, 30);
             guessesLabel.TabIndex = 6;
@@ -107,7 +107,7 @@
             InvalidWordleLabel.AutoSize = true;
             InvalidWordleLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             InvalidWordleLabel.ForeColor = Color.Red;
-            InvalidWordleLabel.Location = new Point(392, 154);
+            InvalidWordleLabel.Location = new Point(315, 117);
             InvalidWordleLabel.Name = "InvalidWordleLabel";
             InvalidWordleLabel.Size = new Size(0, 21);
             InvalidWordleLabel.TabIndex = 7;
@@ -126,7 +126,7 @@
             Font = new Font("Segoe UI", 16F);
             Margin = new Padding(5, 6, 5, 6);
             Name = "OptionsView";
-            Size = new Size(744, 461);
+            Size = new Size(582, 376);
             Click += OptionsView_Click;
             ((System.ComponentModel.ISupportInitialize)guessesUpDown).EndInit();
             ResumeLayout(false);

@@ -35,7 +35,7 @@
             // 
             // defaultGameButton
             // 
-            defaultGameButton.Location = new Point(300, 95);
+            defaultGameButton.Location = new Point(211, 63);
             defaultGameButton.Name = "defaultGameButton";
             defaultGameButton.Size = new Size(160, 45);
             defaultGameButton.TabIndex = 0;
@@ -45,7 +45,7 @@
             // 
             // customGameButton
             // 
-            customGameButton.Location = new Point(300, 195);
+            customGameButton.Location = new Point(211, 163);
             customGameButton.Name = "customGameButton";
             customGameButton.Size = new Size(160, 45);
             customGameButton.TabIndex = 1;
@@ -55,7 +55,7 @@
             // 
             // exitButton
             // 
-            exitButton.Location = new Point(300, 295);
+            exitButton.Location = new Point(211, 263);
             exitButton.Name = "exitButton";
             exitButton.Size = new Size(160, 45);
             exitButton.TabIndex = 2;
@@ -73,7 +73,7 @@
             Font = new Font("Segoe UI", 16F);
             Margin = new Padding(5, 6, 5, 6);
             Name = "MenuView";
-            Size = new Size(744, 461);
+            Size = new Size(582, 376);
             ResumeLayout(false);
         }
 

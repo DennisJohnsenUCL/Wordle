@@ -39,7 +39,7 @@
             // wordleLabel
             // 
             wordleLabel.AutoSize = true;
-            wordleLabel.Location = new Point(657, 6);
+            wordleLabel.Location = new Point(82, 11);
             wordleLabel.Name = "wordleLabel";
             wordleLabel.Size = new Size(0, 30);
             wordleLabel.TabIndex = 1;
@@ -48,14 +48,14 @@
             // 
             guessesLabel.AutoSize = true;
             guessesLabel.Font = new Font("Segoe UI", 12F);
-            guessesLabel.Location = new Point(512, 58);
+            guessesLabel.Location = new Point(100, 175);
             guessesLabel.Name = "guessesLabel";
             guessesLabel.Size = new Size(0, 21);
             guessesLabel.TabIndex = 2;
             // 
             // backButton
             // 
-            backButton.Location = new Point(3, 3);
+            backButton.Location = new Point(5, 5);
             backButton.Name = "backButton";
             backButton.Size = new Size(71, 43);
             backButton.TabIndex = 3;
@@ -67,7 +67,7 @@
             // newGameButton
             // 
             newGameButton.AutoSize = true;
-            newGameButton.Location = new Point(613, 388);
+            newGameButton.Location = new Point(5, 331);
             newGameButton.Name = "newGameButton";
             newGameButton.Size = new Size(128, 40);
             newGameButton.TabIndex = 4;
@@ -81,16 +81,16 @@
             // 
             wordlePanel.AutoScroll = true;
             wordlePanel.FlowDirection = FlowDirection.TopDown;
-            wordlePanel.Location = new Point(259, 28);
+            wordlePanel.Location = new Point(314, 22);
             wordlePanel.Name = "wordlePanel";
-            wordlePanel.Size = new Size(246, 400);
+            wordlePanel.Size = new Size(246, 332);
             wordlePanel.TabIndex = 5;
             wordlePanel.WrapContents = false;
             // 
             // alphabetPanel
             // 
             alphabetPanel.Font = new Font("Segoe UI", 16F);
-            alphabetPanel.Location = new Point(3, 217);
+            alphabetPanel.Location = new Point(21, 207);
             alphabetPanel.Margin = new Padding(0);
             alphabetPanel.Name = "alphabetPanel";
             alphabetPanel.Size = new Size(268, 79);
@@ -111,7 +111,7 @@
             Font = new Font("Segoe UI", 16F);
             Margin = new Padding(5, 6, 5, 6);
             Name = "GameView";
-            Size = new Size(744, 460);
+            Size = new Size(582, 376);
             KeyDown += GameView_KeyDown;
             ResumeLayout(false);
             PerformLayout();
