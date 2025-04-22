@@ -19,7 +19,7 @@ namespace Wordle_WinForms.UserControls
 
         private bool ValidateWordle()
         {
-            var wordle = WordleTextBox.Text;
+            var wordle = wordleTextBox.Text;
 
             if (!(wordle.Length == 0 || wordle.Length == 5))
             {
@@ -36,8 +36,8 @@ namespace Wordle_WinForms.UserControls
 
         private void Reset()
         {
-            WordleTextBox.Text = "";
-            GuessesUpDown.Value = 6;
+            wordleTextBox.Text = "";
+            guessesUpDown.Value = 6;
             InvalidWordleLabel.Text = "";
         }
 
@@ -47,8 +47,8 @@ namespace Wordle_WinForms.UserControls
 
             if (validInput)
             {
-                var wordle = WordleTextBox.TextLength == 0 ? null : WordleTextBox.Text;
-                var options = new WordleOptions(wordle, (int)GuessesUpDown.Value);
+                var wordle = wordleTextBox.TextLength == 0 ? null : wordleTextBox.Text;
+                var options = new WordleOptions(wordle, (int)guessesUpDown.Value);
                 StartGame?.Invoke(this, new StartGameEventArgs(options));
                 Reset();
             }
@@ -79,7 +79,7 @@ namespace Wordle_WinForms.UserControls
         {
             if (e.KeyData == Keys.Enter)
             {
-                ActiveControl = GuessesUpDown;
+                ActiveControl = guessesUpDown;
             }
         }
 

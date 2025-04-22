@@ -28,48 +28,48 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DefaultGameButton = new Button();
-            CustomGameButton = new Button();
-            ExitButton = new Button();
+            defaultGameButton = new Button();
+            customGameButton = new Button();
+            exitButton = new Button();
             SuspendLayout();
             // 
-            // DefaultGameButton
+            // defaultGameButton
             // 
-            DefaultGameButton.Location = new Point(300, 95);
-            DefaultGameButton.Name = "DefaultGameButton";
-            DefaultGameButton.Size = new Size(160, 45);
-            DefaultGameButton.TabIndex = 0;
-            DefaultGameButton.Text = "Play Wordle";
-            DefaultGameButton.UseVisualStyleBackColor = true;
-            DefaultGameButton.Click += DefaultGameButton_Click;
+            defaultGameButton.Location = new Point(300, 95);
+            defaultGameButton.Name = "defaultGameButton";
+            defaultGameButton.Size = new Size(160, 45);
+            defaultGameButton.TabIndex = 0;
+            defaultGameButton.Text = "Play Wordle";
+            defaultGameButton.UseVisualStyleBackColor = true;
+            defaultGameButton.Click += DefaultGameButton_Click;
             // 
-            // CustomGameButton
+            // customGameButton
             // 
-            CustomGameButton.Location = new Point(300, 195);
-            CustomGameButton.Name = "CustomGameButton";
-            CustomGameButton.Size = new Size(160, 45);
-            CustomGameButton.TabIndex = 1;
-            CustomGameButton.Text = "Custom game";
-            CustomGameButton.UseVisualStyleBackColor = true;
-            CustomGameButton.Click += CustomGameButton_Click;
+            customGameButton.Location = new Point(300, 195);
+            customGameButton.Name = "customGameButton";
+            customGameButton.Size = new Size(160, 45);
+            customGameButton.TabIndex = 1;
+            customGameButton.Text = "Custom game";
+            customGameButton.UseVisualStyleBackColor = true;
+            customGameButton.Click += CustomGameButton_Click;
             // 
-            // ExitButton
+            // exitButton
             // 
-            ExitButton.Location = new Point(300, 295);
-            ExitButton.Name = "ExitButton";
-            ExitButton.Size = new Size(160, 45);
-            ExitButton.TabIndex = 2;
-            ExitButton.Text = "Exit";
-            ExitButton.UseVisualStyleBackColor = true;
-            ExitButton.Click += ExitButton_Click;
+            exitButton.Location = new Point(300, 295);
+            exitButton.Name = "exitButton";
+            exitButton.Size = new Size(160, 45);
+            exitButton.TabIndex = 2;
+            exitButton.Text = "Exit";
+            exitButton.UseVisualStyleBackColor = true;
+            exitButton.Click += ExitButton_Click;
             // 
             // MenuView
             // 
             AutoScaleDimensions = new SizeF(12F, 30F);
             AutoScaleMode = AutoScaleMode.Font;
-            Controls.Add(ExitButton);
-            Controls.Add(CustomGameButton);
-            Controls.Add(DefaultGameButton);
+            Controls.Add(exitButton);
+            Controls.Add(customGameButton);
+            Controls.Add(defaultGameButton);
             Font = new Font("Segoe UI", 16F);
             Margin = new Padding(5, 6, 5, 6);
             Name = "MenuView";
@@ -79,8 +79,8 @@
 
         #endregion
 
-        private Button DefaultGameButton;
-        private Button CustomGameButton;
-        private Button ExitButton;
+        private Button defaultGameButton;
+        private Button customGameButton;
+        private Button exitButton;
     }
 }

@@ -28,86 +28,86 @@
         /// </summary>
         private void InitializeComponent()
         {
-            WordleLabel = new Label();
-            GuessesLabel = new Label();
-            BackButton = new Button();
-            NewGameButton = new Button();
-            WordlePanel = new Wordle_WinForms.CustomControls.WordleFlowPanel();
-            AlphabetPanel1 = new AlphabetPanel();
+            wordleLabel = new Label();
+            guessesLabel = new Label();
+            backButton = new Button();
+            newGameButton = new Button();
+            wordlePanel = new Wordle_WinForms.CustomControls.WordleFlowPanel();
+            alphabetPanel = new AlphabetPanel();
             SuspendLayout();
             // 
-            // WordleLabel
+            // wordleLabel
             // 
-            WordleLabel.AutoSize = true;
-            WordleLabel.Location = new Point(657, 6);
-            WordleLabel.Name = "WordleLabel";
-            WordleLabel.Size = new Size(0, 30);
-            WordleLabel.TabIndex = 1;
+            wordleLabel.AutoSize = true;
+            wordleLabel.Location = new Point(657, 6);
+            wordleLabel.Name = "wordleLabel";
+            wordleLabel.Size = new Size(0, 30);
+            wordleLabel.TabIndex = 1;
             // 
-            // GuessesLabel
+            // guessesLabel
             // 
-            GuessesLabel.AutoSize = true;
-            GuessesLabel.Font = new Font("Segoe UI", 12F);
-            GuessesLabel.Location = new Point(512, 58);
-            GuessesLabel.Name = "GuessesLabel";
-            GuessesLabel.Size = new Size(0, 21);
-            GuessesLabel.TabIndex = 2;
+            guessesLabel.AutoSize = true;
+            guessesLabel.Font = new Font("Segoe UI", 12F);
+            guessesLabel.Location = new Point(512, 58);
+            guessesLabel.Name = "guessesLabel";
+            guessesLabel.Size = new Size(0, 21);
+            guessesLabel.TabIndex = 2;
             // 
-            // BackButton
+            // backButton
             // 
-            BackButton.Location = new Point(3, 3);
-            BackButton.Name = "BackButton";
-            BackButton.Size = new Size(71, 43);
-            BackButton.TabIndex = 3;
-            BackButton.TabStop = false;
-            BackButton.Text = "Back";
-            BackButton.UseVisualStyleBackColor = true;
-            BackButton.Click += BackButton_Click;
+            backButton.Location = new Point(3, 3);
+            backButton.Name = "backButton";
+            backButton.Size = new Size(71, 43);
+            backButton.TabIndex = 3;
+            backButton.TabStop = false;
+            backButton.Text = "Back";
+            backButton.UseVisualStyleBackColor = true;
+            backButton.Click += BackButton_Click;
             // 
-            // NewGameButton
+            // newGameButton
             // 
-            NewGameButton.AutoSize = true;
-            NewGameButton.Location = new Point(613, 388);
-            NewGameButton.Name = "NewGameButton";
-            NewGameButton.Size = new Size(128, 40);
-            NewGameButton.TabIndex = 4;
-            NewGameButton.TabStop = false;
-            NewGameButton.Text = "New game";
-            NewGameButton.UseVisualStyleBackColor = true;
-            NewGameButton.Visible = false;
-            NewGameButton.Click += NewGameButton_Click;
+            newGameButton.AutoSize = true;
+            newGameButton.Location = new Point(613, 388);
+            newGameButton.Name = "newGameButton";
+            newGameButton.Size = new Size(128, 40);
+            newGameButton.TabIndex = 4;
+            newGameButton.TabStop = false;
+            newGameButton.Text = "New game";
+            newGameButton.UseVisualStyleBackColor = true;
+            newGameButton.Visible = false;
+            newGameButton.Click += NewGameButton_Click;
             // 
-            // WordlePanel
+            // wordlePanel
             // 
-            WordlePanel.AutoScroll = true;
-            WordlePanel.FlowDirection = FlowDirection.TopDown;
-            WordlePanel.Location = new Point(259, 28);
-            WordlePanel.Name = "WordlePanel";
-            WordlePanel.Size = new Size(246, 400);
-            WordlePanel.TabIndex = 5;
-            WordlePanel.WrapContents = false;
+            wordlePanel.AutoScroll = true;
+            wordlePanel.FlowDirection = FlowDirection.TopDown;
+            wordlePanel.Location = new Point(259, 28);
+            wordlePanel.Name = "wordlePanel";
+            wordlePanel.Size = new Size(246, 400);
+            wordlePanel.TabIndex = 5;
+            wordlePanel.WrapContents = false;
             // 
-            // AlphabetPanel1
+            // alphabetPanel
             // 
-            AlphabetPanel1.Font = new Font("Segoe UI", 16F);
-            AlphabetPanel1.Location = new Point(3, 217);
-            AlphabetPanel1.Margin = new Padding(0);
-            AlphabetPanel1.Name = "AlphabetPanel1";
-            AlphabetPanel1.Size = new Size(268, 79);
-            AlphabetPanel1.TabIndex = 6;
-            AlphabetPanel1.TabStop = false;
-            AlphabetPanel1.Visible = false;
+            alphabetPanel.Font = new Font("Segoe UI", 16F);
+            alphabetPanel.Location = new Point(3, 217);
+            alphabetPanel.Margin = new Padding(0);
+            alphabetPanel.Name = "alphabetPanel";
+            alphabetPanel.Size = new Size(268, 79);
+            alphabetPanel.TabIndex = 6;
+            alphabetPanel.TabStop = false;
+            alphabetPanel.Visible = false;
             // 
             // GameView
             // 
             AutoScaleDimensions = new SizeF(12F, 30F);
             AutoScaleMode = AutoScaleMode.Font;
-            Controls.Add(AlphabetPanel1);
-            Controls.Add(WordlePanel);
-            Controls.Add(NewGameButton);
-            Controls.Add(BackButton);
-            Controls.Add(GuessesLabel);
-            Controls.Add(WordleLabel);
+            Controls.Add(alphabetPanel);
+            Controls.Add(wordlePanel);
+            Controls.Add(newGameButton);
+            Controls.Add(backButton);
+            Controls.Add(guessesLabel);
+            Controls.Add(wordleLabel);
             Font = new Font("Segoe UI", 16F);
             Margin = new Padding(5, 6, 5, 6);
             Name = "GameView";
@@ -118,11 +118,11 @@
         }
 
         #endregion
-        private Label WordleLabel;
-        private Label GuessesLabel;
-        private Button BackButton;
-        private Button NewGameButton;
-        private CustomControls.WordleFlowPanel WordlePanel;
-        private AlphabetPanel AlphabetPanel1;
+        private Label wordleLabel;
+        private Label guessesLabel;
+        private Button backButton;
+        private Button newGameButton;
+        private CustomControls.WordleFlowPanel wordlePanel;
+        private AlphabetPanel alphabetPanel;
     }
 }

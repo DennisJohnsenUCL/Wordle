@@ -22,18 +22,18 @@ namespace Wordle_WinForms.UserControls
         {
             _game = game;
             _game.Start();
-            WordleLabel.Text = _game.Wordle;
+            wordleLabel.Text = _game.Wordle;
             StartNewRow();
         }
 
         private void Reset()
         {
             _game = null;
-            WordlePanel.Reset();
-            AlphabetPanel1.Visible = false;
-            AlphabetPanel1.Reset();
-            GuessesLabel.Text = "";
-            NewGameButton.Visible = false;
+            wordlePanel.Reset();
+            alphabetPanel.Visible = false;
+            alphabetPanel.Reset();
+            guessesLabel.Text = "";
+            newGameButton.Visible = false;
         }
 
         private void GameView_KeyDown(object sender, KeyEventArgs e)
@@ -41,27 +41,27 @@ namespace Wordle_WinForms.UserControls
             var k = e.KeyData;
             var c = e.KeyCode;
 
-            if (c >= Keys.A && c <= Keys.Z) WordlePanel.AddLetter((char)k);
+            if (c >= Keys.A && c <= Keys.Z) wordlePanel.AddLetter((char)k);
             else if (k == Keys.Enter) HandleEnterPress();
-            else if (k == Keys.Back) WordlePanel.RemoveLetter();
+            else if (k == Keys.Back) wordlePanel.RemoveLetter();
         }
 
         private void HandleEnterPress()
         {
             if (_game != null)
             {
-                string guess = WordlePanel.GetActiveWord();
+                string guess = wordlePanel.GetActiveWord();
                 if (guess.Length == 5 && WordleGameUtils.IsAllowedWord(guess))
                 {
                     var response = _game.GuessWordle(guess);
 
-                    WordlePanel.PrintCorrectness(response);
-                    AlphabetPanel1.ColorizeAlphabet(_game.LetterHints);
+                    wordlePanel.PrintCorrectness(response);
+                    alphabetPanel.ColorizeAlphabet(_game.LetterHints);
 
-                    if (AlphabetPanel1.Visible == false) AlphabetPanel1.Visible = true;
+                    if (alphabetPanel.Visible == false) alphabetPanel.Visible = true;
 
                     if (!IsGameOver()) StartNewRow();
-                    else NewGameButton.Visible = true;
+                    else newGameButton.Visible = true;
                 }
             }
         }
@@ -70,14 +70,14 @@ namespace Wordle_WinForms.UserControls
         {
             if (_game?.GameState == GameState.Completed)
             {
-                GuessesLabel.Text = "";
-                WordlePanel.PrintMessage($"You guessed the Wordle\nWith {_game!.GuessesLeft} guesses to spare");
+                guessesLabel.Text = "";
+                wordlePanel.PrintMessage($"You guessed the Wordle\nWith {_game!.GuessesLeft} guesses to spare");
                 return true;
             }
             else if (_game?.GameState == GameState.Failed)
             {
-                GuessesLabel.Text = "";
-                WordlePanel.PrintMessage($"Better luck next time!\nThe wordle was {_game!.Wordle}");
+                guessesLabel.Text = "";
+                wordlePanel.PrintMessage($"Better luck next time!\nThe wordle was {_game!.Wordle}");
                 return true;
             }
             return false;
@@ -85,8 +85,8 @@ namespace Wordle_WinForms.UserControls
 
         private void StartNewRow()
         {
-            WordlePanel.AddRow();
-            GuessesLabel.Text = $"You have {_game!.GuessesLeft} guesses left";
+            wordlePanel.AddRow();
+            guessesLabel.Text = $"You have {_game!.GuessesLeft} guesses left";
         }
 
         private void BackButton_Click(object sender, EventArgs e)
