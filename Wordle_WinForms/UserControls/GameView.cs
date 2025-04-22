@@ -1,5 +1,6 @@
 ﻿using Wordle_WinForms.Enums;
 using Wordle_WinForms.Interfaces;
+using Wordle_WinForms.Utils;
 using WordleCore;
 using WordleCore.Enums;
 using WordleCore.Utils;
@@ -55,7 +56,7 @@ namespace Wordle_WinForms.UserControls
                 {
                     var (chars, correctness) = _game.GuessWordle(guess);
 
-                    WordlePanel.PrintCorrectness(chars, [.. correctness.Select(x => _colors[x])]);
+                    WordlePanel.PrintCorrectness(chars, [.. correctness.Select(x => ColorProvider.Colors[x])]);
                     AlphabetPanel1.ColorizeAlphabet(_game.LetterHints);
 
                     if (AlphabetPanel1.Visible == false) AlphabetPanel1.Visible = true;
@@ -101,13 +102,5 @@ namespace Wordle_WinForms.UserControls
             StartGame(new WordleGame());
             ActiveControl = null;
         }
-
-        private static readonly Dictionary<Correctness, Color> _colors = new()
-        {
-            { Correctness.Correct, Color.Green },
-            { Correctness.Absent, Color.Red },
-            { Correctness.OverCount, Color.Red },
-            { Correctness.Present, Color.Yellow }
-        };
     }
 }
