@@ -22,6 +22,7 @@ namespace Wordle_WinForms
 
             MaximizeBox = false;
             FormBorderStyle = FormBorderStyle.FixedSingle;
+            StartPosition = FormStartPosition.CenterScreen;
 
             InitializeComponent();
             InitializeViews();
