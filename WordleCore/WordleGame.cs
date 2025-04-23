@@ -45,21 +45,18 @@ namespace WordleCore
 			if (guess.Length != 5) throw new WordleGuessWrongLengthException("Wordle guesses must be 5 letters");
 			if (!WordleGameUtils.IsAllowedWord(guess)) throw new WordleNotAllowedWordException("The guessed word is not in the list of allowed words");
 
-			char[] chars = guess.ToCharArray();
-
-			Correctness[] correctness = WordleGameUtils.GetCorrectnesses(Wordle, guess);
+			var result = WordleGameUtils.GetCorrectnesses(Wordle, guess);
 
 			GuessesLeft--;
 
 			SetGameState(guess);
-			WordleResponse response = new(chars, correctness);
-			AddToLetterHints(response);
-			return response;
+			AddToLetterHints(result);
+			return new WordleResponse(result);
 		}
 
-		private void AddToLetterHints(WordleResponse response)
+		private void AddToLetterHints(LetterResult[] results)
 		{
-			LetterHints.AddHintsFromResponse(response);
+			LetterHints.AddHints(results);
 		}
 
 		internal void SetGameState(string guess)

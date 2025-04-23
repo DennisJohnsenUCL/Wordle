@@ -29,16 +29,16 @@ namespace Wordle_WinForms.CustomControls
             _activeRow = row;
         }
 
-        public bool PrintCorrectness(WordleResponse wordleResponse)
+        public bool PrintCorrectness(WordleResponse response)
         {
             if (_activeRow == null) return false;
 
-            var (chars, correctness) = wordleResponse;
-
-            for (int i = 0; i < chars.Length; i++)
+            for (int i = 0; i < 5; i++)
             {
-                _activeRow.Controls[i].Text = chars[i].ToString();
-                _activeRow.Controls[i].BackColor = ColorProvider.Colors[correctness[i]];
+                var (letter, correctness) = response.LetterResults[i];
+
+                _activeRow.Controls[i].Text = letter.ToString();
+                _activeRow.Controls[i].BackColor = ColorProvider.Colors[correctness];
             }
             return true;
         }

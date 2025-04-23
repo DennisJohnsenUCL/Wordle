@@ -1,23 +1,13 @@
-﻿using System.Collections.Immutable;
-using WordleCore.Enums;
-
-namespace WordleCore.Models
+﻿namespace WordleCore.Models
 {
 	public record WordleResponse
 	{
-		public ImmutableArray<char> Chars { get; }
-		public ImmutableArray<Correctness> Correctness { get; }
+		private readonly LetterResult[] _letterResults = [];
+		public IReadOnlyList<LetterResult> LetterResults { get { return _letterResults; } }
 
-		public WordleResponse(char[] chars, Correctness[] correctness)
+		public WordleResponse(LetterResult[] letterResults)
 		{
-			Chars = [.. chars];
-			Correctness = [.. correctness];
-		}
-
-		public void Deconstruct(out ImmutableArray<char> chars, out ImmutableArray<Correctness> correctness)
-		{
-			chars = Chars;
-			correctness = Correctness;
+			_letterResults = letterResults;
 		}
 	}
 }

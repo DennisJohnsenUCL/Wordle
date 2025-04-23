@@ -28,23 +28,25 @@ namespace WordleCore.Models
 			_correct.Add(c);
 		}
 
-		internal void AddHintsFromResponse(WordleResponse response)
+		internal void AddHints(LetterResult[] results)
 		{
-			for (int i = 0; i < response.Chars.Length; i++)
+			for (int i = 0; i < 5; i++)
 			{
-				if (response.Correctness[i] == Correctness.Absent)
+				var (letter, correctness) = results[i];
+
+				if (correctness == Correctness.Absent)
 				{
-					AddToAbsent(response.Chars[i]);
+					AddToAbsent(letter);
 				}
 
-				else if (response.Correctness[i] == Correctness.Present)
+				else if (correctness == Correctness.Present)
 				{
-					AddToPresent(response.Chars[i]);
+					AddToPresent(letter);
 				}
 
-				else if (response.Correctness[i] == Correctness.Correct)
+				else if (correctness == Correctness.Correct)
 				{
-					AddToCorrect(response.Chars[i]);
+					AddToCorrect(letter);
 				}
 			}
 		}

@@ -17,24 +17,30 @@ namespace WordleCore.Utils
 
 		internal static string GetRandomWordle() => _previousWordles.Value[_rng.Value.Next(0, _previousWordles.Value.Length)];
 
-		internal static Correctness[] GetCorrectnesses(string wordle, string wordleGuess)
+		internal static LetterResult[] GetCorrectnesses(string wordle, string guess)
 		{
-			Correctness[] correctness = new Correctness[5];
+			LetterResult[] letterResults = new LetterResult[5];
 
-			for (int i = 0; i < wordleGuess.Length; i++)
+			for (int i = 0; i < 5; i++)
 			{
-				if (wordleGuess[i] == wordle[i]) { correctness[i] = Correctness.Correct; continue; }
-				else if (!wordle.Contains(wordleGuess[i])) { correctness[i] = Correctness.Absent; continue; }
+				Correctness correctness;
 
-				int total = wordle.Count(x => x == wordleGuess[i]);
-				int correctAfter = wordle.Where((x, j) => j > i && x == wordleGuess[i] && x == wordleGuess[j]).Count();
-				int countUpTo = wordleGuess[..(i + 1)].Count(x => x == wordleGuess[i]);
+				if (guess[i] == wordle[i]) correctness = Correctness.Correct;
+				else if (!wordle.Contains(guess[i])) correctness = Correctness.Absent;
+				else
+				{
+					int total = wordle.Count(x => x == guess[i]);
+					int correctAfter = wordle.Where((x, j) => j > i && x == guess[i] && x == guess[j]).Count();
+					int countUpTo = guess[..(i + 1)].Count(x => x == guess[i]);
 
-				if (total - correctAfter >= countUpTo) correctness[i] = Correctness.Present;
-				else correctness[i] = Correctness.OverCount;
+					if (total - correctAfter >= countUpTo) correctness = Correctness.Present;
+					else correctness = Correctness.OverCount;
+				}
+
+				letterResults[i] = new LetterResult(guess[i], correctness);
 			}
 
-			return correctness;
+			return letterResults;
 		}
 
 		public static WordleGame GetWordleGameFromOptions(WordleOptions options)
