@@ -1,5 +1,4 @@
 ﻿using Wordle_WinForms.UserControls;
-using Wordle_WinForms.Utils;
 using WordleCore.Models;
 
 namespace Wordle_WinForms.CustomControls
@@ -12,7 +11,7 @@ namespace Wordle_WinForms.CustomControls
         {
             AutoScroll = true;
             FlowDirection = FlowDirection.TopDown;
-            Size = new Size(246, 400);
+            Size = new Size(246, 332);
             WrapContents = false;
         }
 
@@ -29,18 +28,9 @@ namespace Wordle_WinForms.CustomControls
             _activeRow = row;
         }
 
-        public bool PrintCorrectness(WordleResponse response)
+        public void PrintCorrectness(WordleResponse response)
         {
-            if (_activeRow == null) return false;
-
-            for (int i = 0; i < 5; i++)
-            {
-                var (letter, correctness) = response.LetterResults[i];
-
-                _activeRow.Controls[i].Text = letter.ToString();
-                _activeRow.Controls[i].BackColor = ColorProvider.Colors[correctness];
-            }
-            return true;
+            _activeRow?.PrintCorrectness(response);
         }
 
         public void PrintMessage(string message)
