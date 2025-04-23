@@ -100,7 +100,10 @@ namespace WordleCore.Tests
             var actual = WordleGameUtils.GetCorrectnesses("CIGAR", "CIGAR");
             Correctness[] expected = [.. Enumerable.Repeat(Correctness.Correct, 5)];
 
-            Assert.IsTrue(expected.SequenceEqual(actual));
+            for (int i = 0; i < 5; i++)
+            {
+                Assert.AreEqual(expected[i], actual[i].Correctness);
+            }
         }
 
         [TestMethod]
@@ -109,7 +112,10 @@ namespace WordleCore.Tests
             var actual = WordleGameUtils.GetCorrectnesses("CIGAR", "BOOKS");
             Correctness[] expected = [.. Enumerable.Repeat(Correctness.Absent, 5)];
 
-            Assert.IsTrue(expected.SequenceEqual(actual));
+            for (int i = 0; i < 5; i++)
+            {
+                Assert.AreEqual(expected[i], actual[i].Correctness);
+            }
         }
 
         [TestMethod]
@@ -118,7 +124,10 @@ namespace WordleCore.Tests
             var actual = WordleGameUtils.GetCorrectnesses("BOOKS", "KAZOO");
             Correctness[] expected = [Correctness.Present, Correctness.Absent, Correctness.Absent, Correctness.Present, Correctness.Present];
 
-            Assert.IsTrue(expected.SequenceEqual(actual));
+            for (int i = 0; i < 5; i++)
+            {
+                Assert.AreEqual(expected[i], actual[i].Correctness);
+            }
         }
 
         [TestMethod]
@@ -127,7 +136,10 @@ namespace WordleCore.Tests
             var actual = WordleGameUtils.GetCorrectnesses("TOTAL", "TOOLS");
             Correctness[] expected = [Correctness.Correct, Correctness.Correct, Correctness.OverCount, Correctness.Present, Correctness.Absent];
 
-            Assert.IsTrue(expected.SequenceEqual(actual));
+            for (int i = 0; i < 5; i++)
+            {
+                Assert.AreEqual(expected[i], actual[i].Correctness);
+            }
         }
 
         [TestMethod]
@@ -136,7 +148,10 @@ namespace WordleCore.Tests
             var actual = WordleGameUtils.GetCorrectnesses("TOTAL", "TAROT");
             Correctness[] expected = [Correctness.Correct, Correctness.Present, Correctness.Absent, Correctness.Present, Correctness.Present];
 
-            Assert.IsTrue(expected.SequenceEqual(actual));
+            for (int i = 0; i < 5; i++)
+            {
+                Assert.AreEqual(expected[i], actual[i].Correctness);
+            }
         }
 
         [TestMethod]
@@ -145,7 +160,10 @@ namespace WordleCore.Tests
             var actual = WordleGameUtils.GetCorrectnesses("LEVEL", "LEAVE");
             Correctness[] expected = [Correctness.Correct, Correctness.Correct, Correctness.Absent, Correctness.Present, Correctness.Present];
 
-            Assert.IsTrue(expected.SequenceEqual(actual));
+            for (int i = 0; i < 5; i++)
+            {
+                Assert.AreEqual(expected[i], actual[i].Correctness);
+            }
         }
 
         [TestMethod]
@@ -154,7 +172,10 @@ namespace WordleCore.Tests
             var actual = WordleGameUtils.GetCorrectnesses("LEAVE", "LEVEL");
             Correctness[] expected = [Correctness.Correct, Correctness.Correct, Correctness.Present, Correctness.Present, Correctness.OverCount];
 
-            Assert.IsTrue(expected.SequenceEqual(actual));
+            for (int i = 0; i < 5; i++)
+            {
+                Assert.AreEqual(expected[i], actual[i].Correctness);
+            }
         }
 
         [TestMethod]
@@ -163,7 +184,10 @@ namespace WordleCore.Tests
             var actual = WordleGameUtils.GetCorrectnesses("TOTAL", "POTOO");
             Correctness[] expected = [Correctness.Absent, Correctness.Correct, Correctness.Correct, Correctness.OverCount, Correctness.OverCount];
 
-            Assert.IsTrue(expected.SequenceEqual(actual));
+            for (int i = 0; i < 5; i++)
+            {
+                Assert.AreEqual(expected[i], actual[i].Correctness);
+            }
         }
 
         [TestMethod]
@@ -172,7 +196,10 @@ namespace WordleCore.Tests
             var actual = WordleGameUtils.GetCorrectnesses("PINTO", "POTOO");
             Correctness[] expected = [Correctness.Correct, Correctness.OverCount, Correctness.Present, Correctness.OverCount, Correctness.Correct];
 
-            Assert.IsTrue(expected.SequenceEqual(actual));
+            for (int i = 0; i < 5; i++)
+            {
+                Assert.AreEqual(expected[i], actual[i].Correctness);
+            }
         }
     }
 }

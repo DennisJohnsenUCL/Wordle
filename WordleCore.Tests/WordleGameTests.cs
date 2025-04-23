@@ -167,9 +167,12 @@ namespace WordleCore.Tests
             wordleGame.Start();
 
             char[] expected = ['P', 'O', 'T', 'O', 'O'];
-            char[] actual = [.. wordleGame.GuessWordle("POTOO").Chars];
+            var actual = wordleGame.GuessWordle("POTOO").LetterResults;
 
-            Assert.IsTrue(actual.SequenceEqual(expected));
+            for (int i = 0; i < 5; i++)
+            {
+                Assert.AreEqual(expected[i], actual[i].Letter);
+            }
         }
 
         [TestMethod]
@@ -179,9 +182,12 @@ namespace WordleCore.Tests
             wordleGame.Start();
 
             Correctness[] expected = [Correctness.Absent, Correctness.Correct, Correctness.Correct, Correctness.OverCount, Correctness.OverCount];
-            Correctness[] actual = [.. wordleGame.GuessWordle("POTOO").Correctness];
+            var actual = wordleGame.GuessWordle("POTOO").LetterResults;
 
-            Assert.IsTrue(actual.SequenceEqual(expected));
+            for (int i = 0; i < 5; i++)
+            {
+                Assert.AreEqual(expected[i], actual[i].Correctness);
+            }
         }
 
         [TestMethod]
