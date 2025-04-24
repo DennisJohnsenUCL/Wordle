@@ -48,6 +48,19 @@ namespace Wordle_WinForms.UserControls
         {
             if (_game != null)
             {
+                HandleWordleGuess();
+            }
+            else
+            {
+                Reset();
+                StartGame(new WordleGame());
+            }
+        }
+
+        private void HandleWordleGuess()
+        {
+            if (_game != null)
+            {
                 string guess = wordlePanel.GetActiveWord();
                 if (guess.Length == 5 && WordleGameUtils.IsAllowedWord(guess))
                 {
@@ -56,26 +69,33 @@ namespace Wordle_WinForms.UserControls
                     wordlePanel.PrintCorrectness(response);
                     alphabetPanel.ColorizeAlphabet(_game.LetterHints);
 
-                    if (!IsGameOver()) StartNewRow();
+                    if (IsGameOver()) HandleGameOver();
+                    else StartNewRow();
                 }
             }
         }
 
         private bool IsGameOver()
         {
+            return _game?.GameState == GameState.Completed || _game?.GameState == GameState.Failed;
+        }
+
+        private void HandleGameOver()
+        {
+            string message = "";
+
             if (_game?.GameState == GameState.Completed)
             {
-                guessesLabel.Text = "";
-                wordlePanel.PrintMessage($"You guessed the Wordle\nWith {_game!.GuessesLeft} guesses to spare");
-                return true;
+                message = $"You guessed the Wordle\nWith {_game!.GuessesLeft} guesses to spare";
             }
             else if (_game?.GameState == GameState.Failed)
             {
-                guessesLabel.Text = "";
-                wordlePanel.PrintMessage($"Better luck next time!\nThe wordle was {_game!.Wordle}");
-                return true;
+                message = $"Better luck next time!\nThe wordle was {_game!.Wordle}";
             }
-            return false;
+
+            wordlePanel.PrintMessage(message);
+            guessesLabel.Text = "";
+            _game = null;
         }
 
         private void StartNewRow()
