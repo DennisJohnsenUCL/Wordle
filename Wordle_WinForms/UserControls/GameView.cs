@@ -10,6 +10,7 @@ namespace Wordle_WinForms.UserControls
     {
         private readonly INavigationController<Views> _navigation;
         private WordleGame? _game = null;
+        private int? _guesses = null;
 
         public GameView(INavigationController<Views> navigation)
         {
@@ -22,6 +23,7 @@ namespace Wordle_WinForms.UserControls
         {
             _game = game;
             _game.Start();
+            _guesses = _game.Guesses;
             wordleLabel.Text = _game.Wordle;
             StartNewRow();
         }
@@ -52,26 +54,24 @@ namespace Wordle_WinForms.UserControls
             }
             else
             {
-                Reset();
-                StartGame(new WordleGame());
+                HandleNewGameClick();
             }
         }
 
         private void HandleWordleGuess()
         {
-            if (_game != null)
+            if (_game == null) return;
+
+            string guess = wordlePanel.GetActiveWord();
+            if (guess.Length == 5 && WordleGameUtils.IsAllowedWord(guess))
             {
-                string guess = wordlePanel.GetActiveWord();
-                if (guess.Length == 5 && WordleGameUtils.IsAllowedWord(guess))
-                {
-                    var response = _game.GuessWordle(guess);
+                var response = _game.GuessWordle(guess);
 
-                    wordlePanel.PrintCorrectness(response);
-                    alphabetPanel.ColorizeAlphabet(_game.LetterHints);
+                wordlePanel.PrintCorrectness(response);
+                alphabetPanel.ColorizeAlphabet(_game.LetterHints);
 
-                    if (IsGameOver()) HandleGameOver();
-                    else StartNewRow();
-                }
+                if (IsGameOver()) HandleGameOver();
+                else StartNewRow();
             }
         }
 
@@ -112,8 +112,13 @@ namespace Wordle_WinForms.UserControls
 
         private void NewGameButton_Click(object sender, EventArgs e)
         {
+            HandleNewGameClick();
+        }
+
+        private void HandleNewGameClick()
+        {
             Reset();
-            StartGame(new WordleGame());
+            StartGame(new WordleGame((int)_guesses!));
             ActiveControl = null;
         }
     }
