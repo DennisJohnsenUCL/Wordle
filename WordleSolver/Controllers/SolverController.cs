@@ -10,11 +10,12 @@ namespace WordleSolver.Controllers
     internal class SolverController
     {
         private readonly IWordleSolver _solver;
-        private readonly List<string> _wordles;
+        private readonly IEnumerable<string> _wordles;
         private int _guessesMade = 0;
-        private const int _guessesAllowed = int.MaxValue;
+        private int _highestGuesses = 0;
+        private const int GuessesAllowed = int.MaxValue;
 
-        public SolverController(IWordleSolver solver, List<string> wordles)
+        public SolverController(IWordleSolver solver, IEnumerable<string> wordles)
         {
             _solver = solver;
             _wordles = wordles;
@@ -31,7 +32,7 @@ namespace WordleSolver.Controllers
             }
             timer.Stop();
 
-            double guessesPerWordle = _guessesMade / _wordles.Count;
+            double guessesPerWordle = _guessesMade / _wordles.Count();
             return new SolverResult(_solver.SolverIdentifier, guessesPerWordle, timer.ElapsedMilliseconds);
         }
 
@@ -50,7 +51,7 @@ namespace WordleSolver.Controllers
 
         private static WordleGame InitializeGame(string wordle)
         {
-            var game = new WordleGame(wordle, _guessesAllowed);
+            var game = new WordleGame(wordle, GuessesAllowed);
             game.Start();
             return game;
         }
