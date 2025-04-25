@@ -6,14 +6,9 @@ namespace WordleSolver.Solvers
 {
     internal class WordleSolver1 : IWordleSolver
     {
-        protected virtual List<string> Words { get; }
+        protected virtual List<string> Words { get; } = LoadWords();
         private int _index = 0;
         public string SolverIdentifier { get; } = "Solver1, guesses all words (no mask) in non-specific order";
-
-        public WordleSolver1()
-        {
-            Words = LoadWords();
-        }
 
         private static List<string> LoadWords()
         {
