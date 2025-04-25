@@ -3,10 +3,10 @@
     internal record SolverResult
     {
         public string SolverIdentifier { get; }
-        public int GuessesPerWordle { get; }
+        public double GuessesPerWordle { get; }
         public long ElapsedMilliseconds { get; }
 
-        public SolverResult(string solverIdentifier, int guessesPerWordle, long elapsedMilliseconds)
+        public SolverResult(string solverIdentifier, double guessesPerWordle, long elapsedMilliseconds)
         {
             SolverIdentifier = solverIdentifier;
             GuessesPerWordle = guessesPerWordle;
@@ -19,7 +19,7 @@
                 $"Guesses per Wordle = {GuessesPerWordle}, time taken (in ms): {ElapsedMilliseconds}";
         }
 
-        public void Deconstruct(out string solverIdentifier, out int guessesPerWordle, out long elapsedMilliseconds)
+        public void Deconstruct(out string solverIdentifier, out double guessesPerWordle, out long elapsedMilliseconds)
         {
             solverIdentifier = SolverIdentifier;
             guessesPerWordle = GuessesPerWordle;
