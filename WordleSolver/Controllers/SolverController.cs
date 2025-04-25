@@ -31,7 +31,7 @@ namespace WordleSolver.Controllers
             }
             timer.Stop();
 
-            double guessesPerWordle = _guessesMade / _wordles.Count();
+            double guessesPerWordle = (double)_guessesMade / _wordles.Count();
             return new SolverResult(_solver.SolverIdentifier, guessesPerWordle, timer.ElapsedMilliseconds);
         }
 

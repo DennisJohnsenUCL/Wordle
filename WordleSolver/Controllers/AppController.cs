@@ -19,7 +19,7 @@ namespace WordleSolver.Controllers
             {
                 var solverController = new SolverController(solver, _wordles);
                 var result = solverController.Run();
-                Console.WriteLine(result);
+                Console.WriteLine(result + "\n");
             }
         }
     }

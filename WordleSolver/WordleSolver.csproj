@@ -8,13 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Data\allowed_words_sorted.txt" />
-    <None Remove="Data\allowed_words_sorted_occurrences.txt" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Data\allowed_words_sorted.txt" />
-    <EmbeddedResource Include="Data\allowed_words_sorted_occurrences.txt" />
+    <Compile Remove="Data\**" />
+    <EmbeddedResource Remove="Data\**" />
+    <None Remove="Data\**" />
   </ItemGroup>
 
   <ItemGroup>

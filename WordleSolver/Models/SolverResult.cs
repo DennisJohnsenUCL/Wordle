@@ -16,7 +16,7 @@
         public override string ToString()
         {
             return $"Solver: {SolverIdentifier}\n" +
-                $"Guesses per Wordle = {GuessesPerWordle}, time taken (in ms): {ElapsedMilliseconds}";
+                $"Guesses per Wordle = {GuessesPerWordle:0.00}, time taken (in ms): {ElapsedMilliseconds}";
         }
 
         public void Deconstruct(out string solverIdentifier, out double guessesPerWordle, out long elapsedMilliseconds)

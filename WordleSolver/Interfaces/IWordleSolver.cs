@@ -4,10 +4,10 @@ namespace WordleSolver.Interfaces
 {
     internal interface IWordleSolver
     {
-        public string SolverIdentifier { get; }
-        public string GetFirstGuess();
-        public void AddResponse(WordleResponse response);
-        public string GetNextGuess();
-        public void Reset();
+        string SolverIdentifier { get; }
+        string GetFirstGuess();
+        void AddResponse(WordleResponse response);
+        string GetNextGuess();
+        void Reset();
     }
 }
