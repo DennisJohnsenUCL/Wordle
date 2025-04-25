@@ -12,7 +12,6 @@ namespace WordleSolver.Controllers
         private readonly IWordleSolver _solver;
         private readonly IEnumerable<string> _wordles;
         private int _guessesMade = 0;
-        private int _highestGuesses = 0;
         private const int GuessesAllowed = int.MaxValue;
 
         public SolverController(IWordleSolver solver, IEnumerable<string> wordles)

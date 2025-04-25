@@ -4,8 +4,8 @@ namespace WordleSolver.Controllers
 {
     internal class AppController
     {
-        private IEnumerable<string> _wordles;
-        private IEnumerable<IWordleSolver> _solvers;
+        private readonly IEnumerable<string> _wordles;
+        private readonly IEnumerable<IWordleSolver> _solvers;
 
         public AppController(IEnumerable<string> wordles, IEnumerable<IWordleSolver> solvers)
         {
