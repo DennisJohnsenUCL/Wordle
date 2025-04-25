@@ -8,6 +8,7 @@ namespace WordleSolver.Solvers
     {
         protected virtual List<string> Words { get; }
         private int _index = 0;
+        public string SolverIdentifier { get; } = "Solver1, guesses all words (no mask) in non-specific order";
 
         public WordleSolver1()
         {

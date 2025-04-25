@@ -12,7 +12,8 @@ namespace WordleSolver
             var wordleSolver = new WordleSolver1();
             var solverController = new SolverController(wordleSolver, wordles);
 
-            solverController.Run();
+            var result = solverController.Run();
+            Console.WriteLine(result);
         }
     }
 }

@@ -1,6 +1,8 @@
-﻿using WordleCore;
+﻿using System.Diagnostics;
+using WordleCore;
 using WordleCore.Enums;
 using WordleSolver.Interfaces;
+using WordleSolver.Models;
 
 namespace WordleSolver.Controllers
 {
@@ -8,7 +10,8 @@ namespace WordleSolver.Controllers
     {
         private readonly IWordleSolver _solver;
         private readonly List<string> _wordles;
-        private const int _guesses = int.MaxValue;
+        private int _guessesMade = 0;
+        private const int _guessesAllowed = int.MaxValue;
 
         public SolverController(IWordleSolver solver, List<string> wordles)
         {
@@ -16,23 +19,30 @@ namespace WordleSolver.Controllers
             _wordles = wordles;
         }
 
-        public void Run()
+        public SolverResult Run()
         {
+            var timer = new Stopwatch();
+            timer.Start();
             foreach (string wordle in _wordles)
             {
-                var game = new WordleGame(wordle, _guesses);
+                var game = new WordleGame(wordle, _guessesAllowed);
                 game.Start();
                 var guess = _solver.GetFirstGuess();
+                _guessesMade++;
                 var response = game.GuessWordle(guess);
                 if (IsGameOver(game)) { _solver.Reset(); continue; }
                 while (true)
                 {
                     _solver.AddResponse(response);
                     guess = _solver.GetNextGuess();
+                    _guessesMade++;
                     response = game.GuessWordle(guess);
                     if (IsGameOver(game)) { _solver.Reset(); break; }
                 }
             }
+            timer.Stop();
+            var guessesPerWordle = _guessesMade / _wordles.Count;
+            return new SolverResult(_solver.SolverIdentifier, guessesPerWordle, timer.ElapsedMilliseconds);
         }
 
         private static bool IsGameOver(WordleGame game)
