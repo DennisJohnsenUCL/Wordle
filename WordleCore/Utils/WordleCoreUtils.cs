@@ -2,9 +2,9 @@
 
 namespace WordleCore.Utils
 {
-	internal static class WordleCoreUtils
+	public static class WordleCoreUtils
 	{
-		internal static string LoadEmbeddedResource(string resourceName)
+		public static string LoadEmbeddedResource(string resourceName)
 		{
 			var assembly = Assembly.GetExecutingAssembly();
 
@@ -15,7 +15,7 @@ namespace WordleCore.Utils
 			return reader.ReadToEnd();
 		}
 
-		internal static string[] LoadEmbeddedTxt(string resourceName) =>
+		public static string[] LoadEmbeddedTxt(string resourceName) =>
 			LoadEmbeddedResource(resourceName).Split(['\n', '\r'], StringSplitOptions.RemoveEmptyEntries);
 	}
 }
