@@ -4,7 +4,7 @@ using WordleSolver.Interfaces;
 
 namespace WordleSolver.Solvers
 {
-    internal class WordleSolver1 : IWordleSolver
+    internal class LazyRandomSolver : IWordleSolver
     {
         protected virtual List<string> Words { get; } = LoadWords();
         protected int Index { get; set; } = 0;

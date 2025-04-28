@@ -2,7 +2,7 @@
 
 namespace WordleSolver.Solvers
 {
-    internal class WordleSolver2 : WordleSolver1
+    internal class LazySortedSolver : LazyRandomSolver
     {
         protected override List<string> Words { get; } = LoadWords();
         public override string SolverIdentifier { get; } = "Solver2, guesses all words (no mask) ordered by usage in literature";

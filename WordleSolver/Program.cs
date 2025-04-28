@@ -12,9 +12,9 @@ namespace WordleSolver
             List<string> wordles = [.. WordleCoreUtils.LoadEmbeddedTxt("WordleCore.Data.previous_wordles.txt")];
             var solvers = new List<IWordleSolver>()
             {
-                new WordleSolver1(),
-                new WordleSolver2(),
-                new WordleSolver3(),
+                //new LazyRandomSolver(),
+                //new LazySortedSolver(),
+                new FilteredSortedSolver(),
             };
 
             var appController = new AppController(wordles, solvers);

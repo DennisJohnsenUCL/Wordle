@@ -4,7 +4,7 @@ using WordleSolver.Models;
 
 namespace WordleSolver.Solvers
 {
-    internal class WordleSolver3 : WordleSolver2
+    internal class FilteredSortedSolver : LazySortedSolver
     {
         public override string SolverIdentifier { get; } = "Solver3, filters guesses based on constraints, guesses words in order of literature usage";
         protected virtual List<Constraint> Constraints { get; private set; } = [];
@@ -56,8 +56,8 @@ namespace WordleSolver.Solvers
 
         public override void Reset()
         {
-            Index = 0;
             Constraints = [];
+            base.Reset();
         }
     }
 }
