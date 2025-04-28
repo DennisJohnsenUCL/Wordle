@@ -1,5 +1,6 @@
 ﻿using WordleCore.Enums;
 using WordleCore.Models;
+using WordleSolver.Interfaces;
 using WordleSolver.Models;
 
 namespace WordleSolver.Solvers
@@ -8,10 +9,16 @@ namespace WordleSolver.Solvers
     {
         public override string SolverIdentifier { get; } = "Solver3, filters guesses based on constraints, guesses words in order of literature usage";
         protected virtual HashSet<Constraint> Constraints { get; private set; } = [];
+        protected string FirstGuess { get; private set; }
+
+        public FilteredSortedSolver(IFirstGuessProvider firstGuessProvider)
+        {
+            FirstGuess = firstGuessProvider.Value;
+        }
 
         public override string GetFirstGuess()
         {
-            return "SALET";
+            return FirstGuess;
         }
 
         public override void AddResponse(WordleResponse response)

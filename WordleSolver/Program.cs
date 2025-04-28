@@ -1,6 +1,7 @@
 ﻿using WordleCore.Utils;
 using WordleSolver.Controllers;
 using WordleSolver.Interfaces;
+using WordleSolver.Services;
 using WordleSolver.Solvers;
 
 namespace WordleSolver
@@ -10,11 +11,12 @@ namespace WordleSolver
         public static void Main()
         {
             List<string> wordles = [.. WordleCoreUtils.LoadEmbeddedTxt("WordleCore.Data.previous_wordles.txt")];
+            var staticFirstGuessProvider = new StaticFirstGuessProvider("SALET");
             var solvers = new List<IWordleSolver>()
             {
                 //new LazyRandomSolver(),
                 //new LazySortedSolver(),
-                new FilteredSortedSolver(),
+                new FilteredSortedSolver(staticFirstGuessProvider),
             };
 
             var appController = new AppController(wordles, solvers);
