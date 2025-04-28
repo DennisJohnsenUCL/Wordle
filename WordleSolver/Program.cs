@@ -13,7 +13,8 @@ namespace WordleSolver
             var solvers = new List<IWordleSolver>()
             {
                 new WordleSolver1(),
-                new WordleSolver2()
+                new WordleSolver2(),
+                new WordleSolver3(),
             };
 
             var appController = new AppController(wordles, solvers);

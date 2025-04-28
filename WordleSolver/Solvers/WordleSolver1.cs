@@ -7,7 +7,7 @@ namespace WordleSolver.Solvers
     internal class WordleSolver1 : IWordleSolver
     {
         protected virtual List<string> Words { get; } = LoadWords();
-        private int _index = 0;
+        protected int Index { get; set; } = 0;
         public virtual string SolverIdentifier { get; } = "Solver1, guesses all words (no mask) in non-specific order";
 
         private static List<string> LoadWords()
@@ -24,14 +24,14 @@ namespace WordleSolver.Solvers
 
         public virtual string GetNextGuess()
         {
-            var guess = Words[_index];
-            _index++;
+            var guess = Words[Index];
+            Index++;
             return guess;
         }
 
         public virtual void Reset()
         {
-            _index = 0;
+            Index = 0;
         }
     }
 }
