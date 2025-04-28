@@ -7,7 +7,7 @@ namespace WordleSolver.Solvers
     internal class FilteredSortedSolver : LazySortedSolver
     {
         public override string SolverIdentifier { get; } = "Solver3, filters guesses based on constraints, guesses words in order of literature usage";
-        protected virtual List<Constraint> Constraints { get; private set; } = [];
+        protected virtual HashSet<Constraint> Constraints { get; private set; } = [];
 
         public override string GetFirstGuess()
         {
@@ -22,7 +22,9 @@ namespace WordleSolver.Solvers
             {
                 var (letter, correctness) = results[i];
 
-                Constraints.Add(new Constraint(letter, correctness, i));
+                var constraint = new Constraint(letter, correctness, i);
+
+                Constraints.Add(constraint);
             }
         }
 
