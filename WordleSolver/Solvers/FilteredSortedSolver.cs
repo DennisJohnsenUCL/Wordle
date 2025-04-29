@@ -1,14 +1,13 @@
-﻿using WordleCore.Enums;
-using WordleCore.Models;
+﻿using WordleCore.Models;
+using WordleSolver.Core;
 using WordleSolver.Interfaces;
-using WordleSolver.Models;
 
 namespace WordleSolver.Solvers
 {
     internal class FilteredSortedSolver : LazySortedSolver
     {
         public override string SolverIdentifier { get; } = "Solver3, filters guesses based on constraints, guesses words in order of literature usage";
-        protected virtual HashSet<Constraint> Constraints { get; private set; } = [];
+        protected ConstraintManager Constraints { get; } = new();
         protected string FirstGuess { get; private set; }
 
         public FilteredSortedSolver(IFirstGuessProvider firstGuessProvider)
@@ -23,16 +22,7 @@ namespace WordleSolver.Solvers
 
         public override void AddResponse(WordleResponse response)
         {
-            var results = response.LetterResults;
-
-            for (int i = 0; i < results.Count; i++)
-            {
-                var (letter, correctness) = results[i];
-
-                var constraint = new Constraint(letter, correctness, i);
-
-                Constraints.Add(constraint);
-            }
+            Constraints.AddConstraints(response.LetterResults);
         }
 
         public override string GetNextGuess()
@@ -52,20 +42,12 @@ namespace WordleSolver.Solvers
 
         protected virtual bool FitsConstraints(string word)
         {
-            foreach (var constraint in Constraints)
-            {
-                var (letter, correctness, position) = constraint;
-
-                if (correctness == Correctness.Absent && word.Contains(letter)) return false;
-                if (correctness == Correctness.Correct && word[position] != letter) return false;
-                if (correctness == Correctness.Present && !word.Remove(position, 1).Contains(letter)) return false;
-            }
-            return true;
+            return Constraints.FitsConstraints(word);
         }
 
         public override void Reset()
         {
-            Constraints = [];
+            Constraints.Clear();
             base.Reset();
         }
     }
