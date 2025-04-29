@@ -1,5 +1,4 @@
 ﻿using WordleCore.Models;
-using WordleSolver.Core;
 using WordleSolver.Interfaces;
 
 namespace WordleSolver.Solvers
@@ -7,12 +6,13 @@ namespace WordleSolver.Solvers
     internal class FilteredSortedSolver : LazySortedSolver
     {
         public override string SolverIdentifier { get; } = "Solver3, filters guesses based on constraints, guesses words in order of literature usage";
-        protected ConstraintManager Constraints { get; } = new();
+        protected IConstraintManager Constraints { get; }
         protected string FirstGuess { get; private set; }
 
-        public FilteredSortedSolver(IFirstGuessProvider firstGuessProvider)
+        public FilteredSortedSolver(IFirstGuessProvider firstGuessProvider, IConstraintManager constraintManager)
         {
             FirstGuess = firstGuessProvider.Value;
+            Constraints = constraintManager;
         }
 
         public override string GetFirstGuess()

@@ -1,10 +1,11 @@
 ﻿using WordleCore.Enums;
 using WordleCore.Models;
+using WordleSolver.Interfaces;
 using WordleSolver.Models;
 
 namespace WordleSolver.Core
 {
-    internal class ConstraintManager
+    internal class ConstraintManager : IConstraintManager
     {
         public HashSet<Constraint> Constraints { get; private set; } = [];
 
