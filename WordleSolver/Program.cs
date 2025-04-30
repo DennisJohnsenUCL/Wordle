@@ -15,7 +15,7 @@ namespace WordleSolver
             var constraintManager = new ConstraintManager();
             List<string> wordles = [.. WordleCoreUtils.LoadEmbeddedTxt("WordleCore.Data.previous_wordles.txt")];
             var guesses = int.MaxValue;
-            var factory = new WordleGameFactory();
+            var gameFactory = new WordleGameFactory();
 
             var solvers = new List<ISolver>()
             {
@@ -28,9 +28,10 @@ namespace WordleSolver
 
             foreach (ISolver solver in solvers)
             {
-                var games = factory.CreateGames(wordles, guesses);
+                var games = gameFactory.CreateGames(wordles, guesses);
+                var controller = new SolverController(solver, games);
 
-                controllers.Add(new SolverController(solver, games));
+                controllers.Add(controller);
             }
 
             var appController = new AppController(controllers);

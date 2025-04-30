@@ -3,27 +3,25 @@
     internal record SolverResult
     {
         public string SolverIdentifier { get; }
-        public double GuessesPerWordle { get; }
+        public double AverageGuesses { get; }
+        public int FailedGames { get; }
+        public int GamesPlayed { get; }
         public long ElapsedMilliseconds { get; }
 
-        public SolverResult(string solverIdentifier, double guessesPerWordle, long elapsedMilliseconds)
+        public SolverResult(string solverIdentifier, double averageGuesses, int failedGames, int gamesPlayed, long elapsedMilliseconds)
         {
             SolverIdentifier = solverIdentifier;
-            GuessesPerWordle = guessesPerWordle;
+            AverageGuesses = averageGuesses;
+            FailedGames = failedGames;
+            GamesPlayed = gamesPlayed;
             ElapsedMilliseconds = elapsedMilliseconds;
         }
 
         public override string ToString()
         {
             return $"Solver: {SolverIdentifier}\n" +
-                $"Guesses per Wordle = {GuessesPerWordle:0.00}, time taken (in ms): {ElapsedMilliseconds}";
-        }
-
-        public void Deconstruct(out string solverIdentifier, out double guessesPerWordle, out long elapsedMilliseconds)
-        {
-            solverIdentifier = SolverIdentifier;
-            guessesPerWordle = GuessesPerWordle;
-            elapsedMilliseconds = ElapsedMilliseconds;
+                $"Average guesses per Wordle = {AverageGuesses:0.00}, time taken (in ms): {ElapsedMilliseconds}\n" +
+                $"Games played: {GamesPlayed}, failed games: {FailedGames}";
         }
     }
 }

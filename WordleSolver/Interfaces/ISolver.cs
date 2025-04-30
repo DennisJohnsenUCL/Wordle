@@ -2,7 +2,7 @@
 {
     internal interface ISolver
     {
-        string SolverIdentifier { get; }
+        string Identifier { get; }
         string GetFirstGuess();
         string GetNextGuess();
         void Reset();
