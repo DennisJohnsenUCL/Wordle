@@ -5,9 +5,9 @@ namespace WordleSolver.Controllers
     internal class AppController
     {
         private readonly IEnumerable<string> _wordles;
-        private readonly IEnumerable<IWordleSolver> _solvers;
+        private readonly IEnumerable<ISolver> _solvers;
 
-        public AppController(IEnumerable<string> wordles, IEnumerable<IWordleSolver> solvers)
+        public AppController(IEnumerable<string> wordles, IEnumerable<ISolver> solvers)
         {
             _wordles = wordles;
             _solvers = solvers;

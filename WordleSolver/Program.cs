@@ -16,10 +16,10 @@ namespace WordleSolver
             var staticFirstGuessProvider = new StaticFirstGuessProvider("SALET");
             var constraintManager = new ConstraintManager();
 
-            var solvers = new List<IWordleSolver>()
+            var solvers = new List<ISolver>()
             {
-                new LazyRandomSolver(),
-                new LazySortedSolver(),
+                //new LazyRandomSolver(),
+                //new LazySortedSolver(),
                 new FilteredSortedSolver(staticFirstGuessProvider, constraintManager),
             };
 

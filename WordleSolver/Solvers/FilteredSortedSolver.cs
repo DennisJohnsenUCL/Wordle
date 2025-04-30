@@ -3,7 +3,7 @@ using WordleSolver.Interfaces;
 
 namespace WordleSolver.Solvers
 {
-    internal class FilteredSortedSolver : LazySortedSolver
+    internal class FilteredSortedSolver : LazySortedSolver, IReactiveSolver
     {
         public override string SolverIdentifier { get; } = "Solver3, filters guesses based on constraints, guesses words in order of literature usage";
         protected IConstraintManager Constraints { get; }
@@ -20,7 +20,7 @@ namespace WordleSolver.Solvers
             return FirstGuess;
         }
 
-        public override void AddResponse(WordleResponse response)
+        public virtual void AddResponse(WordleResponse response)
         {
             Constraints.AddConstraints(response.LetterResults);
         }

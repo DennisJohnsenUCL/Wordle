@@ -9,12 +9,12 @@ namespace WordleSolver.Controllers
 {
     internal class SolverController
     {
-        private readonly IWordleSolver _solver;
+        private readonly ISolver _solver;
         private readonly IEnumerable<string> _wordles;
         private int _guessesMade = 0;
         private const int GuessesAllowed = int.MaxValue;
 
-        public SolverController(IWordleSolver solver, IEnumerable<string> wordles)
+        public SolverController(ISolver solver, IEnumerable<string> wordles)
         {
             _solver = solver;
             _wordles = wordles;
@@ -42,7 +42,7 @@ namespace WordleSolver.Controllers
 
             while (!IsGameOver(game))
             {
-                _solver.AddResponse(response);
+                if (_solver is IReactiveSolver solver) solver.AddResponse(response);
                 response = MakeNextGuess(game);
             }
             _solver.Reset();

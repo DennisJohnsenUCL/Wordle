@@ -1,10 +1,9 @@
-﻿using WordleCore.Models;
-using WordleCore.Utils;
+﻿using WordleCore.Utils;
 using WordleSolver.Interfaces;
 
 namespace WordleSolver.Solvers
 {
-    internal class LazyRandomSolver : IWordleSolver
+    internal class LazyRandomSolver : ISolver
     {
         protected virtual List<string> Words { get; } = LoadWords();
         protected int Index { get; set; } = 0;
@@ -19,8 +18,6 @@ namespace WordleSolver.Solvers
         {
             return GetNextGuess();
         }
-
-        public virtual void AddResponse(WordleResponse _) { }
 
         public virtual string GetNextGuess()
         {
