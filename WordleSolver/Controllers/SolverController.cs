@@ -10,14 +10,14 @@ namespace WordleSolver.Controllers
     internal class SolverController
     {
         private readonly ISolver _solver;
-        private readonly IEnumerable<string> _wordles;
+        private readonly IEnumerable<WordleGame> _games;
         private int _guessesMade = 0;
         private const int GuessesAllowed = int.MaxValue;
 
-        public SolverController(ISolver solver, IEnumerable<string> wordles)
+        public SolverController(ISolver solver, IEnumerable<WordleGame> games)
         {
             _solver = solver;
-            _wordles = wordles;
+            _games = games;
         }
 
         public SolverResult Run()
@@ -25,19 +25,19 @@ namespace WordleSolver.Controllers
             var timer = new Stopwatch();
 
             timer.Start();
-            foreach (string wordle in _wordles)
+            foreach (var game in _games)
             {
-                ExecuteGame(wordle);
+                ExecuteGame(game);
             }
             timer.Stop();
 
-            double guessesPerWordle = (double)_guessesMade / _wordles.Count();
+            double guessesPerWordle = (double)_guessesMade / _games.Count();
             return new SolverResult(_solver.SolverIdentifier, guessesPerWordle, timer.ElapsedMilliseconds);
         }
 
-        private void ExecuteGame(string wordle)
+        private void ExecuteGame(WordleGame game)
         {
-            var game = InitializeGame(wordle);
+            game.Start();
             var response = MakeFirstGuess(game);
 
             while (!IsGameOver(game))
@@ -46,13 +46,6 @@ namespace WordleSolver.Controllers
                 response = MakeNextGuess(game);
             }
             _solver.Reset();
-        }
-
-        private static WordleGame InitializeGame(string wordle)
-        {
-            var game = new WordleGame(wordle, GuessesAllowed);
-            game.Start();
-            return game;
         }
 
         private WordleResponse MakeFirstGuess(WordleGame game)

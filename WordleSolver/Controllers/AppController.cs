@@ -1,24 +1,19 @@
-﻿using WordleSolver.Interfaces;
-
-namespace WordleSolver.Controllers
+﻿namespace WordleSolver.Controllers
 {
     internal class AppController
     {
-        private readonly IEnumerable<string> _wordles;
-        private readonly IEnumerable<ISolver> _solvers;
+        private readonly IEnumerable<SolverController> _controllers;
 
-        public AppController(IEnumerable<string> wordles, IEnumerable<ISolver> solvers)
+        public AppController(IEnumerable<SolverController> controllers)
         {
-            _wordles = wordles;
-            _solvers = solvers;
+            _controllers = controllers;
         }
 
         public void Run()
         {
-            foreach (var solver in _solvers)
+            foreach (var controller in _controllers)
             {
-                var solverController = new SolverController(solver, _wordles);
-                var result = solverController.Run();
+                var result = controller.Run();
                 Console.WriteLine(result + "\n");
             }
         }
