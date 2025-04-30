@@ -1,5 +1,4 @@
-﻿using WordleCore;
-using WordleCore.Utils;
+﻿using WordleCore.Utils;
 using WordleSolver.Controllers;
 using WordleSolver.Core;
 using WordleSolver.Interfaces;
@@ -16,6 +15,7 @@ namespace WordleSolver
             var constraintManager = new ConstraintManager();
             List<string> wordles = [.. WordleCoreUtils.LoadEmbeddedTxt("WordleCore.Data.previous_wordles.txt")];
             var guesses = int.MaxValue;
+            var factory = new WordleGameFactory();
 
             var solvers = new List<ISolver>()
             {
@@ -28,12 +28,7 @@ namespace WordleSolver
 
             foreach (ISolver solver in solvers)
             {
-                List<WordleGame> games = [];
-
-                foreach (string wordle in wordles)
-                {
-                    games.Add(new WordleGame(wordle, guesses));
-                }
+                var games = factory.CreateGames(wordles, guesses);
 
                 controllers.Add(new SolverController(solver, games));
             }
