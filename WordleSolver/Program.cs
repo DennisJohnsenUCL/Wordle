@@ -13,9 +13,6 @@ namespace WordleSolver
         {
             var staticFirstGuessProvider = new StaticFirstGuessProvider("SALET");
             var constraintManager = new ConstraintManager();
-            List<string> wordles = [.. WordleCoreUtils.LoadEmbeddedTxt("WordleCore.Data.previous_wordles.txt")];
-            var guesses = int.MaxValue;
-            var factory = new WordleGameFactory();
 
             var solvers = new List<ISolver>()
             {
@@ -25,12 +22,16 @@ namespace WordleSolver
             };
 
             var controllers = new List<SolverController>();
+            var wordles = new List<string>(WordleCoreUtils.LoadEmbeddedTxt("WordleCore.Data.previous_wordles.txt"));
+            var guesses = int.MaxValue;
+            var gameFactory = new WordleGameFactory();
 
             foreach (ISolver solver in solvers)
             {
-                var games = factory.CreateGames(wordles, guesses);
+                var games = gameFactory.CreateGames(wordles, guesses);
 
-                controllers.Add(new SolverController(solver, games));
+                var controller = new SolverController(solver, games);
+                controllers.Add(controller);
             }
 
             var appController = new AppController(controllers);

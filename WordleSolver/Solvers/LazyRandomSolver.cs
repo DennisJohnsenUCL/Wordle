@@ -7,7 +7,7 @@ namespace WordleSolver.Solvers
     {
         protected virtual List<string> Words { get; } = LoadWords();
         protected int Index { get; set; } = 0;
-        public virtual string SolverIdentifier { get; } = "Solver1, guesses all words (no mask) in non-specific order";
+        public virtual string Identifier { get; } = "Solver1, guesses all words (no mask) in non-specific order";
 
         private static List<string> LoadWords()
         {

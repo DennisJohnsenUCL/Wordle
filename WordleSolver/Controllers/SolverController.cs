@@ -1,7 +1,5 @@
 ﻿using System.Diagnostics;
 using WordleCore;
-using WordleCore.Enums;
-using WordleCore.Models;
 using WordleSolver.Interfaces;
 using WordleSolver.Models;
 
@@ -11,8 +9,7 @@ namespace WordleSolver.Controllers
     {
         private readonly ISolver _solver;
         private readonly IEnumerable<WordleGame> _games;
-        private int _guessesMade = 0;
-        private const int GuessesAllowed = int.MaxValue;
+        private readonly List<int> _guessesList = [];
 
         public SolverController(ISolver solver, IEnumerable<WordleGame> games)
         {
@@ -27,44 +24,24 @@ namespace WordleSolver.Controllers
             timer.Start();
             foreach (var game in _games)
             {
-                ExecuteGame(game);
+                var gameController = new GameController(_solver, game);
+                int guesses = gameController.Run();
+                _guessesList.Add(guesses);
+                _solver.Reset();
             }
             timer.Stop();
 
-            double guessesPerWordle = (double)_guessesMade / _games.Count();
-            return new SolverResult(_solver.SolverIdentifier, guessesPerWordle, timer.ElapsedMilliseconds);
-        }
+            double avgGuesses = (double)_guessesList.Sum() / _guessesList.Count;
+            int failedGames = _guessesList.Where(guesses => guesses > 6).Count();
 
-        private void ExecuteGame(WordleGame game)
-        {
-            game.Start();
-            var response = MakeFirstGuess(game);
+            var result = new SolverResult(
+                _solver.Identifier,
+                avgGuesses,
+                failedGames,
+                _games.Count(),
+                timer.ElapsedMilliseconds);
 
-            while (!IsGameOver(game))
-            {
-                if (_solver is IReactiveSolver solver) solver.AddResponse(response);
-                response = MakeNextGuess(game);
-            }
-            _solver.Reset();
-        }
-
-        private WordleResponse MakeFirstGuess(WordleGame game)
-        {
-            var guess = _solver.GetFirstGuess();
-            _guessesMade++;
-            return game.GuessWordle(guess);
-        }
-
-        private WordleResponse MakeNextGuess(WordleGame game)
-        {
-            var guess = _solver.GetNextGuess();
-            _guessesMade++;
-            return game.GuessWordle(guess);
-        }
-
-        private static bool IsGameOver(WordleGame game)
-        {
-            return (game.GameState == GameState.Completed || game.GameState == GameState.Failed);
+            return result;
         }
     }
 }
