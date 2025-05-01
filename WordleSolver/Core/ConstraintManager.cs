@@ -7,7 +7,8 @@ namespace WordleSolver.Core
 {
     internal class ConstraintManager : IConstraintManager
     {
-        public HashSet<Constraint> Constraints { get; private set; } = [];
+        private HashSet<Constraint> _constraints = [];
+        private Dictionary<char, int> _counts = [];
 
         public void AddConstraints(IReadOnlyList<LetterResult> results)
         {
@@ -15,15 +16,25 @@ namespace WordleSolver.Core
             {
                 var (letter, correctness) = results[i];
 
-                var constraint = new Constraint(letter, correctness, i);
+                if (correctness == Correctness.OverCount)
+                {
+                    var count = results.Count(r => r.Letter == letter &&
+                    (r.Correctness == Correctness.Present || r.Correctness == Correctness.Correct));
 
-                Constraints.Add(constraint);
+                    _counts.TryAdd(letter, count);
+                }
+                else
+                {
+                    var constraint = new Constraint(letter, correctness, i);
+
+                    _constraints.Add(constraint);
+                }
             }
         }
 
         public bool FitsConstraints(string word)
         {
-            foreach (var constraint in Constraints)
+            foreach (var constraint in _constraints)
             {
                 var (letter, correctness, position) = constraint;
 
@@ -31,12 +42,19 @@ namespace WordleSolver.Core
                 if (correctness == Correctness.Correct && word[position] != letter) return false;
                 if (correctness == Correctness.Present && !word.Remove(position, 1).Contains(letter)) return false;
             }
+
+            foreach (var count in _counts)
+            {
+                if (word.Count(c => c == count.Key) > count.Value) return false;
+            }
+
             return true;
         }
 
         public void Clear()
         {
-            Constraints = [];
+            _constraints = [];
+            _counts = [];
         }
     }
 }
