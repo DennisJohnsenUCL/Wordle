@@ -21,7 +21,8 @@ namespace WordleSolver
             {
                 //new LazyRandomSolver(),
                 //new LazySortedSolver(),
-                new FilteredSortedSolver(staticFirstGuessProvider, constraintManager),
+                //new FilteredSortedSolver(staticFirstGuessProvider, constraintManager),
+                new EntropySolver(staticFirstGuessProvider, constraintManager)
             };
 
             var controllers = new List<SolverController>();

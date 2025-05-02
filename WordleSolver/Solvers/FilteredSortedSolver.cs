@@ -6,8 +6,8 @@ namespace WordleSolver.Solvers
     internal class FilteredSortedSolver : LazySortedSolver, IReactiveSolver
     {
         public override string Identifier { get; } = "FilteredSortedSolver, filters guesses based on constraints, guesses words in order of literature usage";
-        protected IConstraintManager Constraints { get; }
-        protected string FirstGuess { get; private set; }
+        protected IConstraintManager Constraints { get; protected private set; }
+        protected string FirstGuess { get; protected private set; }
 
         public FilteredSortedSolver(IFirstGuessProvider firstGuessProvider, IConstraintManager constraintManager)
         {

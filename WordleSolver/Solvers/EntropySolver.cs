@@ -1,0 +1,163 @@
+﻿using WordleCore.Enums;
+using WordleCore.Models;
+using WordleCore.Utils;
+using WordleSolver.Interfaces;
+
+namespace WordleSolver.Solvers
+{
+    internal class EntropySolver : FilteredSortedSolver
+    {
+        public override string Identifier { get; } = "EntropySolver, uses information theory to calculate the guess with most information";
+        private string? _lastGuess;
+        private string? _lastPattern;
+        private List<string> _guessedWords = [];
+
+        public EntropySolver(IFirstGuessProvider firstGuessProvider, IConstraintManager constraintManager)
+            : base(firstGuessProvider, constraintManager) { }
+
+        public override void AddResponse(WordleResponse response)
+        {
+            _lastPattern = string.Concat(response.LetterResults.Select(result => CorrectnessMappings[result.Correctness]));
+            base.AddResponse(response);
+        }
+
+        public override string GetNextGuess()
+        {
+            List<string> possibleWords = [];
+            Dictionary<string, double> entropies = [];
+
+            if (_lastGuess == "SALET" && _lastPattern != null)
+            {
+                if (CachedBestSecond.TryGetValue(_lastPattern, out var value))
+                {
+                    Console.WriteLine("Using cached best 2nd: " + value);
+                    _guessedWords.Add(value);
+                    _lastGuess = value;
+                    return value;
+                }
+            }
+
+            foreach (var word in Words)
+            {
+                if (FitsConstraints(word)) possibleWords.Add(word);
+            }
+
+            Console.WriteLine("Possible words: " + possibleWords.Count);
+
+            // Maybe don't do this? Check followup video, 3b1b does not do it in first video? Maybe just 1
+            if (possibleWords.Count < 10)
+            {
+                foreach (var word in possibleWords)
+                {
+                    if (!_guessedWords.Contains(word))
+                    {
+                        Console.WriteLine("Less than 10: " + possibleWords[0]);
+                        return possibleWords[0];
+                    }
+                }
+            }
+
+            Console.WriteLine("Patterns in cache: " + CachedPatterns.Count);
+            int cached = 0;
+            int newp = 0;
+
+            foreach (var word in Words)
+            {
+                Dictionary<string, List<string>> patterns = [];
+
+                // Parallelize?
+                // If state is stored between runs (_lastguess == salet for precomputed entropy usage)
+                // Maybe parallelize in the solvercontroller? It does not reset state between runs,
+                // But it uses the same solver instance so that state would still concur
+                // Maybe instead find a way to get rid of that state
+                // Just keeps a growing list (no specific order, so no issue)
+                // But yes issue because solver resets constraintmanager
+                // So only way to parallelize would be to do one solver instance per game and have solver control the game in run
+                foreach (var possibleWord in possibleWords)
+                {
+                    // Pre-compute patterns?
+                    // Also use string union instead of tuple for faster
+                    string pattern;
+                    if (CachedPatterns.ContainsKey((word, possibleWord))) { pattern = CachedPatterns[(word, possibleWord)]; cached++; }
+                    else
+                    {
+                        var results = WordleGameUtils.GetCorrectnesses(word, possibleWord);
+                        pattern = string.Concat(results.Select(result => CorrectnessMappings[result.Correctness]));
+                        CachedPatterns.Add((word, possibleWord), pattern);
+                        newp++;
+                    }
+
+                    if (patterns.TryGetValue(pattern, out List<string>? value)) value.Add(possibleWord);
+                    else patterns.Add(pattern, [possibleWord]);
+                }
+
+                // Use pattern frequencies instead of amounts (for next algo?)
+                var probabilities = patterns.Select(pattern => (double)pattern.Value.Count / possibleWords.Count);
+
+                var entropy = probabilities.Sum(probability => probability * Math.Log2(1 / probability));
+
+                entropies.Add(word, entropy);
+            }
+
+            Console.WriteLine("Patterns from cache: " + cached);
+            Console.WriteLine("New patterns: " + newp);
+
+            foreach (var entropy in entropies)
+            {
+                if (_guessedWords.Contains(entropy.Key)) entropies.Remove(entropy.Key);
+            }
+
+            var guess = entropies.Aggregate((acc, current) => acc.Value > current.Value ? acc : current).Key;
+            Console.WriteLine("More than 10: " + guess);
+
+            // Highest entropies (best second guesses) can be precomputed knowing only the pattern
+            // As the only thing you need to calculate them is the list of possible words given the constraints
+            // Or pattern, in the case of only one guess being made is here since that's a small pool
+            // Make constraintmanager factory to pass separate to solvers and to entropy precomputer
+            // Use precomputed patterns
+
+            // ABOVE IS WRONG
+            // It depends on opener because the constraints make the possible words,
+            // And those are based on the pattern gained from guessing salet
+            // But only 243 patterns because no overcount is posssible in salet since no repeated letters
+            if (_lastPattern != null && _lastGuess == "SALET")
+            {
+                Console.WriteLine("Caching second best " + guess + " for " + _lastPattern);
+                CachedBestSecond.Add(_lastPattern, guess);
+            }
+
+            _guessedWords.Add(guess);
+            _lastGuess = guess;
+            return guess;
+        }
+
+        public override string GetFirstGuess()
+        {
+            Console.WriteLine("First guess: SALET");
+            _guessedWords.Add(FirstGuess);
+            _lastGuess = FirstGuess;
+            return base.GetFirstGuess();
+        }
+
+        public override void Reset()
+        {
+            _lastGuess = null;
+            _lastPattern = null;
+            _guessedWords = [];
+            base.Reset();
+        }
+
+        private static readonly Dictionary<(string guess, string wordle), string> CachedPatterns = [];
+
+        private static readonly Dictionary<string, string> CachedBestSecond = [];
+
+        // Pattern precomputer will also need this, so DI or static
+        private static readonly Dictionary<Correctness, char> CorrectnessMappings = new()
+        {
+            { Correctness.Absent, 'A' },
+            { Correctness.Present, 'P' },
+            { Correctness.Correct, 'C' },
+            { Correctness.OverCount, 'O' },
+        };
+    }
+}

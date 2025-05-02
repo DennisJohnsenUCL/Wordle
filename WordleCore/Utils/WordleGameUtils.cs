@@ -17,7 +17,7 @@ namespace WordleCore.Utils
 
 		internal static string GetRandomWordle() => _previousWordles.Value[_rng.Value.Next(0, _previousWordles.Value.Length)];
 
-		internal static LetterResult[] GetCorrectnesses(string wordle, string guess)
+		public static LetterResult[] GetCorrectnesses(string wordle, string guess)
 		{
 			LetterResult[] letterResults = new LetterResult[5];
 
