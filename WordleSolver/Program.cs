@@ -12,17 +12,22 @@ namespace WordleSolver
         public static void Main()
         {
             var staticFirstGuessProvider = new StaticFirstGuessProvider("SALET");
-            var constraintManager = new ConstraintManager();
+
+            List<string> words = [.. WordleCoreUtils.LoadEmbeddedTxt("WordleCore.Data.allowed_words.txt")];
+            List<string> sortedWords = [.. WordleCoreUtils.LoadEmbeddedTxt("WordleCore.Data.allowed_words_sorted.txt")];
             List<string> wordles = [.. WordleCoreUtils.LoadEmbeddedTxt("WordleCore.Data.previous_wordles.txt")];
+
             var guesses = int.MaxValue;
             var gameFactory = new WordleGameFactory();
+
+            var patternsProvider = new PatternsProvider(sortedWords);
 
             var solvers = new List<ISolver>()
             {
                 //new LazyRandomSolver(),
                 //new LazySortedSolver(),
-                //new FilteredSortedSolver(staticFirstGuessProvider, constraintManager),
-                new EntropySolver(staticFirstGuessProvider, constraintManager)
+                //new FilteredSortedSolver(staticFirstGuessProvider, new ConstraintManager()),
+                new EntropySolver(staticFirstGuessProvider, new ConstraintManager(), patternsProvider),
             };
 
             var controllers = new List<SolverController>();
