@@ -31,6 +31,8 @@ namespace WordleSolver.Solvers
 
             foreach (var word in Words)
             {
+                if (_guessedWords.Contains(word)) continue;
+
                 if (FitsConstraints(word))
                 {
                     possibleWords.Add(word);
@@ -39,13 +41,7 @@ namespace WordleSolver.Solvers
 
             if (possibleWords.Count < 20)
             {
-                foreach (var word in possibleWords)
-                {
-                    if (!_guessedWords.Contains(word))
-                    {
-                        return possibleWords[0];
-                    }
-                }
+                return possibleWords[0];
             }
 
             // Can achieve this by checking constraint count instead of state tracking last guess and pattern
@@ -63,6 +59,8 @@ namespace WordleSolver.Solvers
             {
                 var word = Words[i];
 
+                if (_guessedWords.Contains(word)) continue;
+
                 // Find a better name for this one
                 Dictionary<string, List<string>> patterns = [];
 
@@ -76,17 +74,11 @@ namespace WordleSolver.Solvers
                     else patterns.Add(pattern, [possibleWord]);
                 }
 
-                // Use pattern frequencies instead of amounts (for next algo?)
                 var probabilities = patterns.Select(pattern => (double)pattern.Value.Count / possibleWords.Count);
 
                 var entropy = probabilities.Sum(probability => probability * Math.Log2(1 / probability));
 
                 entropies.Add(word, entropy);
-            }
-
-            foreach (var entropy in entropies)
-            {
-                if (_guessedWords.Contains(entropy.Key)) entropies.Remove(entropy.Key);
             }
 
             var guess = entropies.Aggregate((acc, current) => acc.Value > current.Value ? acc : current).Key;
