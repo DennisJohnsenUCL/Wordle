@@ -3,7 +3,6 @@ using WordleCore;
 using WordleCore.Enums;
 using WordleSolver.Interfaces;
 using WordleSolver.Models;
-using WordleSolver.Solvers;
 
 namespace WordleSolver.Controllers
 {
@@ -26,7 +25,6 @@ namespace WordleSolver.Controllers
             timer.Start();
             foreach (var game in _games)
             {
-                if (_solver is EntropySolver) Console.WriteLine("New game: " + game.Wordle);
                 int guesses = ExecuteGame(game);
                 _guessesList.Add(guesses);
                 _solver.Reset();
