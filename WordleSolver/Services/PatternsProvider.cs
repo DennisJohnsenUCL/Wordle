@@ -10,7 +10,8 @@ namespace WordleSolver.Services
         private readonly IReadOnlyList<string> _words;
         private readonly ushort[,] _PatternsIndexMatrix;
         private readonly string[] _patterns;
-        private readonly Dictionary<string, int> _reverseLookup;
+        private readonly Dictionary<string, int> _wordsReverseLookup;
+        private readonly Dictionary<string, ushort> _patternsReverseLookup;
 
         public PatternsProvider(IReadOnlyList<string> words)
         {
@@ -19,7 +20,8 @@ namespace WordleSolver.Services
             _PatternsIndexMatrix = new ushort[_words.Count, _words.Count];
 
             _patterns = GeneratePatterns();
-            _reverseLookup = GenerateReverseLookups();
+            _wordsReverseLookup = GenerateWordsReverseLookup();
+            _patternsReverseLookup = GeneratePatternsReverseLookup();
 
             var timer = new Stopwatch();
             timer.Start();
@@ -30,7 +32,7 @@ namespace WordleSolver.Services
 
         public string GetPattern(int guessIndex, string wordle)
         {
-            var index = _PatternsIndexMatrix[guessIndex, _reverseLookup[wordle]];
+            var index = _PatternsIndexMatrix[guessIndex, _wordsReverseLookup[wordle]];
             var pattern = _patterns[index];
             return pattern;
         }
@@ -49,11 +51,20 @@ namespace WordleSolver.Services
             return patterns;
         }
 
-        private Dictionary<string, int> GenerateReverseLookups()
+        private Dictionary<string, int> GenerateWordsReverseLookup()
         {
             var reverseLookup = _words
                 .Select((word, i) => (word, i))
                 .ToDictionary(x => x.word, x => x.i);
+
+            return reverseLookup;
+        }
+
+        private Dictionary<string, ushort> GeneratePatternsReverseLookup()
+        {
+            var reverseLookup = _patterns
+                .Select((pattern, i) => (pattern, i))
+                .ToDictionary(x => x.pattern, x => (ushort)x.i);
 
             return reverseLookup;
         }
@@ -71,9 +82,9 @@ namespace WordleSolver.Services
                     var results = WordleGameUtils.GetCorrectnesses(word2, word1);
                     var pattern = string.Concat(results.Select(result => CorrectnessMappings[result.Correctness]));
 
-                    var patternIndex = Array.IndexOf(_patterns, pattern);
+                    var patternIndex = _patternsReverseLookup[pattern];
 
-                    _PatternsIndexMatrix[i, j] = (ushort)patternIndex;
+                    _PatternsIndexMatrix[i, j] = patternIndex;
                 }
             }
         }

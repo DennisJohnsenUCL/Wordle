@@ -10,6 +10,7 @@ namespace WordleSolver.Solvers
         private string? _lastGuess;
         private string? _lastPattern;
         private List<string> _guessedWords = [];
+        private static readonly Dictionary<string, string> CachedBestSecond = [];
         private readonly IPatternsProvider _patternsProvider;
 
         public EntropySolver(IFirstGuessProvider firstGuessProvider, IConstraintManager constraintManager, IPatternsProvider patternsProvider)
@@ -62,7 +63,7 @@ namespace WordleSolver.Solvers
                 if (_guessedWords.Contains(word)) continue;
 
                 // Find a better name for this one
-                Dictionary<string, List<string>> patterns = [];
+                Dictionary<string, List<string>> patternGroups = [];
 
                 for (int j = 0; j < possibleWords.Count; j++)
                 {
@@ -70,11 +71,11 @@ namespace WordleSolver.Solvers
 
                     var pattern = _patternsProvider.GetPattern(i, possibleWord);
 
-                    if (patterns.TryGetValue(pattern, out List<string>? value)) value.Add(possibleWord);
-                    else patterns.Add(pattern, [possibleWord]);
+                    if (patternGroups.TryGetValue(pattern, out List<string>? value)) value.Add(possibleWord);
+                    else patternGroups.Add(pattern, [possibleWord]);
                 }
 
-                var probabilities = patterns.Select(pattern => (double)pattern.Value.Count / possibleWords.Count);
+                var probabilities = patternGroups.Select(pattern => (double)pattern.Value.Count / possibleWords.Count);
 
                 var entropy = probabilities.Sum(probability => probability * Math.Log2(1 / probability));
 
@@ -108,8 +109,6 @@ namespace WordleSolver.Solvers
 
             base.Reset();
         }
-
-        private static readonly Dictionary<string, string> CachedBestSecond = [];
 
         private static readonly Dictionary<Correctness, char> CorrectnessMappings = new()
         {
