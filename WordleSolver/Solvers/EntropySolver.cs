@@ -1,4 +1,5 @@
-﻿using WordleCore.Enums;
+﻿using System.Collections.Concurrent;
+using WordleCore.Enums;
 using WordleCore.Models;
 using WordleSolver.Interfaces;
 
@@ -28,7 +29,7 @@ namespace WordleSolver.Solvers
         public override string GetNextGuess()
         {
             List<string> possibleWords = [];
-            Dictionary<string, double> entropies = [];
+            ConcurrentDictionary<string, double> entropies = [];
 
             foreach (var word in Words)
             {
@@ -56,13 +57,12 @@ namespace WordleSolver.Solvers
                 }
             }
 
-            for (int i = 0; i < Words.Count; i++)
+            Parallel.For(0, Words.Count, i =>
             {
                 var word = Words[i];
 
-                if (_guessedWords.Contains(word)) continue;
+                if (_guessedWords.Contains(word)) return;
 
-                // Find a better name for this one
                 Dictionary<string, List<string>> patternGroups = [];
 
                 for (int j = 0; j < possibleWords.Count; j++)
@@ -71,7 +71,7 @@ namespace WordleSolver.Solvers
 
                     var pattern = _patternsProvider.GetPattern(i, possibleWord);
 
-                    if (patternGroups.TryGetValue(pattern, out List<string>? value)) value.Add(possibleWord);
+                    if (patternGroups.TryGetValue(pattern, out var value)) value.Add(possibleWord);
                     else patternGroups.Add(pattern, [possibleWord]);
                 }
 
@@ -79,8 +79,8 @@ namespace WordleSolver.Solvers
 
                 var entropy = probabilities.Sum(probability => probability * Math.Log2(1 / probability));
 
-                entropies.Add(word, entropy);
-            }
+                entropies.TryAdd(word, entropy);
+            });
 
             var guess = entropies.Aggregate((acc, current) => acc.Value > current.Value ? acc : current).Key;
 
