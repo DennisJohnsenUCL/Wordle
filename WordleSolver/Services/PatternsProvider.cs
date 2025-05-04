@@ -32,7 +32,8 @@ namespace WordleSolver.Services
 
         public string GetPattern(int guessIndex, string wordle)
         {
-            var index = _PatternsIndexMatrix[guessIndex, _wordsReverseLookup[wordle]];
+            var jindex = _wordsReverseLookup[wordle];
+            var index = _PatternsIndexMatrix[guessIndex, jindex];
             var pattern = _patterns[index];
             return pattern;
         }
@@ -71,7 +72,7 @@ namespace WordleSolver.Services
 
         private void Compute()
         {
-            for (int i = 0; i < _words.Count; i++)
+            Parallel.For(0, _words.Count, i =>
             {
                 var word1 = _words[i];
 
@@ -86,7 +87,7 @@ namespace WordleSolver.Services
 
                     _PatternsIndexMatrix[i, j] = patternIndex;
                 }
-            }
+            });
         }
 
         private static readonly Dictionary<Correctness, char> CorrectnessMappings = new()
