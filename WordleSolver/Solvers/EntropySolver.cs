@@ -11,8 +11,9 @@ namespace WordleSolver.Solvers
         private string? _lastGuess;
         private string? _lastPattern;
         private List<string> _guessedWords = [];
-        private static readonly Dictionary<string, string> CachedBestSecond = [];
+        private readonly Dictionary<string, string> CachedBestSecond = [];
         private readonly IPatternsProvider _patternsProvider;
+        private readonly int _limit = 20;
 
         public EntropySolver(IFirstGuessProvider firstGuessProvider, IConstraintManager constraintManager, IPatternsProvider patternsProvider)
             : base(firstGuessProvider, constraintManager)
@@ -28,8 +29,26 @@ namespace WordleSolver.Solvers
 
         public override string GetNextGuess()
         {
-            List<string> possibleWords = [];
-            ConcurrentDictionary<string, double> entropies = [];
+            var possibleWords = GetPossibleWords();
+
+            if (possibleWords.Count < _limit) return possibleWords[0];
+
+            if (TryGetCachedGuess(out var cachedGuess)) return cachedGuess;
+
+            var entropies = GetEntropies(possibleWords);
+
+            var guess = entropies.Aggregate((acc, current) => acc.Value > current.Value ? acc : current).Key;
+
+            if (_lastGuess == "SALET") CachedBestSecond.Add(_lastPattern!, guess);
+
+            _guessedWords.Add(guess);
+            _lastGuess = guess;
+            return guess;
+        }
+
+        protected virtual List<string> GetPossibleWords()
+        {
+            var possibleWords = new List<string>();
 
             foreach (var word in Words)
             {
@@ -40,22 +59,28 @@ namespace WordleSolver.Solvers
                     possibleWords.Add(word);
                 }
             }
+            return possibleWords;
+        }
 
-            if (possibleWords.Count < 20)
+        protected virtual bool TryGetCachedGuess(out string cachedGuess)
+        {
+            if (_lastGuess == FirstGuess)
             {
-                return possibleWords[0];
-            }
-
-            // Can achieve this by checking constraint count instead of state tracking last guess and pattern
-            if (_lastGuess == "SALET" && _lastPattern != null)
-            {
-                if (CachedBestSecond.TryGetValue(_lastPattern, out var value))
+                if (CachedBestSecond.TryGetValue(_lastPattern!, out var value))
                 {
                     _guessedWords.Add(value);
                     _lastGuess = value;
-                    return value;
+                    cachedGuess = value;
+                    return true;
                 }
             }
+            cachedGuess = string.Empty;
+            return false;
+        }
+
+        protected virtual ConcurrentDictionary<string, double> GetEntropies(List<string> possibleWords)
+        {
+            ConcurrentDictionary<string, double> entropies = [];
 
             Parallel.For(0, Words.Count, i =>
             {
@@ -82,16 +107,7 @@ namespace WordleSolver.Solvers
                 entropies.TryAdd(word, entropy);
             });
 
-            var guess = entropies.Aggregate((acc, current) => acc.Value > current.Value ? acc : current).Key;
-
-            if (_lastPattern != null && _lastGuess == "SALET")
-            {
-                CachedBestSecond.Add(_lastPattern, guess);
-            }
-
-            _guessedWords.Add(guess);
-            _lastGuess = guess;
-            return guess;
+            return entropies;
         }
 
         public override string GetFirstGuess()
@@ -106,7 +122,6 @@ namespace WordleSolver.Solvers
             _lastGuess = null;
             _lastPattern = null;
             _guessedWords = [];
-
             base.Reset();
         }
 
