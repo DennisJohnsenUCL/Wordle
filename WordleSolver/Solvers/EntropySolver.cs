@@ -88,7 +88,7 @@ namespace WordleSolver.Solvers
 
                 if (_guessedWords.Contains(word)) return;
 
-                Dictionary<string, List<string>> patternGroups = [];
+                Dictionary<string, int> patternGroups = [];
 
                 for (int j = 0; j < possibleWords.Count; j++)
                 {
@@ -96,11 +96,11 @@ namespace WordleSolver.Solvers
 
                     var pattern = _patternsProvider.GetPattern(i, possibleWord);
 
-                    if (patternGroups.TryGetValue(pattern, out var value)) value.Add(possibleWord);
-                    else patternGroups.Add(pattern, [possibleWord]);
+                    if (patternGroups.TryGetValue(pattern, out int value)) patternGroups[pattern] = ++value;
+                    else patternGroups.Add(pattern, 1);
                 }
 
-                var probabilities = patternGroups.Select(pattern => (double)pattern.Value.Count / possibleWords.Count);
+                var probabilities = patternGroups.Select(pattern => (double)pattern.Value / possibleWords.Count);
 
                 var entropy = probabilities.Sum(probability => probability * Math.Log2(1 / probability));
 
