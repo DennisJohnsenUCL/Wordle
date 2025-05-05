@@ -13,12 +13,10 @@ namespace WordleSolver.Solvers
             IFirstGuessProvider firstGuessProvider,
             IConstraintManager constraintManager,
             IPatternsProvider patternsProvider,
-            string[] wordFrequencies)
+            Dictionary<string, double> wordFrequencies)
             : base(firstGuessProvider, constraintManager, patternsProvider)
         {
-            _wordFrequencies = wordFrequencies
-                .Select(line => line.Split('\t'))
-                .ToDictionary(parts => parts[0], parts => double.Parse(parts[2]));
+            _wordFrequencies = wordFrequencies;
         }
 
         protected override ConcurrentDictionary<string, double> GetEntropies(List<string> possibleWords)
