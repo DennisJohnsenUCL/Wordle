@@ -15,6 +15,7 @@ namespace WordleSolver
 
             List<string> words = [.. WordleCoreUtils.LoadEmbeddedTxt("WordleCore.Data.allowed_words.txt")];
             List<string> sortedWords = [.. WordleCoreUtils.LoadEmbeddedTxt("WordleCore.Data.allowed_words_sorted.txt")];
+            string[] sortedWordFrequencies = WordleCoreUtils.LoadEmbeddedTxt("WordleCore.Data.allowed_words_sorted_frequencies.txt");
             List<string> wordles = [.. WordleCoreUtils.LoadEmbeddedTxt("WordleCore.Data.previous_wordles.txt")];
 
             var guesses = int.MaxValue;
@@ -28,6 +29,7 @@ namespace WordleSolver
                 //new LazySortedSolver(),
                 //new FilteredSortedSolver(staticFirstGuessProvider, new ConstraintManager()),
                 new EntropySolver(staticFirstGuessProvider, new ConstraintManager(), patternsProvider),
+                new EntropyFrequencySolver(staticFirstGuessProvider, new ConstraintManager(), patternsProvider, sortedWordFrequencies),
             };
 
             var controllers = new List<SolverController>();

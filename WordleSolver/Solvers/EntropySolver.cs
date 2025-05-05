@@ -10,15 +10,15 @@ namespace WordleSolver.Solvers
         public override string Identifier { get; } = "EntropySolver, uses information theory to calculate the guess with most information";
         private string? _lastGuess;
         private string? _lastPattern;
-        private List<string> _guessedWords = [];
+        protected List<string> GuessedWords { get; protected private set; } = [];
         private readonly Dictionary<string, string> CachedBestSecond = [];
-        private readonly IPatternsProvider _patternsProvider;
-        private readonly int _limit = 20;
+        protected IPatternsProvider PatternsProvider { get; }
+        protected virtual int Limit { get; protected private set; } = 20;
 
         public EntropySolver(IFirstGuessProvider firstGuessProvider, IConstraintManager constraintManager, IPatternsProvider patternsProvider)
             : base(firstGuessProvider, constraintManager)
         {
-            _patternsProvider = patternsProvider;
+            PatternsProvider = patternsProvider;
         }
 
         public override void AddResponse(WordleResponse response)
@@ -31,7 +31,7 @@ namespace WordleSolver.Solvers
         {
             var possibleWords = GetPossibleWords();
 
-            if (possibleWords.Count < _limit) return possibleWords[0];
+            if (possibleWords.Count < Limit) return possibleWords[0];
 
             if (TryGetCachedGuess(out var cachedGuess)) return cachedGuess;
 
@@ -41,7 +41,7 @@ namespace WordleSolver.Solvers
 
             if (_lastGuess == "SALET") CachedBestSecond.Add(_lastPattern!, guess);
 
-            _guessedWords.Add(guess);
+            GuessedWords.Add(guess);
             _lastGuess = guess;
             return guess;
         }
@@ -52,7 +52,7 @@ namespace WordleSolver.Solvers
 
             foreach (var word in Words)
             {
-                if (_guessedWords.Contains(word)) continue;
+                if (GuessedWords.Contains(word)) continue;
 
                 if (FitsConstraints(word))
                 {
@@ -64,15 +64,12 @@ namespace WordleSolver.Solvers
 
         protected virtual bool TryGetCachedGuess(out string cachedGuess)
         {
-            if (_lastGuess == FirstGuess)
+            if (_lastGuess == FirstGuess && CachedBestSecond.TryGetValue(_lastPattern!, out var value))
             {
-                if (CachedBestSecond.TryGetValue(_lastPattern!, out var value))
-                {
-                    _guessedWords.Add(value);
-                    _lastGuess = value;
-                    cachedGuess = value;
-                    return true;
-                }
+                GuessedWords.Add(value);
+                _lastGuess = value;
+                cachedGuess = value;
+                return true;
             }
             cachedGuess = string.Empty;
             return false;
@@ -86,7 +83,7 @@ namespace WordleSolver.Solvers
             {
                 var word = Words[i];
 
-                if (_guessedWords.Contains(word)) return;
+                if (GuessedWords.Contains(word)) return;
 
                 Dictionary<string, int> patternGroups = [];
 
@@ -94,13 +91,13 @@ namespace WordleSolver.Solvers
                 {
                     var possibleWord = possibleWords[j];
 
-                    var pattern = _patternsProvider.GetPattern(i, possibleWord);
+                    var pattern = PatternsProvider.GetPattern(i, possibleWord);
 
                     if (patternGroups.TryGetValue(pattern, out int value)) patternGroups[pattern] = ++value;
                     else patternGroups.Add(pattern, 1);
                 }
 
-                var probabilities = patternGroups.Select(pattern => (double)pattern.Value / possibleWords.Count);
+                var probabilities = patternGroups.Select(pattern => (double)pattern.Value / patternGroups.Values.Sum());
 
                 var entropy = probabilities.Sum(probability => probability * Math.Log2(1 / probability));
 
@@ -112,7 +109,7 @@ namespace WordleSolver.Solvers
 
         public override string GetFirstGuess()
         {
-            _guessedWords.Add(FirstGuess);
+            GuessedWords.Add(FirstGuess);
             _lastGuess = FirstGuess;
             return base.GetFirstGuess();
         }
@@ -121,7 +118,7 @@ namespace WordleSolver.Solvers
         {
             _lastGuess = null;
             _lastPattern = null;
-            _guessedWords = [];
+            GuessedWords = [];
             base.Reset();
         }
 

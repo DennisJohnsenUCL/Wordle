@@ -9,14 +9,14 @@
   <ItemGroup>
     <None Remove="Data\allowed_words.txt" />
     <None Remove="Data\allowed_words_sorted.txt" />
-    <None Remove="Data\allowed_words_sorted_occurrences.txt" />
+    <None Remove="Data\allowed_words_sorted_frequencies.txt" />
     <None Remove="Data\previous_wordles.txt" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Data\allowed_words.txt" />
     <EmbeddedResource Include="Data\allowed_words_sorted.txt" />
-    <EmbeddedResource Include="Data\allowed_words_sorted_occurrences.txt" />
+    <EmbeddedResource Include="Data\allowed_words_sorted_frequencies.txt" />
     <EmbeddedResource Include="Data\previous_wordles.txt" />
   </ItemGroup>
 
