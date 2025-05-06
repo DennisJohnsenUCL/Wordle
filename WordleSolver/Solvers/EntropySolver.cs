@@ -8,9 +8,8 @@ namespace WordleSolver.Solvers
     internal class EntropySolver : FilteredSortedSolver
     {
         public override string Identifier { get; } = "EntropySolver, uses information theory to calculate the guess with most information";
-        private string? _lastGuess;
         private string? _lastPattern;
-        protected List<string> GuessedWords { get; protected private set; } = [];
+        protected HashSet<string> GuessedWords { get; protected private set; } = [];
         private readonly Dictionary<string, string> CachedBestSecond = [];
         protected IPatternsProvider PatternsProvider { get; }
         protected virtual int Limit { get; protected private set; } = 20;
@@ -39,10 +38,9 @@ namespace WordleSolver.Solvers
 
             var guess = entropies.Aggregate((acc, current) => acc.Value > current.Value ? acc : current).Key;
 
-            if (_lastGuess == "SALET") CachedBestSecond.Add(_lastPattern!, guess);
+            if (GuessedWords.Count == 1) CachedBestSecond.Add(_lastPattern!, guess);
 
             GuessedWords.Add(guess);
-            _lastGuess = guess;
             return guess;
         }
 
@@ -64,10 +62,9 @@ namespace WordleSolver.Solvers
 
         protected virtual bool TryGetCachedGuess(out string cachedGuess)
         {
-            if (_lastGuess == FirstGuess && CachedBestSecond.TryGetValue(_lastPattern!, out var value))
+            if (GuessedWords.Count == 1 && CachedBestSecond.TryGetValue(_lastPattern!, out var value))
             {
                 GuessedWords.Add(value);
-                _lastGuess = value;
                 cachedGuess = value;
                 return true;
             }
@@ -110,13 +107,11 @@ namespace WordleSolver.Solvers
         public override string GetFirstGuess()
         {
             GuessedWords.Add(FirstGuess);
-            _lastGuess = FirstGuess;
             return base.GetFirstGuess();
         }
 
         public override void Reset()
         {
-            _lastGuess = null;
             _lastPattern = null;
             GuessedWords = [];
             base.Reset();

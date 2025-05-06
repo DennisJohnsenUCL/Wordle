@@ -21,12 +21,7 @@ namespace WordleSolver.Solvers
 
         protected override ConcurrentDictionary<string, double> GetEntropies(List<string> possibleWords)
         {
-            var possibleSet = possibleWords.ToHashSet();
-            var possibleFrequencies = _wordFrequencies
-                .Where(pair => possibleSet.Contains(pair.Key))
-                .ToDictionary();
-            var totalFreq = possibleFrequencies.Sum(pair => pair.Value);
-            var normalizedFrequencies = possibleFrequencies.ToDictionary(x => x.Key, x => x.Value / totalFreq);
+            var normalizedFrequencies = GetNormalizedFrequencies(possibleWords);
 
             ConcurrentDictionary<string, double> entropies = [];
 
@@ -42,7 +37,7 @@ namespace WordleSolver.Solvers
                 {
                     var pattern = PatternsProvider.GetPattern(i, possibleWord);
 
-                    if (patternGroups.TryGetValue(pattern, out double value)) patternGroups[pattern] += normalizedFrequencies[possibleWord];
+                    if (patternGroups.TryGetValue(pattern, out var _)) patternGroups[pattern] += normalizedFrequencies[possibleWord];
                     else patternGroups.Add(pattern, normalizedFrequencies[possibleWord]);
                 }
 
@@ -52,6 +47,19 @@ namespace WordleSolver.Solvers
             });
 
             return entropies;
+        }
+
+        protected virtual Dictionary<string, double> GetNormalizedFrequencies(List<string> possibleWords)
+        {
+            var possibleSet = possibleWords.ToHashSet();
+            var possibleFrequencies = _wordFrequencies
+                .Where(pair => possibleSet.Contains(pair.Key))
+                .ToDictionary();
+
+            var totalFreq = possibleFrequencies.Sum(pair => pair.Value);
+            var normalizedFrequencies = possibleFrequencies.ToDictionary(x => x.Key, x => x.Value / totalFreq);
+
+            return normalizedFrequencies;
         }
     }
 }
