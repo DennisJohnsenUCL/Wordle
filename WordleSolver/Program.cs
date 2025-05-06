@@ -37,8 +37,9 @@ namespace WordleSolver
                 //new LazySortedSolver(),
                 //new FilteredSortedSolver(staticFirstGuessProvider, new ConstraintManager()),
                 //new EntropySolver(staticFirstGuessProvider, new ConstraintManager(), patternsProvider),
-                //new EntropyFrequencySolver(staticFirstGuessProvider, new ConstraintManager(), patternsProvider, sortedWordFrequencies),
+                new EntropyFrequencySolver(staticFirstGuessProvider, new ConstraintManager(), patternsProvider, sortedWordFrequencies),
                 new EntropyFrequencySigmoidSolver(staticFirstGuessProvider, new ConstraintManager(), patternsProvider, sortedWordOccurrences),
+                new EntropyFrequencyLogSolver(staticFirstGuessProvider, new ConstraintManager(), patternsProvider, sortedWordOccurrences),
             };
 
             var controllers = new List<SolverController>();

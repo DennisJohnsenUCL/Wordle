@@ -4,6 +4,8 @@ namespace WordleSolver.Solvers
 {
     internal class EntropyFrequencySigmoidSolver : EntropyFrequencySolver
     {
+        public override string Identifier { get; } = "EntropyFrequencySigmoidSolver, applies a sigmoid curve to word frequencies";
+
         public EntropyFrequencySigmoidSolver(
             IFirstGuessProvider firstGuessProvider,
             IConstraintManager constraintManager,
