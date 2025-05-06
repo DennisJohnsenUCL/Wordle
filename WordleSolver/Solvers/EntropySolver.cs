@@ -90,8 +90,7 @@ namespace WordleSolver.Solvers
 
                     var pattern = PatternsProvider.GetPattern(i, possibleWord);
 
-                    if (patternGroups.TryGetValue(pattern, out int value)) patternGroups[pattern] = ++value;
-                    else patternGroups.Add(pattern, 1);
+                    if (!patternGroups.TryAdd(pattern, 1)) patternGroups[pattern] += 1;
                 }
 
                 var probabilities = patternGroups.Select(pattern => (double)pattern.Value / patternGroups.Values.Sum());
