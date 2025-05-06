@@ -15,9 +15,14 @@ namespace WordleSolver
 
             List<string> words = [.. WordleCoreUtils.LoadEmbeddedTxt("WordleCore.Data.allowed_words.txt")];
             List<string> sortedWords = [.. WordleCoreUtils.LoadEmbeddedTxt("WordleCore.Data.allowed_words_sorted.txt")];
+
             var sortedWordFrequencies = WordleCoreUtils.LoadEmbeddedTxt("WordleCore.Data.allowed_words_sorted_frequencies.txt")
                 .Select(line => line.Split('\t'))
                 .ToDictionary(parts => parts[0], parts => double.Parse(parts[2]));
+
+            var sortedWordOccurrences = WordleCoreUtils.LoadEmbeddedTxt("WordleCore.Data.allowed_words_sorted_frequencies.txt")
+                .Select(line => line.Split('\t'))
+                .ToDictionary(parts => parts[0], parts => long.Parse(parts[1]));
 
             List<string> wordles = [.. WordleCoreUtils.LoadEmbeddedTxt("WordleCore.Data.previous_wordles.txt")];
 
@@ -31,8 +36,9 @@ namespace WordleSolver
                 //new LazyRandomSolver(),
                 //new LazySortedSolver(),
                 //new FilteredSortedSolver(staticFirstGuessProvider, new ConstraintManager()),
-                new EntropySolver(staticFirstGuessProvider, new ConstraintManager(), patternsProvider),
-                new EntropyFrequencySolver(staticFirstGuessProvider, new ConstraintManager(), patternsProvider, sortedWordFrequencies),
+                //new EntropySolver(staticFirstGuessProvider, new ConstraintManager(), patternsProvider),
+                //new EntropyFrequencySolver(staticFirstGuessProvider, new ConstraintManager(), patternsProvider, sortedWordFrequencies),
+                new EntropyFrequencySigmoidSolver(staticFirstGuessProvider, new ConstraintManager(), patternsProvider, sortedWordOccurrences),
             };
 
             var controllers = new List<SolverController>();
