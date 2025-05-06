@@ -13,8 +13,8 @@ namespace WordleSolver
         {
             var staticFirstGuessProvider = new StaticFirstGuessProvider("SALET");
 
-            List<string> words = [.. WordleCoreUtils.LoadEmbeddedTxt("WordleCore.Data.allowed_words.txt")];
-            List<string> sortedWords = [.. WordleCoreUtils.LoadEmbeddedTxt("WordleCore.Data.allowed_words_sorted.txt")];
+            string[] words = WordleCoreUtils.LoadEmbeddedTxt("WordleCore.Data.allowed_words.txt");
+            string[] sortedWords = WordleCoreUtils.LoadEmbeddedTxt("WordleCore.Data.allowed_words_sorted.txt");
 
             var sortedWordFrequencies = WordleCoreUtils.LoadEmbeddedTxt("WordleCore.Data.allowed_words_sorted_frequencies.txt")
                 .Select(line => line.Split('\t'))
@@ -24,7 +24,7 @@ namespace WordleSolver
                 .Select(line => line.Split('\t'))
                 .ToDictionary(parts => parts[0], parts => long.Parse(parts[1]));
 
-            List<string> wordles = [.. WordleCoreUtils.LoadEmbeddedTxt("WordleCore.Data.previous_wordles.txt")];
+            string[] wordles = WordleCoreUtils.LoadEmbeddedTxt("WordleCore.Data.previous_wordles.txt");
 
             var guesses = int.MaxValue;
             var gameFactory = new WordleGameFactory();

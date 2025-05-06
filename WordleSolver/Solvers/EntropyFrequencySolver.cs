@@ -36,9 +36,9 @@ namespace WordleSolver.Solvers
                 foreach (var possibleWord in normalizedFrequencies.Keys)
                 {
                     var pattern = PatternsProvider.GetPattern(i, possibleWord);
+                    var frequency = normalizedFrequencies[possibleWord];
 
-                    if (patternGroups.TryGetValue(pattern, out var _)) patternGroups[pattern] += normalizedFrequencies[possibleWord];
-                    else patternGroups.Add(pattern, normalizedFrequencies[possibleWord]);
+                    if (!patternGroups.TryAdd(pattern, frequency)) patternGroups[pattern] += frequency;
                 }
 
                 var entropy = patternGroups.Sum(probability => probability.Value * Math.Log2(1 / probability.Value));
