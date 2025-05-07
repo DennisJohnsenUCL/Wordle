@@ -53,6 +53,10 @@ namespace WordleSolver.Services
                         var sigmoid = GetEntropyFrequencySigmoidSolver();
                         solvers.Add(sigmoid);
                         break;
+                    case "log":
+                        var log = GetEntropyFrequencyLogSolver();
+                        solvers.Add(log);
+                        break;
                     default:
                         break;
                 }
@@ -113,6 +117,27 @@ namespace WordleSolver.Services
 
             var constraintManager = new ConstraintManager();
             var solver = new EntropyFrequencySigmoidSolver(_firstGuessProvider, constraintManager, _patternsProvider, normalizedWordSigmoidFrequency, _words);
+            return solver;
+        }
+
+        private EntropyFrequencyLogSolver GetEntropyFrequencyLogSolver()
+        {
+            var wordLogFrequency = new Dictionary<string, double>();
+
+            foreach (var key in _sortedWordOccurrences.Keys)
+            {
+                var value = _sortedWordOccurrences[key];
+                var newValue = Math.Log(1 + value);
+
+                wordLogFrequency[key] = newValue;
+            }
+
+            double total = wordLogFrequency.Values.Sum();
+
+            var normalizedWordLogFrequency = wordLogFrequency.ToDictionary(x => x.Key, x => x.Value / total);
+
+            var constraintManager = new ConstraintManager();
+            var solver = new EntropyFrequencyLogSolver(_firstGuessProvider, constraintManager, _patternsProvider, normalizedWordLogFrequency, _words);
             return solver;
         }
     }
