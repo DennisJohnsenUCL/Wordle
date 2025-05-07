@@ -45,6 +45,10 @@ namespace WordleSolver.Services
                         var entropy = GetEntropySolver();
                         solvers.Add(entropy);
                         break;
+                    case "frequency":
+                        var frequency = GetEntropyFrequencySolver();
+                        solvers.Add(frequency);
+                        break;
                     default:
                         break;
                 }
@@ -69,9 +73,17 @@ namespace WordleSolver.Services
 
         private EntropySolver GetEntropySolver()
         {
-            var words = _sortedWordOccurrences.Keys.ToArray();
             var constraintManager = new ConstraintManager();
-            var solver = new EntropySolver(_firstGuessProvider, constraintManager, _patternsProvider, words);
+            var solver = new EntropySolver(_firstGuessProvider, constraintManager, _patternsProvider, _words);
+            return solver;
+        }
+
+        private EntropyFrequencySolver GetEntropyFrequencySolver()
+        {
+            var total = _sortedWordOccurrences.Values.Sum();
+            var wordFrequencies = _sortedWordOccurrences.ToDictionary(x => x.Key, x => (double)x.Value / total);
+            var constraintManager = new ConstraintManager();
+            var solver = new EntropyFrequencySolver(_firstGuessProvider, constraintManager, _patternsProvider, wordFrequencies, _words);
             return solver;
         }
     }

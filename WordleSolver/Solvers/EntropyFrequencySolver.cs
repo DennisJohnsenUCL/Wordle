@@ -13,8 +13,9 @@ namespace WordleSolver.Solvers
             IFirstGuessProvider firstGuessProvider,
             IConstraintManager constraintManager,
             IPatternsProvider patternsProvider,
-            Dictionary<string, double> wordFrequencies)
-            : base(firstGuessProvider, constraintManager, patternsProvider)
+            Dictionary<string, double> wordFrequencies,
+            string[] words)
+            : base(firstGuessProvider, constraintManager, patternsProvider, words)
         {
             _wordFrequencies = wordFrequencies;
         }
@@ -25,7 +26,7 @@ namespace WordleSolver.Solvers
 
             ConcurrentDictionary<string, double> entropies = [];
 
-            Parallel.For(0, Words.Count, i =>
+            Parallel.For(0, Words.Length, i =>
             {
                 var word = Words[i];
 
