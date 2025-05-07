@@ -81,22 +81,25 @@ namespace WordleSolver.Services
 
         private EntropySolver GetEntropySolver()
         {
+            var words = _sortedWordOccurrences.Keys.ToArray();
             var constraintManager = new ConstraintManager();
-            var solver = new EntropySolver(_firstGuessProvider, constraintManager, _patternsProvider, _words);
+            var solver = new EntropySolver(_firstGuessProvider, constraintManager, _patternsProvider, words);
             return solver;
         }
 
         private EntropyFrequencySolver GetEntropyFrequencySolver()
         {
+            var words = _sortedWordOccurrences.Keys.ToArray();
             var total = _sortedWordOccurrences.Values.Sum();
             var wordFrequencies = _sortedWordOccurrences.ToDictionary(x => x.Key, x => (double)x.Value / total);
             var constraintManager = new ConstraintManager();
-            var solver = new EntropyFrequencySolver(_firstGuessProvider, constraintManager, _patternsProvider, wordFrequencies, _words);
+            var solver = new EntropyFrequencySolver(_firstGuessProvider, constraintManager, _patternsProvider, wordFrequencies, words);
             return solver;
         }
 
         private EntropyFrequencySigmoidSolver GetEntropyFrequencySigmoidSolver()
         {
+            var words = _sortedWordOccurrences.Keys.ToArray();
             int m = 5000000;
             int s = 1000000;
             var wordSigmoidFrequency = new Dictionary<string, double>();
@@ -116,12 +119,13 @@ namespace WordleSolver.Services
             var normalizedWordSigmoidFrequency = wordSigmoidFrequency.ToDictionary(x => x.Key, x => x.Value / total);
 
             var constraintManager = new ConstraintManager();
-            var solver = new EntropyFrequencySigmoidSolver(_firstGuessProvider, constraintManager, _patternsProvider, normalizedWordSigmoidFrequency, _words);
+            var solver = new EntropyFrequencySigmoidSolver(_firstGuessProvider, constraintManager, _patternsProvider, normalizedWordSigmoidFrequency, words);
             return solver;
         }
 
         private EntropyFrequencyLogSolver GetEntropyFrequencyLogSolver()
         {
+            var words = _sortedWordOccurrences.Keys.ToArray();
             var wordLogFrequency = new Dictionary<string, double>();
 
             foreach (var key in _sortedWordOccurrences.Keys)
@@ -137,7 +141,7 @@ namespace WordleSolver.Services
             var normalizedWordLogFrequency = wordLogFrequency.ToDictionary(x => x.Key, x => x.Value / total);
 
             var constraintManager = new ConstraintManager();
-            var solver = new EntropyFrequencyLogSolver(_firstGuessProvider, constraintManager, _patternsProvider, normalizedWordLogFrequency, _words);
+            var solver = new EntropyFrequencyLogSolver(_firstGuessProvider, constraintManager, _patternsProvider, normalizedWordLogFrequency, words);
             return solver;
         }
     }

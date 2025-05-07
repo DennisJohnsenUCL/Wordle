@@ -21,7 +21,7 @@ namespace WordleSolver
 
             var guesses = int.MaxValue;
             var gameFactory = new WordleGameFactory();
-            var patternsProvider = new PatternsProvider(words);
+            var patternsProvider = new PatternsProvider([.. sortedWordOccurrences.Keys]);
             string[] activeSolvers = ["random", "sorted", "filtered", "entropy", "frequency", "sigmoid", "log"];
 
             var solverFactory = new SolverFactory(
