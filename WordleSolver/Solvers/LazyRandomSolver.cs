@@ -1,17 +1,16 @@
-﻿using WordleCore.Utils;
-using WordleSolver.Interfaces;
+﻿using WordleSolver.Interfaces;
 
 namespace WordleSolver.Solvers
 {
     internal class LazyRandomSolver : ISolver
     {
-        protected virtual List<string> Words { get; } = LoadWords();
+        protected virtual string[] Words { get; }
         protected int Index { get; set; } = 0;
         public virtual string Identifier { get; } = "LazyRandomSolver, guesses all words (no mask) in non-specific order";
 
-        private static List<string> LoadWords()
+        public LazyRandomSolver(string[] words)
         {
-            return [.. WordleCoreUtils.LoadEmbeddedTxt("WordleCore.Data.allowed_words.txt")];
+            Words = words;
         }
 
         public virtual string GetFirstGuess()

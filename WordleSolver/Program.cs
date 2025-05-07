@@ -1,9 +1,7 @@
 ﻿using WordleCore.Utils;
 using WordleSolver.Controllers;
-using WordleSolver.Core;
 using WordleSolver.Interfaces;
 using WordleSolver.Services;
-using WordleSolver.Solvers;
 
 namespace WordleSolver
 {
@@ -28,19 +26,22 @@ namespace WordleSolver
 
             var guesses = int.MaxValue;
             var gameFactory = new WordleGameFactory();
-
             var patternsProvider = new PatternsProvider(sortedWords);
+            string[] activeSolvers = ["random"];
+            var solverFactory = new SolverFactory(words, sortedWordOccurrences, activeSolvers);
 
-            var solvers = new List<ISolver>()
-            {
-                //new LazyRandomSolver(),
-                //new LazySortedSolver(),
-                //new FilteredSortedSolver(staticFirstGuessProvider, new ConstraintManager()),
-                //new EntropySolver(staticFirstGuessProvider, new ConstraintManager(), patternsProvider),
-                new EntropyFrequencySolver(staticFirstGuessProvider, new ConstraintManager(), patternsProvider, sortedWordFrequencies),
-                //new EntropyFrequencySigmoidSolver(staticFirstGuessProvider, new ConstraintManager(), patternsProvider, sortedWordOccurrences),
-                //new EntropyFrequencyLogSolver(staticFirstGuessProvider, new ConstraintManager(), patternsProvider, sortedWordOccurrences),
-            };
+            var solvers = solverFactory.GetSolvers();
+
+            //var solvers = new List<ISolver>()
+            //{
+            //    //new LazyRandomSolver(),
+            //    //new LazySortedSolver(),
+            //    //new FilteredSortedSolver(staticFirstGuessProvider, new ConstraintManager()),
+            //    //new EntropySolver(staticFirstGuessProvider, new ConstraintManager(), patternsProvider),
+            //    new EntropyFrequencySolver(staticFirstGuessProvider, new ConstraintManager(), patternsProvider, sortedWordFrequencies),
+            //    //new EntropyFrequencySigmoidSolver(staticFirstGuessProvider, new ConstraintManager(), patternsProvider, sortedWordOccurrences),
+            //    //new EntropyFrequencyLogSolver(staticFirstGuessProvider, new ConstraintManager(), patternsProvider, sortedWordOccurrences),
+            //};
 
             var controllers = new List<SolverController>();
 
