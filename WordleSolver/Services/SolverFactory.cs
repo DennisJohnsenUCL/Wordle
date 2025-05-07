@@ -8,26 +8,24 @@ namespace WordleSolver.Services
     {
         private readonly string[] _words;
         private readonly Dictionary<string, long> _sortedWordOccurrences;
-        private readonly IEnumerable<SolverTypes> _activeSolvers;
         private readonly IFirstGuessProvider _firstGuessProvider;
         private readonly IPatternsProvider _patternsProvider;
 
-        public SolverFactory(string[] words, Dictionary<string, long> sortedWordOccurrences, IEnumerable<SolverTypes> activeSolvers, IFirstGuessProvider firstGuessProvider, IPatternsProvider patternsProvider)
+        public SolverFactory(string[] words, Dictionary<string, long> sortedWordOccurrences, IFirstGuessProvider firstGuessProvider, IPatternsProvider patternsProvider)
         {
             _words = words;
             _sortedWordOccurrences = sortedWordOccurrences;
-            _activeSolvers = activeSolvers;
             _firstGuessProvider = firstGuessProvider;
             _patternsProvider = patternsProvider;
         }
 
-        public List<ISolver> GetSolvers()
+        public List<ISolver> GetSolvers(IEnumerable<SolverTypes> solversToGet)
         {
             var solvers = new List<ISolver>();
 
-            foreach (var activeSolver in _activeSolvers)
+            foreach (var solver in solversToGet)
             {
-                switch (activeSolver)
+                switch (solver)
                 {
                     case SolverTypes.Random:
                         var random = new LazyRandomSolver(_words);

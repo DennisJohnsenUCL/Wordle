@@ -23,7 +23,7 @@ namespace WordleSolver
             var gameFactory = new WordleGameFactory();
             var patternsProvider = new PatternsProvider([.. sortedWordOccurrences.Keys]);
 
-            SolverTypes[] activeSolvers =
+            SolverTypes[] solversToGet =
                 [SolverTypes.Random,
                 SolverTypes.Sorted,
                 SolverTypes.Filtered,
@@ -35,12 +35,11 @@ namespace WordleSolver
             var solverFactory = new SolverFactory(
                 words,
                 sortedWordOccurrences,
-                activeSolvers,
                 staticFirstGuessProvider,
                 patternsProvider
                 );
 
-            var solvers = solverFactory.GetSolvers();
+            var solvers = solverFactory.GetSolvers(solversToGet);
 
             var controllers = new List<SolverController>();
 
