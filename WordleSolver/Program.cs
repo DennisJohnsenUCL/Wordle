@@ -1,5 +1,6 @@
 ﻿using WordleCore.Utils;
 using WordleSolver.Controllers;
+using WordleSolver.Enums;
 using WordleSolver.Interfaces;
 using WordleSolver.Services;
 

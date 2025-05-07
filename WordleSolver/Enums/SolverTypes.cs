@@ -1,4 +1,4 @@
-﻿namespace WordleSolver
+﻿namespace WordleSolver.Enums
 {
     internal enum SolverTypes
     {

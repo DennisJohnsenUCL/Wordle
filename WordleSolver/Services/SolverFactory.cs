@@ -1,4 +1,5 @@
 ﻿using WordleSolver.Core;
+using WordleSolver.Enums;
 using WordleSolver.Interfaces;
 using WordleSolver.Solvers;
 
