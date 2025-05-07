@@ -8,11 +8,11 @@ namespace WordleSolver.Services
     {
         private readonly string[] _words;
         private readonly Dictionary<string, long> _sortedWordOccurrences;
-        private readonly IEnumerable<string> _activeSolvers;
+        private readonly IEnumerable<SolverTypes> _activeSolvers;
         private readonly IFirstGuessProvider _firstGuessProvider;
         private readonly IPatternsProvider _patternsProvider;
 
-        public SolverFactory(string[] words, Dictionary<string, long> sortedWordOccurrences, IEnumerable<string> activeSolvers, IFirstGuessProvider firstGuessProvider, IPatternsProvider patternsProvider)
+        public SolverFactory(string[] words, Dictionary<string, long> sortedWordOccurrences, IEnumerable<SolverTypes> activeSolvers, IFirstGuessProvider firstGuessProvider, IPatternsProvider patternsProvider)
         {
             _words = words;
             _sortedWordOccurrences = sortedWordOccurrences;
@@ -29,31 +29,31 @@ namespace WordleSolver.Services
             {
                 switch (activeSolver)
                 {
-                    case "random":
+                    case SolverTypes.Random:
                         var random = new LazyRandomSolver(_words);
                         solvers.Add(random);
                         break;
-                    case "sorted":
+                    case SolverTypes.Sorted:
                         var sorted = GetLazySortedSolver();
                         solvers.Add(sorted);
                         break;
-                    case "filtered":
+                    case SolverTypes.Filtered:
                         var filtered = GetFilteredSortedSolver();
                         solvers.Add(filtered);
                         break;
-                    case "entropy":
+                    case SolverTypes.Entropy:
                         var entropy = GetEntropySolver();
                         solvers.Add(entropy);
                         break;
-                    case "frequency":
+                    case SolverTypes.Frequency:
                         var frequency = GetEntropyFrequencySolver();
                         solvers.Add(frequency);
                         break;
-                    case "sigmoid":
+                    case SolverTypes.Sigmoid:
                         var sigmoid = GetEntropyFrequencySigmoidSolver();
                         solvers.Add(sigmoid);
                         break;
-                    case "log":
+                    case SolverTypes.Log:
                         var log = GetEntropyFrequencyLogSolver();
                         solvers.Add(log);
                         break;

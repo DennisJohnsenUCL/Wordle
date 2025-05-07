@@ -22,7 +22,15 @@ namespace WordleSolver
             var guesses = int.MaxValue;
             var gameFactory = new WordleGameFactory();
             var patternsProvider = new PatternsProvider([.. sortedWordOccurrences.Keys]);
-            string[] activeSolvers = ["random", "sorted", "filtered", "entropy", "frequency", "sigmoid", "log"];
+
+            SolverTypes[] activeSolvers =
+                [SolverTypes.Random,
+                SolverTypes.Sorted,
+                SolverTypes.Filtered,
+                SolverTypes.Entropy,
+                SolverTypes.Frequency,
+                SolverTypes.Sigmoid,
+                SolverTypes.Log];
 
             var solverFactory = new SolverFactory(
                 words,
