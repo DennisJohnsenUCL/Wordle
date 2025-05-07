@@ -27,12 +27,13 @@ namespace WordleSolver
             var guesses = int.MaxValue;
             var gameFactory = new WordleGameFactory();
             var patternsProvider = new PatternsProvider(sortedWords);
-            string[] activeSolvers = ["random", "sorted", "filtered"];
+            string[] activeSolvers = ["random", "sorted", "filtered", "entropy"];
             var solverFactory = new SolverFactory(
                 words,
                 sortedWordOccurrences,
                 activeSolvers,
-                staticFirstGuessProvider
+                staticFirstGuessProvider,
+                patternsProvider
                 );
 
             var solvers = solverFactory.GetSolvers();

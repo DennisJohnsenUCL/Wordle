@@ -14,8 +14,8 @@ namespace WordleSolver.Solvers
         protected IPatternsProvider PatternsProvider { get; }
         protected virtual int Limit { get; protected private set; } = 20;
 
-        public EntropySolver(IFirstGuessProvider firstGuessProvider, IConstraintManager constraintManager, IPatternsProvider patternsProvider)
-            : base(firstGuessProvider, constraintManager)
+        public EntropySolver(IFirstGuessProvider firstGuessProvider, IConstraintManager constraintManager, IPatternsProvider patternsProvider, string[] words)
+            : base(firstGuessProvider, constraintManager, words)
         {
             PatternsProvider = patternsProvider;
         }
@@ -76,7 +76,7 @@ namespace WordleSolver.Solvers
         {
             ConcurrentDictionary<string, double> entropies = [];
 
-            Parallel.For(0, Words.Count, i =>
+            Parallel.For(0, Words.Length, i =>
             {
                 var word = Words[i];
 

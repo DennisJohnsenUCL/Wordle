@@ -10,13 +10,15 @@ namespace WordleSolver.Services
         private readonly Dictionary<string, long> _sortedWordOccurrences;
         private readonly IEnumerable<string> _activeSolvers;
         private readonly IFirstGuessProvider _firstGuessProvider;
+        private readonly IPatternsProvider _patternsProvider;
 
-        public SolverFactory(string[] words, Dictionary<string, long> sortedWordOccurrences, IEnumerable<string> activeSolvers, IFirstGuessProvider firstGuessProvider)
+        public SolverFactory(string[] words, Dictionary<string, long> sortedWordOccurrences, IEnumerable<string> activeSolvers, IFirstGuessProvider firstGuessProvider, IPatternsProvider patternsProvider)
         {
             _words = words;
             _sortedWordOccurrences = sortedWordOccurrences;
             _activeSolvers = activeSolvers;
             _firstGuessProvider = firstGuessProvider;
+            _patternsProvider = patternsProvider;
         }
 
         public List<ISolver> GetSolvers()
@@ -39,6 +41,10 @@ namespace WordleSolver.Services
                         var filtered = GetFilteredSortedSolver();
                         solvers.Add(filtered);
                         break;
+                    case "entropy":
+                        var entropy = GetEntropySolver();
+                        solvers.Add(entropy);
+                        break;
                     default:
                         break;
                 }
@@ -58,6 +64,14 @@ namespace WordleSolver.Services
             var words = _sortedWordOccurrences.Keys.ToArray();
             var constraintManager = new ConstraintManager();
             var solver = new FilteredSortedSolver(_firstGuessProvider, constraintManager, words);
+            return solver;
+        }
+
+        private EntropySolver GetEntropySolver()
+        {
+            var words = _sortedWordOccurrences.Keys.ToArray();
+            var constraintManager = new ConstraintManager();
+            var solver = new EntropySolver(_firstGuessProvider, constraintManager, _patternsProvider, words);
             return solver;
         }
     }
