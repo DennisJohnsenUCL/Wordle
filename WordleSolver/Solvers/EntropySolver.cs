@@ -7,7 +7,6 @@ namespace WordleSolver.Solvers
 {
     internal class EntropySolver : FilteredSortedSolver
     {
-        public override string Identifier { get; } = "EntropySolver, uses information theory to calculate the guess with most information";
         private string? _lastPattern;
         protected HashSet<string> GuessedWords { get; protected private set; } = [];
         private readonly Dictionary<string, string> CachedBestSecond = [];
