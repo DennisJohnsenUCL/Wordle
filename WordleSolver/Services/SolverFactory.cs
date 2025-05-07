@@ -28,12 +28,22 @@ namespace WordleSolver.Services
                         var random = new LazyRandomSolver(_words);
                         solvers.Add(random);
                         break;
+                    case "sorted":
+                        var sorted = GetLazySortedSolver();
+                        solvers.Add(sorted);
+                        break;
                     default:
                         break;
                 }
             }
-
             return solvers;
+        }
+
+        private LazySortedSolver GetLazySortedSolver()
+        {
+            var words = _sortedWordOccurrences.Keys.ToArray();
+            var solver = new LazySortedSolver(words);
+            return solver;
         }
     }
 }
