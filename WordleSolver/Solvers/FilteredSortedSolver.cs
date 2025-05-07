@@ -9,7 +9,7 @@ namespace WordleSolver.Solvers
         protected IConstraintManager Constraints { get; protected private set; }
         protected string FirstGuess { get; protected private set; }
 
-        public FilteredSortedSolver(IFirstGuessProvider firstGuessProvider, IConstraintManager constraintManager)
+        public FilteredSortedSolver(IFirstGuessProvider firstGuessProvider, IConstraintManager constraintManager, string[] words) : base(words)
         {
             FirstGuess = firstGuessProvider.Value;
             Constraints = constraintManager;
@@ -27,7 +27,7 @@ namespace WordleSolver.Solvers
 
         public override string GetNextGuess()
         {
-            for (int i = Index; i < Words.Count; i++)
+            for (int i = Index; i < Words.Length; i++)
             {
                 var word = Words[i];
 
