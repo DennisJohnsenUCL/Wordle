@@ -13,9 +13,8 @@ namespace WordleSolver.Solvers
             IConstraintManager constraintManager,
             IPatternsProvider patternsProvider,
             Dictionary<string, double> wordFrequencies,
-            string[] words,
             string identifier)
-            : base(firstGuessProvider, constraintManager, patternsProvider, words, identifier)
+            : base(firstGuessProvider, constraintManager, patternsProvider, [.. wordFrequencies.Keys], identifier)
         {
             _wordFrequencies = wordFrequencies;
         }

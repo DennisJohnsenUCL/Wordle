@@ -98,13 +98,14 @@ namespace WordleSolver.Services
             var total = _sortedWordOccurrences.Values.Sum();
             var wordFrequencies = _sortedWordOccurrences.ToDictionary(x => x.Key, x => (double)x.Value / total);
             var constraintManager = new ConstraintManager();
-            var solver = new EntropyFrequencySolver(_firstGuessProvider, constraintManager, _patternsProvider, wordFrequencies, words, "EntropyFrequencySolver");
+            var solver = new EntropyFrequencySolver(_firstGuessProvider, constraintManager, _patternsProvider, wordFrequencies, "EntropyFrequencySolver");
             return solver;
         }
 
         private EntropyFrequencySolver GetEntropyFrequencySigmoidSolver()
         {
             var words = _sortedWordOccurrences.Keys.ToArray();
+
             int m = 5000000;
             int s = 1000000;
             var wordSigmoidFrequency = new Dictionary<string, double>();
@@ -124,7 +125,7 @@ namespace WordleSolver.Services
             var normalizedWordSigmoidFrequency = wordSigmoidFrequency.ToDictionary(x => x.Key, x => x.Value / total);
 
             var constraintManager = new ConstraintManager();
-            var solver = new EntropyFrequencySolver(_firstGuessProvider, constraintManager, _patternsProvider, normalizedWordSigmoidFrequency, words, "EntropyFrequencySigmoidSolver");
+            var solver = new EntropyFrequencySolver(_firstGuessProvider, constraintManager, _patternsProvider, normalizedWordSigmoidFrequency, "EntropyFrequencySigmoidSolver");
             return solver;
         }
 
@@ -146,7 +147,7 @@ namespace WordleSolver.Services
             var normalizedWordLogFrequency = wordLogFrequency.ToDictionary(x => x.Key, x => x.Value / total);
 
             var constraintManager = new ConstraintManager();
-            var solver = new EntropyFrequencySolver(_firstGuessProvider, constraintManager, _patternsProvider, normalizedWordLogFrequency, words, "EntropyFrequencyLogSolver");
+            var solver = new EntropyFrequencySolver(_firstGuessProvider, constraintManager, _patternsProvider, normalizedWordLogFrequency, "EntropyFrequencyLogSolver");
             return solver;
         }
     }
