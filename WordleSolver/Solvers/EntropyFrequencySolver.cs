@@ -5,7 +5,6 @@ namespace WordleSolver.Solvers
 {
     internal class EntropyFrequencySolver : EntropySolver
     {
-        public override string Identifier { get; } = "EntropyFrequencySolver, uses information theory to calculate the guess with most information and weighs each words value by their frequency in literature";
         protected override int Limit { get; protected private set; } = 21;
         private readonly Dictionary<string, double> _wordFrequencies;
 
@@ -14,8 +13,9 @@ namespace WordleSolver.Solvers
             IConstraintManager constraintManager,
             IPatternsProvider patternsProvider,
             Dictionary<string, double> wordFrequencies,
-            string[] words)
-            : base(firstGuessProvider, constraintManager, patternsProvider, words)
+            string[] words,
+            string identifier)
+            : base(firstGuessProvider, constraintManager, patternsProvider, words, identifier)
         {
             _wordFrequencies = wordFrequencies;
         }

@@ -2,15 +2,16 @@
 
 namespace WordleSolver.Solvers
 {
-    internal class LazyRandomSolver : ISolver
+    internal class LazySolver : ISolver
     {
         protected virtual string[] Words { get; }
         protected int Index { get; set; } = 0;
-        public virtual string Identifier { get; } = "LazyRandomSolver, guesses all words (no mask) in non-specific order";
+        public virtual string Identifier { get; }
 
-        public LazyRandomSolver(string[] words)
+        public LazySolver(string[] words, string identifier)
         {
             Words = words;
+            Identifier = identifier;
         }
 
         public virtual string GetFirstGuess()

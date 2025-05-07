@@ -14,8 +14,8 @@ namespace WordleSolver.Solvers
         protected IPatternsProvider PatternsProvider { get; }
         protected virtual int Limit { get; protected private set; } = 20;
 
-        public EntropySolver(IFirstGuessProvider firstGuessProvider, IConstraintManager constraintManager, IPatternsProvider patternsProvider, string[] words)
-            : base(firstGuessProvider, constraintManager, words)
+        public EntropySolver(IFirstGuessProvider firstGuessProvider, IConstraintManager constraintManager, IPatternsProvider patternsProvider, string[] words, string identifier)
+            : base(firstGuessProvider, constraintManager, words, identifier)
         {
             PatternsProvider = patternsProvider;
         }

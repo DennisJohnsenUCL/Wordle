@@ -19,7 +19,6 @@ namespace WordleSolver
                 .ToDictionary(parts => parts[0], parts => long.Parse(parts[1]));
 
             string[] wordles = WordleCoreUtils.LoadEmbeddedTxt("WordleCore.Data.previous_wordles.txt");
-
             var guesses = int.MaxValue;
             var gameFactory = new WordleGameFactory();
             var patternsProvider = new PatternsProvider([.. sortedWordOccurrences.Keys]);

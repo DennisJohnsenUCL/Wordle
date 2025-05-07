@@ -27,7 +27,7 @@ namespace WordleSolver.Services
             timer.Start();
             Compute();
             timer.Stop();
-            Console.WriteLine("Time to pre-compute patterns: " + timer.ElapsedMilliseconds);
+            Console.WriteLine("Time to pre-compute patterns: " + timer.ElapsedMilliseconds + "\n");
         }
 
         public string GetPattern(int guessIndex, string wordle)

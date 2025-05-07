@@ -29,7 +29,7 @@ namespace WordleSolver.Services
                 switch (solver)
                 {
                     case SolverTypes.Random:
-                        var random = new LazyRandomSolver(_words);
+                        var random = GetLazyRandomSolver();
                         solvers.Add(random);
                         break;
                     case SolverTypes.Sorted:
@@ -63,10 +63,16 @@ namespace WordleSolver.Services
             return solvers;
         }
 
-        private LazySortedSolver GetLazySortedSolver()
+        private LazySolver GetLazyRandomSolver()
+        {
+            var solver = new LazySolver(_words, "LazyRandomSolver");
+            return solver;
+        }
+
+        private LazySolver GetLazySortedSolver()
         {
             var words = _sortedWordOccurrences.Keys.ToArray();
-            var solver = new LazySortedSolver(words);
+            var solver = new LazySolver(words, "LazySortedSolver");
             return solver;
         }
 
@@ -74,7 +80,7 @@ namespace WordleSolver.Services
         {
             var words = _sortedWordOccurrences.Keys.ToArray();
             var constraintManager = new ConstraintManager();
-            var solver = new FilteredSortedSolver(_firstGuessProvider, constraintManager, words);
+            var solver = new FilteredSortedSolver(_firstGuessProvider, constraintManager, words, "FilteredSortedSolver");
             return solver;
         }
 
@@ -82,7 +88,7 @@ namespace WordleSolver.Services
         {
             var words = _sortedWordOccurrences.Keys.ToArray();
             var constraintManager = new ConstraintManager();
-            var solver = new EntropySolver(_firstGuessProvider, constraintManager, _patternsProvider, words);
+            var solver = new EntropySolver(_firstGuessProvider, constraintManager, _patternsProvider, words, "EntropySolver");
             return solver;
         }
 
@@ -92,7 +98,7 @@ namespace WordleSolver.Services
             var total = _sortedWordOccurrences.Values.Sum();
             var wordFrequencies = _sortedWordOccurrences.ToDictionary(x => x.Key, x => (double)x.Value / total);
             var constraintManager = new ConstraintManager();
-            var solver = new EntropyFrequencySolver(_firstGuessProvider, constraintManager, _patternsProvider, wordFrequencies, words);
+            var solver = new EntropyFrequencySolver(_firstGuessProvider, constraintManager, _patternsProvider, wordFrequencies, words, "EntropyFrequencySolver");
             return solver;
         }
 
@@ -118,7 +124,7 @@ namespace WordleSolver.Services
             var normalizedWordSigmoidFrequency = wordSigmoidFrequency.ToDictionary(x => x.Key, x => x.Value / total);
 
             var constraintManager = new ConstraintManager();
-            var solver = new EntropyFrequencySigmoidSolver(_firstGuessProvider, constraintManager, _patternsProvider, normalizedWordSigmoidFrequency, words);
+            var solver = new EntropyFrequencySigmoidSolver(_firstGuessProvider, constraintManager, _patternsProvider, normalizedWordSigmoidFrequency, words, "EntropyFrequencySigmoidSolver");
             return solver;
         }
 
@@ -140,7 +146,7 @@ namespace WordleSolver.Services
             var normalizedWordLogFrequency = wordLogFrequency.ToDictionary(x => x.Key, x => x.Value / total);
 
             var constraintManager = new ConstraintManager();
-            var solver = new EntropyFrequencyLogSolver(_firstGuessProvider, constraintManager, _patternsProvider, normalizedWordLogFrequency, words);
+            var solver = new EntropyFrequencyLogSolver(_firstGuessProvider, constraintManager, _patternsProvider, normalizedWordLogFrequency, words, "EntropyFrequencyLogSolver");
             return solver;
         }
     }
