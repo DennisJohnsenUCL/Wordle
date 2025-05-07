@@ -94,7 +94,6 @@ namespace WordleSolver.Services
 
         private EntropyFrequencySolver GetEntropyFrequencySolver()
         {
-            var words = _sortedWordOccurrences.Keys.ToArray();
             var total = _sortedWordOccurrences.Values.Sum();
             var wordFrequencies = _sortedWordOccurrences.ToDictionary(x => x.Key, x => (double)x.Value / total);
             var constraintManager = new ConstraintManager();

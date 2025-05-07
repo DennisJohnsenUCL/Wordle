@@ -38,7 +38,7 @@ namespace WordleSolver.Services
             return pattern;
         }
 
-        private string[] GeneratePatterns()
+        private static string[] GeneratePatterns()
         {
             var letters = CorrectnessMappings.Values.ToArray();
 
