@@ -90,7 +90,7 @@ namespace WordleSolver.Solvers
 
 				foreach (var possibleWord in normalizedFrequencies.Keys)
 				{
-					var pattern = PatternsProvider.GetPattern(i, possibleWord);
+					var pattern = PatternsProvider.GetPattern(word, possibleWord);
 					var frequency = normalizedFrequencies[possibleWord];
 
 					if (!patternGroups.TryAdd(pattern, frequency)) patternGroups[pattern] += frequency;
