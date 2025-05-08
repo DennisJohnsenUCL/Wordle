@@ -76,23 +76,13 @@ namespace WordleSolver.Solvers
 
 		protected virtual ConcurrentDictionary<string, double> GetEntropies(List<string> possibleWords)
 		{
-			var normalizedFrequencies = GetNormalizedFrequencies(possibleWords);
-
 			ConcurrentDictionary<string, double> entropies = [];
 
 			Parallel.ForEach(Words, word =>
 			{
 				if (GuessedWords.Contains(word)) return;
 
-				Dictionary<string, double> patternGroups = [];
-
-				foreach (var possibleWord in normalizedFrequencies.Keys)
-				{
-					var pattern = PatternsProvider.GetPattern(word, possibleWord);
-					var frequency = normalizedFrequencies[possibleWord];
-
-					if (!patternGroups.TryAdd(pattern, frequency)) patternGroups[pattern] += frequency;
-				}
+				var patternGroups = GetPatternGroups(word, possibleWords);
 
 				var entropy = patternGroups.Sum(pattern => pattern.Value * Math.Log2(1 / pattern.Value));
 
@@ -100,6 +90,21 @@ namespace WordleSolver.Solvers
 			});
 
 			return entropies;
+		}
+
+		protected virtual Dictionary<string, double> GetPatternGroups(string word, List<string> possibleWords)
+		{
+			Dictionary<string, double> patternGroups = [];
+			var normalizedFrequencies = GetNormalizedFrequencies(possibleWords);
+
+			foreach (var possibleWord in normalizedFrequencies.Keys)
+			{
+				var pattern = PatternsProvider.GetPattern(word, possibleWord);
+				var frequency = normalizedFrequencies[possibleWord];
+
+				if (!patternGroups.TryAdd(pattern, frequency)) patternGroups[pattern] += frequency;
+			}
+			return patternGroups;
 		}
 
 		public override string GetFirstGuess()
