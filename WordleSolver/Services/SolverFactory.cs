@@ -36,9 +36,13 @@ namespace WordleSolver.Services
 						var sorted = GetLazySortedSolver();
 						solvers.Add(sorted);
 						break;
-					case SolverTypes.Filtered:
-						var filtered = GetFilteredSortedSolver();
-						solvers.Add(filtered);
+					case SolverTypes.FilteredRandom:
+						var filteredRandom = GetFilteredRandomSolver();
+						solvers.Add(filteredRandom);
+						break;
+					case SolverTypes.FilteredSorted:
+						var filteredSorted = GetFilteredSortedSolver();
+						solvers.Add(filteredSorted);
 						break;
 					case SolverTypes.Entropy:
 						var entropy = GetEntropySolver();
@@ -77,11 +81,19 @@ namespace WordleSolver.Services
 			return solver;
 		}
 
-		private FilteredSortedSolver GetFilteredSortedSolver()
+		private FilteredSolver GetFilteredRandomSolver()
+		{
+			var words = _words;
+			var constraintManager = new ConstraintManager();
+			var solver = new FilteredSolver(_firstGuessProvider, constraintManager, words, "FilteredRandomSolver");
+			return solver;
+		}
+
+		private FilteredSolver GetFilteredSortedSolver()
 		{
 			var words = _sortedWordOccurrences.Keys.ToArray();
 			var constraintManager = new ConstraintManager();
-			var solver = new FilteredSortedSolver(_firstGuessProvider, constraintManager, words, "FilteredSortedSolver");
+			var solver = new FilteredSolver(_firstGuessProvider, constraintManager, words, "FilteredSortedSolver");
 			return solver;
 		}
 

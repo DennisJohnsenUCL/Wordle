@@ -5,7 +5,7 @@ using WordleSolver.Interfaces;
 
 namespace WordleSolver.Solvers
 {
-	internal class EntropySolver : FilteredSortedSolver
+	internal class EntropySolver : FilteredSolver
 	{
 		private string? _lastPattern;
 		protected HashSet<string> GuessedWords { get; protected private set; } = [];

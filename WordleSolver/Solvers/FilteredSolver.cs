@@ -3,12 +3,12 @@ using WordleSolver.Interfaces;
 
 namespace WordleSolver.Solvers
 {
-    internal class FilteredSortedSolver : LazySolver, IReactiveSolver
+    internal class FilteredSolver : LazySolver, IReactiveSolver
     {
         protected IConstraintManager Constraints { get; protected private set; }
         protected string FirstGuess { get; protected private set; }
 
-        public FilteredSortedSolver(IFirstGuessProvider firstGuessProvider, IConstraintManager constraintManager, string[] words, string identifier) : base(words, identifier)
+        public FilteredSolver(IFirstGuessProvider firstGuessProvider, IConstraintManager constraintManager, string[] words, string identifier) : base(words, identifier)
         {
             FirstGuess = firstGuessProvider.Value;
             Constraints = constraintManager;
