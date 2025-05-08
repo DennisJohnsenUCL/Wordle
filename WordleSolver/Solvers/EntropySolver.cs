@@ -80,10 +80,8 @@ namespace WordleSolver.Solvers
 
 			ConcurrentDictionary<string, double> entropies = [];
 
-			Parallel.For(0, Words.Length, i =>
+			Parallel.ForEach(Words, word =>
 			{
-				var word = Words[i];
-
 				if (GuessedWords.Contains(word)) return;
 
 				Dictionary<string, double> patternGroups = [];
