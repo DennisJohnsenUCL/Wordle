@@ -99,11 +99,10 @@ namespace WordleSolver.Services
 
 		private EntropySolver GetEntropySolver()
 		{
-			var total = _sortedWordOccurrences.Count;
-			var words = _sortedWordOccurrences.ToDictionary(x => x.Key, x => 1d / total);
+			var flatFrequency = GetFlatFrequencies();
 			var constraintManager = new ConstraintManager();
 			int limit = 20;
-			var solver = new EntropySolver(_firstGuessProvider, constraintManager, _patternsProvider, words, limit, "EntropySolver");
+			var solver = new EntropySolver(_firstGuessProvider, constraintManager, _patternsProvider, flatFrequency, limit, "EntropySolver");
 			return solver;
 		}
 
@@ -136,6 +135,14 @@ namespace WordleSolver.Services
 		#endregion
 
 		#region Transformations
+		private Dictionary<string, double> GetFlatFrequencies()
+		{
+			var total = _words.Length;
+			var flatFrequencies = _sortedWordOccurrences.ToDictionary(x => x.Key, x => 1d / total);
+
+			return flatFrequencies;
+		}
+
 		private Dictionary<string, double> GetNormalizedFrequencies()
 		{
 			var total = _sortedWordOccurrences.Values.Sum();
