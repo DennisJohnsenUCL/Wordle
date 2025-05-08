@@ -1,6 +1,4 @@
 ﻿using System.Diagnostics;
-using WordleCore.Enums;
-using WordleCore.Utils;
 using WordleSolver.Interfaces;
 
 namespace WordleSolver.Services
@@ -41,7 +39,7 @@ namespace WordleSolver.Services
 
 		private static string[] GeneratePatterns()
 		{
-			var letters = CorrectnessMappings.Values.ToArray();
+			char[] letters = ['A', 'P', 'C', 'O'];
 
 			var patterns = letters
 				.SelectMany(c1 => letters
@@ -75,14 +73,9 @@ namespace WordleSolver.Services
 		{
 			Parallel.For(0, _words.Count, i =>
 			{
-				var word1 = _words[i];
-
 				for (int j = 0; j < _words.Count; j++)
 				{
-					var word2 = _words[j];
-
-					var results = WordleGameUtils.GetCorrectnesses(word2, word1);
-					var pattern = string.Concat(results.Select(result => CorrectnessMappings[result.Correctness]));
+					var pattern = CalculatePattern(_words[i], _words[j]);
 
 					var patternIndex = _patternsReverseLookup[pattern];
 
@@ -91,12 +84,25 @@ namespace WordleSolver.Services
 			});
 		}
 
-		private static readonly Dictionary<Correctness, char> CorrectnessMappings = new()
+		private static string CalculatePattern(string guess, string wordle)
 		{
-			{ Correctness.Absent, 'A' },
-			{ Correctness.Present, 'P' },
-			{ Correctness.Correct, 'C' },
-			{ Correctness.OverCount, 'O' },
-		};
+			Span<char> buffer = stackalloc char[5];
+
+			for (int i = 0; i < 5; i++)
+			{
+				if (guess[i] == wordle[i]) buffer[i] = 'C';
+				else if (!wordle.Contains(guess[i])) buffer[i] = 'A';
+				else
+				{
+					int total = wordle.Count(x => x == guess[i]);
+					int correctAfter = wordle.Where((x, j) => j > i && x == guess[i] && x == guess[j]).Count();
+					int countUpTo = guess[..(i + 1)].Count(x => x == guess[i]);
+
+					if (total - correctAfter >= countUpTo) buffer[i] = 'P';
+					else buffer[i] = 'O';
+				}
+			}
+			return buffer.ToString();
+		}
 	}
 }
