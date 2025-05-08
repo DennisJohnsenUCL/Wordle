@@ -5,122 +5,137 @@ using WordleSolver.Interfaces;
 
 namespace WordleSolver.Solvers
 {
-    internal class EntropySolver : FilteredSortedSolver
-    {
-        private string? _lastPattern;
-        protected HashSet<string> GuessedWords { get; protected private set; } = [];
-        private readonly Dictionary<string, string> CachedBestSecond = [];
-        protected IPatternsProvider PatternsProvider { get; }
-        protected virtual int Limit { get; protected private set; } = 20;
+	internal class EntropySolver : FilteredSortedSolver
+	{
+		private string? _lastPattern;
+		protected HashSet<string> GuessedWords { get; protected private set; } = [];
+		private readonly Dictionary<string, string> CachedBestSecond = [];
+		protected IPatternsProvider PatternsProvider { get; }
+		private readonly int _limit;
+		private readonly Dictionary<string, double> _wordFrequencies;
 
-        public EntropySolver(IFirstGuessProvider firstGuessProvider, IConstraintManager constraintManager, IPatternsProvider patternsProvider, string[] words, string identifier)
-            : base(firstGuessProvider, constraintManager, words, identifier)
-        {
-            PatternsProvider = patternsProvider;
-        }
+		public EntropySolver(IFirstGuessProvider firstGuessProvider, IConstraintManager constraintManager, IPatternsProvider patternsProvider, Dictionary<string, double> wordFrequencies, int limit, string identifier)
+			: base(firstGuessProvider, constraintManager, [.. wordFrequencies.Keys], identifier)
+		{
+			PatternsProvider = patternsProvider;
+			_wordFrequencies = wordFrequencies;
+			_limit = limit;
+		}
 
-        public override void AddResponse(WordleResponse response)
-        {
-            _lastPattern = string.Concat(response.LetterResults.Select(result => CorrectnessMappings[result.Correctness]));
-            base.AddResponse(response);
-        }
+		public override void AddResponse(WordleResponse response)
+		{
+			_lastPattern = string.Concat(response.LetterResults.Select(result => CorrectnessMappings[result.Correctness]));
+			base.AddResponse(response);
+		}
 
-        public override string GetNextGuess()
-        {
-            var possibleWords = GetPossibleWords();
+		public override string GetNextGuess()
+		{
+			var possibleWords = GetPossibleWords();
 
-            if (possibleWords.Count < Limit) return possibleWords[0];
+			if (possibleWords.Count < _limit) return possibleWords[0];
 
-            if (TryGetCachedGuess(out var cachedGuess)) return cachedGuess;
+			if (TryGetCachedGuess(out var cachedGuess)) return cachedGuess;
 
-            var entropies = GetEntropies(possibleWords);
+			var entropies = GetEntropies(possibleWords);
 
-            var guess = entropies.Aggregate((acc, current) => acc.Value > current.Value ? acc : current).Key;
+			var guess = entropies.Aggregate((acc, current) => acc.Value > current.Value ? acc : current).Key;
 
-            if (GuessedWords.Count == 1) CachedBestSecond.Add(_lastPattern!, guess);
+			if (GuessedWords.Count == 1) CachedBestSecond.Add(_lastPattern!, guess);
 
-            GuessedWords.Add(guess);
-            return guess;
-        }
+			GuessedWords.Add(guess);
+			return guess;
+		}
 
-        protected virtual List<string> GetPossibleWords()
-        {
-            var possibleWords = new List<string>();
+		protected virtual List<string> GetPossibleWords()
+		{
+			var possibleWords = new List<string>();
 
-            foreach (var word in Words)
-            {
-                if (GuessedWords.Contains(word)) continue;
+			foreach (var word in Words)
+			{
+				if (GuessedWords.Contains(word)) continue;
 
-                if (FitsConstraints(word))
-                {
-                    possibleWords.Add(word);
-                }
-            }
-            return possibleWords;
-        }
+				if (FitsConstraints(word))
+				{
+					possibleWords.Add(word);
+				}
+			}
+			return possibleWords;
+		}
 
-        protected virtual bool TryGetCachedGuess(out string cachedGuess)
-        {
-            if (GuessedWords.Count == 1 && CachedBestSecond.TryGetValue(_lastPattern!, out var value))
-            {
-                GuessedWords.Add(value);
-                cachedGuess = value;
-                return true;
-            }
-            cachedGuess = string.Empty;
-            return false;
-        }
+		protected virtual bool TryGetCachedGuess(out string cachedGuess)
+		{
+			if (GuessedWords.Count == 1 && CachedBestSecond.TryGetValue(_lastPattern!, out var value))
+			{
+				GuessedWords.Add(value);
+				cachedGuess = value;
+				return true;
+			}
+			cachedGuess = string.Empty;
+			return false;
+		}
 
-        protected virtual ConcurrentDictionary<string, double> GetEntropies(List<string> possibleWords)
-        {
-            ConcurrentDictionary<string, double> entropies = [];
+		protected virtual ConcurrentDictionary<string, double> GetEntropies(List<string> possibleWords)
+		{
+			var normalizedFrequencies = GetNormalizedFrequencies(possibleWords);
 
-            Parallel.For(0, Words.Length, i =>
-            {
-                var word = Words[i];
+			ConcurrentDictionary<string, double> entropies = [];
 
-                if (GuessedWords.Contains(word)) return;
+			Parallel.For(0, Words.Length, i =>
+			{
+				var word = Words[i];
 
-                Dictionary<string, int> patternGroups = [];
+				if (GuessedWords.Contains(word)) return;
 
-                for (int j = 0; j < possibleWords.Count; j++)
-                {
-                    var possibleWord = possibleWords[j];
+				Dictionary<string, double> patternGroups = [];
 
-                    var pattern = PatternsProvider.GetPattern(i, possibleWord);
+				foreach (var possibleWord in normalizedFrequencies.Keys)
+				{
+					var pattern = PatternsProvider.GetPattern(i, possibleWord);
+					var frequency = normalizedFrequencies[possibleWord];
 
-                    if (!patternGroups.TryAdd(pattern, 1)) patternGroups[pattern] += 1;
-                }
+					if (!patternGroups.TryAdd(pattern, frequency)) patternGroups[pattern] += frequency;
+				}
 
-                var probabilities = patternGroups.Select(pattern => (double)pattern.Value / patternGroups.Values.Sum());
+				var entropy = patternGroups.Sum(pattern => pattern.Value * Math.Log2(1 / pattern.Value));
 
-                var entropy = probabilities.Sum(probability => probability * Math.Log2(1 / probability));
+				entropies.TryAdd(word, entropy);
+			});
 
-                entropies.TryAdd(word, entropy);
-            });
+			return entropies;
+		}
 
-            return entropies;
-        }
+		public override string GetFirstGuess()
+		{
+			GuessedWords.Add(FirstGuess);
+			return base.GetFirstGuess();
+		}
 
-        public override string GetFirstGuess()
-        {
-            GuessedWords.Add(FirstGuess);
-            return base.GetFirstGuess();
-        }
+		public override void Reset()
+		{
+			_lastPattern = null;
+			GuessedWords = [];
+			base.Reset();
+		}
 
-        public override void Reset()
-        {
-            _lastPattern = null;
-            GuessedWords = [];
-            base.Reset();
-        }
+		protected virtual Dictionary<string, double> GetNormalizedFrequencies(List<string> possibleWords)
+		{
+			var possibleSet = possibleWords.ToHashSet();
+			var possibleFrequencies = _wordFrequencies
+				.Where(pair => possibleSet.Contains(pair.Key))
+				.ToDictionary();
 
-        private static readonly Dictionary<Correctness, char> CorrectnessMappings = new()
-        {
-            { Correctness.Absent, 'A' },
-            { Correctness.Present, 'P' },
-            { Correctness.Correct, 'C' },
-            { Correctness.OverCount, 'O' },
-        };
-    }
+			var totalFreq = possibleFrequencies.Sum(pair => pair.Value);
+			var normalizedFrequencies = possibleFrequencies.ToDictionary(x => x.Key, x => x.Value / totalFreq);
+
+			return normalizedFrequencies;
+		}
+
+		private static readonly Dictionary<Correctness, char> CorrectnessMappings = new()
+		{
+			{ Correctness.Absent, 'A' },
+			{ Correctness.Present, 'P' },
+			{ Correctness.Correct, 'C' },
+			{ Correctness.OverCount, 'O' },
+		};
+	}
 }
