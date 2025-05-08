@@ -76,13 +76,14 @@ namespace WordleSolver.Solvers
 
 		protected virtual ConcurrentDictionary<string, double> GetEntropies(List<string> possibleWords)
 		{
+			var normalizedFrequencies = GetNormalizedFrequencies(possibleWords);
 			ConcurrentDictionary<string, double> entropies = [];
 
 			Parallel.ForEach(Words, word =>
 			{
 				if (GuessedWords.Contains(word)) return;
 
-				var patternGroups = GetPatternGroups(word, possibleWords);
+				var patternGroups = GetPatternGroups(word, normalizedFrequencies);
 
 				var entropy = patternGroups.Sum(pattern => pattern.Value * Math.Log2(1 / pattern.Value));
 
@@ -92,10 +93,9 @@ namespace WordleSolver.Solvers
 			return entropies;
 		}
 
-		protected virtual Dictionary<string, double> GetPatternGroups(string word, List<string> possibleWords)
+		protected virtual Dictionary<string, double> GetPatternGroups(string word, Dictionary<string, double> normalizedFrequencies)
 		{
 			Dictionary<string, double> patternGroups = [];
-			var normalizedFrequencies = GetNormalizedFrequencies(possibleWords);
 
 			foreach (var possibleWord in normalizedFrequencies.Keys)
 			{
