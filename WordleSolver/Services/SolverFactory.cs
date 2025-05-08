@@ -90,7 +90,8 @@ namespace WordleSolver.Services
 			var total = _sortedWordOccurrences.Count;
 			var words = _sortedWordOccurrences.ToDictionary(x => x.Key, x => 1d / total);
 			var constraintManager = new ConstraintManager();
-			var solver = new EntropySolver(_firstGuessProvider, constraintManager, _patternsProvider, words, 20, "EntropySolver");
+			int limit = 20;
+			var solver = new EntropySolver(_firstGuessProvider, constraintManager, _patternsProvider, words, limit, "EntropySolver");
 			return solver;
 		}
 
@@ -98,7 +99,8 @@ namespace WordleSolver.Services
 		{
 			var normalizedFrequency = GetNormalizedFrequencies();
 			var constraintManager = new ConstraintManager();
-			var solver = new EntropySolver(_firstGuessProvider, constraintManager, _patternsProvider, normalizedFrequency, 21, "EntropyFrequencySolver");
+			int limit = 21;
+			var solver = new EntropySolver(_firstGuessProvider, constraintManager, _patternsProvider, normalizedFrequency, limit, "EntropyFrequencySolver");
 			return solver;
 		}
 
@@ -106,7 +108,8 @@ namespace WordleSolver.Services
 		{
 			var normalizedSigmoidFrequency = GetSigmoidFrequencies();
 			var constraintManager = new ConstraintManager();
-			var solver = new EntropySolver(_firstGuessProvider, constraintManager, _patternsProvider, normalizedSigmoidFrequency, 21, "EntropyFrequencySigmoidSolver");
+			int limit = 20;
+			var solver = new EntropySolver(_firstGuessProvider, constraintManager, _patternsProvider, normalizedSigmoidFrequency, limit, "EntropyFrequencySigmoidSolver");
 			return solver;
 		}
 
@@ -114,7 +117,8 @@ namespace WordleSolver.Services
 		{
 			var normalizedLogFrequency = GetLogFrequencies();
 			var constraintManager = new ConstraintManager();
-			var solver = new EntropySolver(_firstGuessProvider, constraintManager, _patternsProvider, normalizedLogFrequency, 20, "EntropyFrequencyLogSolver");
+			int limit = 20;
+			var solver = new EntropySolver(_firstGuessProvider, constraintManager, _patternsProvider, normalizedLogFrequency, limit, "EntropyFrequencyLogSolver");
 			return solver;
 		}
 		#endregion
