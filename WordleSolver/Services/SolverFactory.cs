@@ -64,6 +64,10 @@ namespace WordleSolver.Services
 						var positional = GetPositionalEntropySolver();
 						solvers.Add(positional);
 						break;
+					case SolverTypes.FrequencyThreshold:
+						var frequencyThreshold = GetFrequencyThresholdSolver();
+						solvers.Add(frequencyThreshold);
+						break;
 					default:
 						break;
 				}
@@ -141,8 +145,15 @@ namespace WordleSolver.Services
 		{
 			var normalizedFrequency = GetNormalizedFrequencies();
 			var constraintManager = new ConstraintManager();
-			var solver = new PositionalEntropySolver(_firstGuessProvider, constraintManager, _patternsProvider, normalizedFrequency, 20, "Positional Entropy");
+			var solver = new PositionalEntropySolver(_firstGuessProvider, constraintManager, _patternsProvider, normalizedFrequency, 20, "PositionalEntropy");
+			return solver;
+		}
 
+		private EntropyFrequencyThresholdSolver GetFrequencyThresholdSolver()
+		{
+			var normalizedFrequency = GetNormalizedFrequencies();
+			var constraintManager = new ConstraintManager();
+			var solver = new EntropyFrequencyThresholdSolver(_firstGuessProvider, constraintManager, _patternsProvider, normalizedFrequency, 0.50, "EntropyFrequencyThreshold");
 			return solver;
 		}
 		#endregion

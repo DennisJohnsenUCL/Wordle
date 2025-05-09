@@ -25,15 +25,16 @@ namespace WordleSolver
 
 			SolverTypes[] solversToGet =
 				[
-				SolverTypes.Random,
-				SolverTypes.Sorted,
-				SolverTypes.FilteredRandom,
-				SolverTypes.FilteredSorted,
-				SolverTypes.Entropy,
+				//SolverTypes.Random,
+				//SolverTypes.Sorted,
+				//SolverTypes.FilteredRandom,
+				//SolverTypes.FilteredSorted,
+				//SolverTypes.Entropy,
 				SolverTypes.Frequency,
-				SolverTypes.Sigmoid,
-				SolverTypes.Log,
-				SolverTypes.Positional,
+				//SolverTypes.Sigmoid,
+				//SolverTypes.Log,
+				//SolverTypes.Positional,
+				SolverTypes.FrequencyThreshold,
 				];
 
 			var solverFactory = new SolverFactory(

@@ -7,9 +7,9 @@ namespace WordleSolver.Solvers
 {
 	internal class EntropySolver : FilteredSolver
 	{
-		private string? _lastPattern;
+		protected string? LastPattern { get; protected private set; }
 		protected HashSet<string> GuessedWords { get; protected private set; } = [];
-		private readonly Dictionary<string, string> CachedBestSecond = [];
+		protected Dictionary<string, string> CachedBestSecond { get; protected private set; } = [];
 		protected IPatternsProvider PatternsProvider { get; }
 		private readonly int _limit;
 		private readonly Dictionary<string, double> _wordFrequencies;
@@ -24,7 +24,7 @@ namespace WordleSolver.Solvers
 
 		public override void AddResponse(WordleResponse response)
 		{
-			_lastPattern = string.Concat(response.LetterResults.Select(result => CorrectnessMappings[result.Correctness]));
+			LastPattern = string.Concat(response.LetterResults.Select(result => CorrectnessMappings[result.Correctness]));
 			base.AddResponse(response);
 		}
 
@@ -32,9 +32,9 @@ namespace WordleSolver.Solvers
 		{
 			var possibleWords = GetPossibleWords();
 
-			if (possibleWords.Count < _limit) return possibleWords.First().Key;
-
 			var normalizedFrequencies = GetNormalizedFrequencies(possibleWords);
+
+			if (TryGetThresholdGuess(normalizedFrequencies, out var value)) return value;
 
 			if (TryGetCachedGuess(out var cachedGuess)) return cachedGuess;
 
@@ -42,7 +42,7 @@ namespace WordleSolver.Solvers
 
 			var guess = entropies.Aggregate((acc, current) => acc.Value > current.Value ? acc : current).Key;
 
-			if (GuessedWords.Count == 1) CachedBestSecond.Add(_lastPattern!, guess);
+			if (GuessedWords.Count == 1) CachedBestSecond.Add(LastPattern!, guess);
 
 			GuessedWords.Add(guess);
 			return guess;
@@ -65,9 +65,20 @@ namespace WordleSolver.Solvers
 			return possibleWords;
 		}
 
+		protected virtual bool TryGetThresholdGuess(Dictionary<string, double> normalizedFrequencies, out string guess)
+		{
+			if (normalizedFrequencies.Count < _limit)
+			{
+				guess = normalizedFrequencies.First().Key;
+				return true;
+			}
+			guess = "";
+			return false;
+		}
+
 		protected virtual bool TryGetCachedGuess(out string cachedGuess)
 		{
-			if (GuessedWords.Count == 1 && CachedBestSecond.TryGetValue(_lastPattern!, out var value))
+			if (GuessedWords.Count == 1 && CachedBestSecond.TryGetValue(LastPattern!, out var value))
 			{
 				GuessedWords.Add(value);
 				cachedGuess = value;
@@ -117,7 +128,7 @@ namespace WordleSolver.Solvers
 
 		public override void Reset()
 		{
-			_lastPattern = null;
+			LastPattern = null;
 			GuessedWords = [];
 			base.Reset();
 		}

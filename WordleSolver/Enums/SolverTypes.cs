@@ -11,5 +11,6 @@
 		Sigmoid,
 		Log,
 		Positional,
+		FrequencyThreshold,
 	}
 }
