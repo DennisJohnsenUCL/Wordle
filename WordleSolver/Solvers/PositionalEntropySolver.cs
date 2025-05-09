@@ -8,18 +8,17 @@ namespace WordleSolver.Solvers
 		public PositionalEntropySolver(IFirstGuessProvider firstGuessProvider, IConstraintManager constraintManager, IPatternsProvider patternsProvider, Dictionary<string, double> wordFrequencies, int limit, string identifier)
 			: base(firstGuessProvider, constraintManager, patternsProvider, wordFrequencies, limit, identifier) { }
 
-		protected override ConcurrentDictionary<string, double> GetEntropies(List<string> possibleWords)
+		protected override ConcurrentDictionary<string, double> GetEntropies(Dictionary<string, double> possibleWords)
 		{
-			var normalizedFrequencies = GetNormalizedFrequencies(possibleWords);
 			ConcurrentDictionary<string, double> entropies = [];
 
 			Parallel.ForEach(Words, word =>
 			{
 				if (GuessedWords.Contains(word)) return;
 
-				var totalPositionalEntropy = GetPositionalEntropy([.. normalizedFrequencies.Keys]);
+				var totalPositionalEntropy = GetPositionalEntropy([.. possibleWords.Keys]);
 
-				var (patternGroupWords, patternGroupProbabilities) = GetPatternGroupWords(word, normalizedFrequencies);
+				var (patternGroupWords, patternGroupProbabilities) = GetPatternGroupWords(word, possibleWords);
 
 				var expectedPositionalEntropy = GetExpectedPositionalEntropy(patternGroupWords, patternGroupProbabilities);
 

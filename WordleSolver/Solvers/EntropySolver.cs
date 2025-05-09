@@ -32,11 +32,13 @@ namespace WordleSolver.Solvers
 		{
 			var possibleWords = GetPossibleWords();
 
-			if (possibleWords.Count < _limit) return possibleWords[0];
+			if (possibleWords.Count < _limit) return possibleWords.First().Key;
+
+			var normalizedFrequencies = GetNormalizedFrequencies(possibleWords);
 
 			if (TryGetCachedGuess(out var cachedGuess)) return cachedGuess;
 
-			var entropies = GetEntropies(possibleWords);
+			var entropies = GetEntropies(normalizedFrequencies);
 
 			var guess = entropies.Aggregate((acc, current) => acc.Value > current.Value ? acc : current).Key;
 
@@ -46,17 +48,18 @@ namespace WordleSolver.Solvers
 			return guess;
 		}
 
-		protected virtual List<string> GetPossibleWords()
+		protected virtual Dictionary<string, double> GetPossibleWords()
 		{
-			var possibleWords = new List<string>();
+			var possibleWords = new Dictionary<string, double>();
 
-			foreach (var word in Words)
+			foreach (var pair in _wordFrequencies)
 			{
+				var word = pair.Key;
 				if (GuessedWords.Contains(word)) continue;
 
 				if (FitsConstraints(word))
 				{
-					possibleWords.Add(word);
+					possibleWords.Add(word, pair.Value);
 				}
 			}
 			return possibleWords;
@@ -74,16 +77,15 @@ namespace WordleSolver.Solvers
 			return false;
 		}
 
-		protected virtual ConcurrentDictionary<string, double> GetEntropies(List<string> possibleWords)
+		protected virtual ConcurrentDictionary<string, double> GetEntropies(Dictionary<string, double> possibleWords)
 		{
-			var normalizedFrequencies = GetNormalizedFrequencies(possibleWords);
 			ConcurrentDictionary<string, double> entropies = [];
 
 			Parallel.ForEach(Words, word =>
 			{
 				if (GuessedWords.Contains(word)) return;
 
-				var patternGroups = GetPatternGroups(word, normalizedFrequencies);
+				var patternGroups = GetPatternGroups(word, possibleWords);
 
 				var entropy = patternGroups.Sum(pattern => pattern.Value * Math.Log2(1 / pattern.Value));
 
@@ -120,16 +122,10 @@ namespace WordleSolver.Solvers
 			base.Reset();
 		}
 
-		protected virtual Dictionary<string, double> GetNormalizedFrequencies(List<string> possibleWords)
+		protected virtual Dictionary<string, double> GetNormalizedFrequencies(Dictionary<string, double> possibleWords)
 		{
-			var possibleSet = possibleWords.ToHashSet();
-			var possibleFrequencies = _wordFrequencies
-				.Where(pair => possibleSet.Contains(pair.Key))
-				.ToDictionary();
-
-			var totalFreq = possibleFrequencies.Sum(pair => pair.Value);
-			var normalizedFrequencies = possibleFrequencies.ToDictionary(x => x.Key, x => x.Value / totalFreq);
-
+			var totalFreq = possibleWords.Values.Sum();
+			var normalizedFrequencies = possibleWords.ToDictionary(x => x.Key, x => x.Value / totalFreq);
 			return normalizedFrequencies;
 		}
 
