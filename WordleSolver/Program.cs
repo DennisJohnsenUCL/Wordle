@@ -24,14 +24,17 @@ namespace WordleSolver
 			var patternsProvider = new PatternsProvider([.. sortedWordOccurrences.Keys]);
 
 			SolverTypes[] solversToGet =
-				[SolverTypes.Random,
+				[
+				SolverTypes.Random,
 				SolverTypes.Sorted,
 				SolverTypes.FilteredRandom,
 				SolverTypes.FilteredSorted,
 				SolverTypes.Entropy,
 				SolverTypes.Frequency,
 				SolverTypes.Sigmoid,
-				SolverTypes.Log];
+				SolverTypes.Log,
+				SolverTypes.Positional,
+				];
 
 			var solverFactory = new SolverFactory(
 				words,

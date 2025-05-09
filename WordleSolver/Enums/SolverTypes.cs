@@ -10,5 +10,6 @@
 		Frequency,
 		Sigmoid,
 		Log,
+		Positional,
 	}
 }

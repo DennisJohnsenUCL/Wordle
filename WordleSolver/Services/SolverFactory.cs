@@ -60,6 +60,10 @@ namespace WordleSolver.Services
 						var log = GetEntropyFrequencyLogSolver();
 						solvers.Add(log);
 						break;
+					case SolverTypes.Positional:
+						var positional = GetPositionalEntropySolver();
+						solvers.Add(positional);
+						break;
 					default:
 						break;
 				}
@@ -130,6 +134,15 @@ namespace WordleSolver.Services
 			var constraintManager = new ConstraintManager();
 			int limit = 20;
 			var solver = new EntropySolver(_firstGuessProvider, constraintManager, _patternsProvider, normalizedLogFrequency, limit, "EntropyFrequencyLogSolver");
+			return solver;
+		}
+
+		private PositionalEntropySolver GetPositionalEntropySolver()
+		{
+			var normalizedFrequency = GetNormalizedFrequencies();
+			var constraintManager = new ConstraintManager();
+			var solver = new PositionalEntropySolver(_firstGuessProvider, constraintManager, _patternsProvider, normalizedFrequency, 20, "Positional Entropy");
+
 			return solver;
 		}
 		#endregion
