@@ -40,6 +40,20 @@ namespace WordleSolver.Models
 			_ => throw new IndexOutOfRangeException()
 		};
 
+		public char[] this[Range range]
+		{
+			get
+			{
+				int start = range.Start.GetOffset(Length);
+				int end = range.End.GetOffset(Length);
+				if (start < 0 || end > Length || start > end) throw new ArgumentOutOfRangeException();
+
+				char[] buffer = new char[end - start];
+				for (int i = start; i < end; i++) buffer[i - start] = this[i];
+				return buffer;
+			}
+		}
+
 		public int Length => 5;
 
 		public bool Equals(Word other)
