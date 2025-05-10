@@ -18,7 +18,7 @@ namespace WordleSolver.Solvers
 
 				var totalPositionalEntropy = GetPositionalEntropy([.. possibleWords.Keys]);
 
-				var (patternGroupWords, patternGroupProbabilities) = GetPatternGroupWords(word, possibleWords);
+				var (patternGroupWords, patternGroupProbabilities) = GetPatternGroups(word, possibleWords);
 
 				var expectedPositionalEntropy = GetExpectedPositionalEntropy(patternGroupWords, patternGroupProbabilities);
 
@@ -54,7 +54,7 @@ namespace WordleSolver.Solvers
 			return entropy;
 		}
 
-		private (Dictionary<string, List<string>>, Dictionary<string, double>) GetPatternGroupWords(string guess, Dictionary<string, double> frequencies)
+		protected virtual new (Dictionary<string, List<string>>, Dictionary<string, double>) GetPatternGroups(string guess, Dictionary<string, double> frequencies)
 		{
 			var patternGroupWords = new Dictionary<string, List<string>>();
 			var patternGroupProbabilities = new Dictionary<string, double>();

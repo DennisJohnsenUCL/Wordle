@@ -34,7 +34,7 @@ namespace WordleSolver
 				//SolverTypes.Sigmoid,
 				//SolverTypes.Log,
 				//SolverTypes.Positional,
-				SolverTypes.FrequencyThreshold,
+				//SolverTypes.FrequencyThreshold,
 				];
 
 			var solverFactory = new SolverFactory(
