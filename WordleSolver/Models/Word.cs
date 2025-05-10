@@ -3,7 +3,7 @@ using WordleSolver.Interfaces;
 
 namespace WordleSolver.Models
 {
-	internal readonly struct Word : IEquatable<Word>, IIndexable<char>, IEnumerable<char>
+	internal readonly struct Word : IEquatable<Word>, IIndexable<char>, ISliceable<char>, IEnumerable<char>
 	{
 		private readonly char c0, c1, c2, c3, c4;
 
