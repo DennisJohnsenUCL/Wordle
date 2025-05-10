@@ -1,18 +1,19 @@
 ﻿using WordleSolver.Core;
 using WordleSolver.Enums;
 using WordleSolver.Interfaces;
+using WordleSolver.Models;
 using WordleSolver.Solvers;
 
 namespace WordleSolver.Services
 {
 	internal class SolverFactory
 	{
-		private readonly string[] _words;
-		private readonly Dictionary<string, long> _sortedWordOccurrences;
+		private readonly Word[] _words;
+		private readonly Dictionary<Word, long> _sortedWordOccurrences;
 		private readonly IFirstGuessProvider _firstGuessProvider;
 		private readonly IPatternsProvider _patternsProvider;
 
-		public SolverFactory(string[] words, Dictionary<string, long> sortedWordOccurrences, IFirstGuessProvider firstGuessProvider, IPatternsProvider patternsProvider)
+		public SolverFactory(Word[] words, Dictionary<Word, long> sortedWordOccurrences, IFirstGuessProvider firstGuessProvider, IPatternsProvider patternsProvider)
 		{
 			_words = words;
 			_sortedWordOccurrences = sortedWordOccurrences;
@@ -159,7 +160,7 @@ namespace WordleSolver.Services
 		#endregion
 
 		#region Transformations
-		private Dictionary<string, double> GetFlatFrequencies()
+		private Dictionary<Word, double> GetFlatFrequencies()
 		{
 			var total = _words.Length;
 			var flatFrequencies = _sortedWordOccurrences.ToDictionary(x => x.Key, x => 1d / total);
@@ -167,7 +168,7 @@ namespace WordleSolver.Services
 			return flatFrequencies;
 		}
 
-		private Dictionary<string, double> GetNormalizedFrequencies()
+		private Dictionary<Word, double> GetNormalizedFrequencies()
 		{
 			var total = _sortedWordOccurrences.Values.Sum();
 			var normalizedFrequencies = _sortedWordOccurrences.ToDictionary(x => x.Key, x => (double)x.Value / total);
@@ -175,11 +176,11 @@ namespace WordleSolver.Services
 			return normalizedFrequencies;
 		}
 
-		private Dictionary<string, double> GetSigmoidFrequencies()
+		private Dictionary<Word, double> GetSigmoidFrequencies()
 		{
 			int m = 5000000;
 			int s = 1000000;
-			var sigmoidFrequency = new Dictionary<string, double>();
+			var sigmoidFrequency = new Dictionary<Word, double>();
 
 			foreach (var key in _sortedWordOccurrences.Keys)
 			{
@@ -198,9 +199,9 @@ namespace WordleSolver.Services
 			return normalizedSigmoidFrequency;
 		}
 
-		private Dictionary<string, double> GetLogFrequencies()
+		private Dictionary<Word, double> GetLogFrequencies()
 		{
-			var logFrequency = new Dictionary<string, double>();
+			var logFrequency = new Dictionary<Word, double>();
 
 			foreach (var key in _sortedWordOccurrences.Keys)
 			{
