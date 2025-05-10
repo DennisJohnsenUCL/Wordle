@@ -12,5 +12,6 @@
 		Log,
 		Positional,
 		FrequencyThreshold,
+		MiniMax,
 	}
 }

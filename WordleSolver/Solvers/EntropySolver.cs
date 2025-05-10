@@ -11,7 +11,7 @@ namespace WordleSolver.Solvers
 		protected HashSet<string> GuessedWords { get; protected private set; } = [];
 		protected Dictionary<string, string> CachedBestSecond { get; protected private set; } = [];
 		protected IPatternsProvider PatternsProvider { get; }
-		private readonly int _limit;
+		protected int Limit { get; }
 		private readonly Dictionary<string, double> _wordFrequencies;
 
 		public EntropySolver(IFirstGuessProvider firstGuessProvider, IConstraintManager constraintManager, IPatternsProvider patternsProvider, Dictionary<string, double> wordFrequencies, int limit, string identifier)
@@ -19,7 +19,7 @@ namespace WordleSolver.Solvers
 		{
 			PatternsProvider = patternsProvider;
 			_wordFrequencies = wordFrequencies;
-			_limit = limit;
+			Limit = limit;
 		}
 
 		public override void AddResponse(WordleResponse response)
@@ -67,7 +67,7 @@ namespace WordleSolver.Solvers
 
 		protected virtual bool TryGetThresholdGuess(Dictionary<string, double> normalizedFrequencies, out string guess)
 		{
-			if (normalizedFrequencies.Count < _limit)
+			if (normalizedFrequencies.Count < Limit)
 			{
 				guess = normalizedFrequencies.First().Key;
 				return true;

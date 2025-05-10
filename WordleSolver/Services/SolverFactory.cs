@@ -68,6 +68,10 @@ namespace WordleSolver.Services
 						var frequencyThreshold = GetFrequencyThresholdSolver();
 						solvers.Add(frequencyThreshold);
 						break;
+					case SolverTypes.MiniMax:
+						var minimaxSolver = GetMinimaxSolver();
+						solvers.Add(minimaxSolver);
+						break;
 					default:
 						break;
 				}
@@ -154,6 +158,14 @@ namespace WordleSolver.Services
 			var normalizedFrequency = GetNormalizedFrequencies();
 			var constraintManager = new ConstraintManager();
 			var solver = new EntropyFrequencyThresholdSolver(_firstGuessProvider, constraintManager, _patternsProvider, normalizedFrequency, 0.50, "EntropyFrequencyThreshold");
+			return solver;
+		}
+
+		private MiniMaxSolver GetMinimaxSolver()
+		{
+			var flatFrequency = GetFlatFrequencies();
+			var constraintManager = new ConstraintManager();
+			var solver = new MiniMaxSolver(_firstGuessProvider, constraintManager, _patternsProvider, flatFrequency, 25, "MiniMax");
 			return solver;
 		}
 		#endregion
