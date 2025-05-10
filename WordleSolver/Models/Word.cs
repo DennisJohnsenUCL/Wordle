@@ -18,6 +18,18 @@ namespace WordleSolver.Models
 			c4 = span[4];
 		}
 
+		public Word(string word) : this(word.AsSpan()) { }
+
+		public static implicit operator Word(Span<char> span)
+		{
+			return new Word(span);
+		}
+
+		public static implicit operator Word(string word)
+		{
+			return new Word(word.AsSpan());
+		}
+
 		public char this[int index] => index switch
 		{
 			0 => c0,

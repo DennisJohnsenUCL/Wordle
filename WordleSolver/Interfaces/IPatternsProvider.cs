@@ -1,7 +1,9 @@
-﻿namespace WordleSolver.Interfaces
+﻿using WordleSolver.Models;
+
+namespace WordleSolver.Interfaces
 {
 	internal interface IPatternsProvider
 	{
-		string GetPattern(string guess, string wordle);
+		Word GetPattern(Word guess, Word wordle);
 	}
 }

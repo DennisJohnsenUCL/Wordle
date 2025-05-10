@@ -1,14 +1,15 @@
 ﻿using WordleSolver.Interfaces;
+using WordleSolver.Models;
 
 namespace WordleSolver.Services
 {
-    internal class StaticFirstGuessProvider : IFirstGuessProvider
-    {
-        public string Value { get; }
+	internal class StaticFirstGuessProvider : IFirstGuessProvider
+	{
+		public Word Value { get; }
 
-        public StaticFirstGuessProvider(string firstGuess)
-        {
-            Value = firstGuess;
-        }
-    }
+		public StaticFirstGuessProvider(Word firstGuess)
+		{
+			Value = firstGuess;
+		}
+	}
 }

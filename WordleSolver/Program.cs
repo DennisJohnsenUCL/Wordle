@@ -2,6 +2,7 @@
 using WordleSolver.Controllers;
 using WordleSolver.Enums;
 using WordleSolver.Interfaces;
+using WordleSolver.Models;
 using WordleSolver.Services;
 
 namespace WordleSolver
@@ -12,11 +13,11 @@ namespace WordleSolver
 		{
 			var staticFirstGuessProvider = new StaticFirstGuessProvider("SALET");
 
-			string[] words = WordleCoreUtils.LoadEmbeddedTxt("WordleCore.Data.allowed_words.txt");
+			Word[] words = [.. WordleCoreUtils.LoadEmbeddedTxt("WordleCore.Data.allowed_words.txt").Select(x => (Word)x)];
 
 			var sortedWordOccurrences = WordleCoreUtils.LoadEmbeddedTxt("WordleCore.Data.allowed_words_sorted_frequencies.txt")
 				.Select(line => line.Split('\t'))
-				.ToDictionary(parts => parts[0], parts => long.Parse(parts[1]));
+				.ToDictionary(parts => (Word)parts[0], parts => long.Parse(parts[1]));
 
 			string[] wordles = WordleCoreUtils.LoadEmbeddedTxt("WordleCore.Data.previous_wordles.txt");
 			var guesses = int.MaxValue;

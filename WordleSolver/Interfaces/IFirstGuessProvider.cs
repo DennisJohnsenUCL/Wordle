@@ -1,7 +1,9 @@
-﻿namespace WordleSolver.Interfaces
+﻿using WordleSolver.Models;
+
+namespace WordleSolver.Interfaces
 {
-    internal interface IFirstGuessProvider
-    {
-        string Value { get; }
-    }
+	internal interface IFirstGuessProvider
+	{
+		Word Value { get; }
+	}
 }

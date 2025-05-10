@@ -1,21 +1,22 @@
 ﻿using System.Diagnostics;
 using WordleSolver.Interfaces;
+using WordleSolver.Models;
 
 namespace WordleSolver.Services
 {
 	internal class PatternsProvider : IPatternsProvider
 	{
-		private readonly IReadOnlyList<string> _words;
+		private readonly Word[] _words;
 		private readonly ushort[,] _PatternsIndexMatrix;
-		private readonly string[] _patterns;
-		private readonly Dictionary<string, int> _wordsReverseLookup;
-		private readonly Dictionary<string, ushort> _patternsReverseLookup;
+		private readonly Word[] _patterns;
+		private readonly Dictionary<Word, int> _wordsReverseLookup;
+		private readonly Dictionary<Word, ushort> _patternsReverseLookup;
 
-		public PatternsProvider(IReadOnlyList<string> words)
+		public PatternsProvider(Word[] words)
 		{
 			_words = words;
 
-			_PatternsIndexMatrix = new ushort[_words.Count, _words.Count];
+			_PatternsIndexMatrix = new ushort[_words.Length, _words.Length];
 
 			_patterns = GeneratePatterns();
 			_wordsReverseLookup = GenerateWordsReverseLookup();
@@ -28,7 +29,7 @@ namespace WordleSolver.Services
 			Console.WriteLine("Time to pre-compute patterns: " + timer.ElapsedMilliseconds + "\n");
 		}
 
-		public string GetPattern(string guess, string wordle)
+		public Word GetPattern(Word guess, Word wordle)
 		{
 			var guessIndex = _wordsReverseLookup[guess];
 			var wordleIndex = _wordsReverseLookup[wordle];
@@ -37,7 +38,7 @@ namespace WordleSolver.Services
 			return pattern;
 		}
 
-		private static string[] GeneratePatterns()
+		private static Word[] GeneratePatterns()
 		{
 			char[] letters = ['A', 'P', 'C', 'O'];
 
@@ -46,34 +47,38 @@ namespace WordleSolver.Services
 				.SelectMany(c2 => letters
 				.SelectMany(c3 => letters
 				.SelectMany(c4 => letters
-				.Select(c5 => $"{c1}{c2}{c3}{c4}{c5}"))))).ToArray();
+				.Select(c5 => (Word)$"{c1}{c2}{c3}{c4}{c5}"))))).ToArray();
 
 			return patterns;
 		}
 
-		private Dictionary<string, int> GenerateWordsReverseLookup()
+		private Dictionary<Word, int> GenerateWordsReverseLookup()
 		{
-			var reverseLookup = _words
-				.Select((word, i) => (word, i))
-				.ToDictionary(x => x.word, x => x.i);
+			var reverseLookup = new Dictionary<Word, int>();
 
+			for (int i = 0; i < _words.Length; i++)
+			{
+				reverseLookup.Add(_words[i], i);
+			}
 			return reverseLookup;
 		}
 
-		private Dictionary<string, ushort> GeneratePatternsReverseLookup()
+		private Dictionary<Word, ushort> GeneratePatternsReverseLookup()
 		{
-			var reverseLookup = _patterns
-				.Select((pattern, i) => (pattern, i))
-				.ToDictionary(x => x.pattern, x => (ushort)x.i);
+			var reverseLookup = new Dictionary<Word, ushort>();
 
+			for (int i = 0; i < _patterns.Length; i++)
+			{
+				reverseLookup.Add(_patterns[i], (ushort)i);
+			}
 			return reverseLookup;
 		}
 
 		private void Compute()
 		{
-			Parallel.For(0, _words.Count, i =>
+			Parallel.For(0, _words.Length, i =>
 			{
-				for (int j = 0; j < _words.Count; j++)
+				for (int j = 0; j < _words.Length; j++)
 				{
 					var pattern = CalculatePattern(_words[i], _words[j]);
 
@@ -84,7 +89,7 @@ namespace WordleSolver.Services
 			});
 		}
 
-		private static string CalculatePattern(string guess, string wordle)
+		private static Word CalculatePattern(Word guess, Word wordle)
 		{
 			Span<char> buffer = stackalloc char[5];
 
@@ -102,7 +107,7 @@ namespace WordleSolver.Services
 					else buffer[i] = 'O';
 				}
 			}
-			return buffer.ToString();
+			return buffer;
 		}
 	}
 }
