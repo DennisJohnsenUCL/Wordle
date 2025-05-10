@@ -25,7 +25,7 @@ namespace WordleSolver.Solvers
 
 		public override void AddResponse(WordleResponse response)
 		{
-			LastPattern = (Word)response.LetterResults.Select(result => CorrectnessMappings[result.Correctness]);
+			LastPattern = new Word(response.LetterResults.Select(result => CorrectnessMappings[result.Correctness]));
 			base.AddResponse(response);
 		}
 
@@ -73,7 +73,7 @@ namespace WordleSolver.Solvers
 				guess = normalizedFrequencies.First().Key;
 				return true;
 			}
-			guess = "";
+			guess = Word.Empty;
 			return false;
 		}
 

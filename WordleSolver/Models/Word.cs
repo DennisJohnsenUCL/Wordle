@@ -6,6 +6,7 @@ namespace WordleSolver.Models
 	internal readonly struct Word : IEquatable<Word>, IIndexable<char>, ISliceable<char>, IEnumerable<char>
 	{
 		private readonly char c0, c1, c2, c3, c4;
+		private readonly int _cachedHash;
 
 		public Word(char[] chars)
 		{
@@ -16,6 +17,7 @@ namespace WordleSolver.Models
 			c2 = chars[2];
 			c3 = chars[3];
 			c4 = chars[4];
+			_cachedHash = HashCode.Combine(c0, c1, c2, c3, c4);
 		}
 
 		public Word(ReadOnlySpan<char> span)
@@ -27,6 +29,7 @@ namespace WordleSolver.Models
 			c2 = span[2];
 			c3 = span[3];
 			c4 = span[4];
+			_cachedHash = HashCode.Combine(c0, c1, c2, c3, c4);
 		}
 
 		public Word(string word)
@@ -38,7 +41,33 @@ namespace WordleSolver.Models
 			c2 = word[2];
 			c3 = word[3];
 			c4 = word[4];
+			_cachedHash = HashCode.Combine(c0, c1, c2, c3, c4);
 		}
+
+		public Word(IEnumerable<char> chars)
+		{
+			ArgumentNullException.ThrowIfNull(chars);
+
+			using var enumerator = chars.GetEnumerator();
+
+			if (!enumerator.MoveNext()) throw new ArgumentException("Not enough characters", nameof(chars));
+			c0 = enumerator.Current;
+
+			if (!enumerator.MoveNext()) throw new ArgumentException("Not enough characters", nameof(chars));
+			c1 = enumerator.Current;
+
+			if (!enumerator.MoveNext()) throw new ArgumentException("Not enough characters", nameof(chars));
+			c2 = enumerator.Current;
+
+			if (!enumerator.MoveNext()) throw new ArgumentException("Not enough characters", nameof(chars));
+			c3 = enumerator.Current;
+
+			if (!enumerator.MoveNext()) throw new ArgumentException("Not enough characters", nameof(chars));
+			c4 = enumerator.Current;
+
+			if (enumerator.MoveNext()) throw new ArgumentException("Too many characters", nameof(chars));
+		}
+
 
 		public static implicit operator Word(char[] chars) => new(chars);
 
@@ -72,7 +101,7 @@ namespace WordleSolver.Models
 
 		public int Length => 5;
 
-		public static Word Empty => new();
+		public static Word Empty => new("     ");
 
 		public bool Equals(Word other)
 		{
@@ -84,10 +113,7 @@ namespace WordleSolver.Models
 			return obj is Word word && Equals(word);
 		}
 
-		public override int GetHashCode()
-		{
-			return HashCode.Combine(c0, c1, c2, c3, c4);
-		}
+		public override int GetHashCode() => _cachedHash;
 
 		public override string ToString() => $"{c0}{c1}{c2}{c3}{c4}";
 

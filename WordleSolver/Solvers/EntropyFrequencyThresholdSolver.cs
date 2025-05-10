@@ -21,7 +21,7 @@ namespace WordleSolver.Solvers
 				guess = maxPair.Key;
 				return true;
 			}
-			guess = "";
+			guess = Word.Empty;
 			return false;
 		}
 	}
