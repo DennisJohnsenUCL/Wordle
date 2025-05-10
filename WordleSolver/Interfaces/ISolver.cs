@@ -1,10 +1,12 @@
-﻿namespace WordleSolver.Interfaces
+﻿using WordleSolver.Models;
+
+namespace WordleSolver.Interfaces
 {
-    internal interface ISolver
-    {
-        string Identifier { get; }
-        string GetFirstGuess();
-        string GetNextGuess();
-        void Reset();
-    }
+	internal interface ISolver
+	{
+		string Identifier { get; }
+		Word GetFirstGuess();
+		Word GetNextGuess();
+		void Reset();
+	}
 }

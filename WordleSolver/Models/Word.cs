@@ -73,9 +73,25 @@ namespace WordleSolver.Models
 
 		public override string ToString() => $"{c0}{c1}{c2}{c3}{c4}";
 
+		public char[] ToCharArray() => [c0, c1, c2, c3, c4];
+
 		public static bool operator ==(Word left, Word right) => left.Equals(right);
 
 		public static bool operator !=(Word left, Word right) => !left.Equals(right);
+
+		public char[] Remove(int startIndex, int count)
+		{
+			if (startIndex + count > Length) throw new ArgumentOutOfRangeException();
+
+			int offset = startIndex + count;
+			int j = 0;
+			char[] buffer = new char[Length - count];
+			for (int i = 0; i < Length; i++)
+			{
+				if (i < startIndex || i >= offset) buffer[j++] = this[i];
+			}
+			return buffer;
+		}
 
 		public Enumerator GetEnumerator() => new(this);
 

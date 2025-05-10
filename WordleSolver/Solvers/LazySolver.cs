@@ -1,25 +1,26 @@
 ﻿using WordleSolver.Interfaces;
+using WordleSolver.Models;
 
 namespace WordleSolver.Solvers
 {
 	internal class LazySolver : ISolver
 	{
-		protected virtual string[] Words { get; }
+		protected virtual Word[] Words { get; }
 		protected int Index { get; set; } = 0;
 		public virtual string Identifier { get; }
 
-		public LazySolver(string[] words, string identifier)
+		public LazySolver(Word[] words, string identifier)
 		{
 			Words = words;
 			Identifier = identifier;
 		}
 
-		public virtual string GetFirstGuess()
+		public virtual Word GetFirstGuess()
 		{
 			return GetNextGuess();
 		}
 
-		public virtual string GetNextGuess()
+		public virtual Word GetNextGuess()
 		{
 			var guess = Words[Index];
 			Index++;
