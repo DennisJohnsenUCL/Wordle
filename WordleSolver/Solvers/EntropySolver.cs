@@ -2,19 +2,20 @@
 using WordleCore.Enums;
 using WordleCore.Models;
 using WordleSolver.Interfaces;
+using WordleSolver.Models;
 
 namespace WordleSolver.Solvers
 {
 	internal class EntropySolver : FilteredSolver
 	{
-		protected string? LastPattern { get; protected private set; }
-		protected HashSet<string> GuessedWords { get; protected private set; } = [];
-		protected Dictionary<string, string> CachedBestSecond { get; protected private set; } = [];
+		protected Word? LastPattern { get; protected private set; }
+		protected HashSet<Word> GuessedWords { get; protected private set; } = [];
+		protected Dictionary<Word, Word> CachedBestSecond { get; protected private set; } = [];
 		protected IPatternsProvider PatternsProvider { get; }
 		private readonly int _limit;
-		private readonly Dictionary<string, double> _wordFrequencies;
+		private readonly Dictionary<Word, double> _wordFrequencies;
 
-		public EntropySolver(IFirstGuessProvider firstGuessProvider, IConstraintManager constraintManager, IPatternsProvider patternsProvider, Dictionary<string, double> wordFrequencies, int limit, string identifier)
+		public EntropySolver(IFirstGuessProvider firstGuessProvider, IConstraintManager constraintManager, IPatternsProvider patternsProvider, Dictionary<Word, double> wordFrequencies, int limit, string identifier)
 			: base(firstGuessProvider, constraintManager, [.. wordFrequencies.Keys], identifier)
 		{
 			PatternsProvider = patternsProvider;
@@ -24,11 +25,11 @@ namespace WordleSolver.Solvers
 
 		public override void AddResponse(WordleResponse response)
 		{
-			LastPattern = string.Concat(response.LetterResults.Select(result => CorrectnessMappings[result.Correctness]));
+			LastPattern = (Word)response.LetterResults.Select(result => CorrectnessMappings[result.Correctness]);
 			base.AddResponse(response);
 		}
 
-		public override string GetNextGuess()
+		public override Word GetNextGuess()
 		{
 			var possibleWords = GetPossibleWords();
 
@@ -42,15 +43,15 @@ namespace WordleSolver.Solvers
 
 			var guess = entropies.Aggregate((acc, current) => acc.Value > current.Value ? acc : current).Key;
 
-			if (GuessedWords.Count == 1) CachedBestSecond.Add(LastPattern!, guess);
+			if (GuessedWords.Count == 1) CachedBestSecond.Add((Word)LastPattern!, guess);
 
 			GuessedWords.Add(guess);
 			return guess;
 		}
 
-		protected virtual Dictionary<string, double> GetPossibleWords()
+		protected virtual Dictionary<Word, double> GetPossibleWords()
 		{
-			var possibleWords = new Dictionary<string, double>();
+			var possibleWords = new Dictionary<Word, double>();
 
 			foreach (var pair in _wordFrequencies)
 			{
@@ -65,7 +66,7 @@ namespace WordleSolver.Solvers
 			return possibleWords;
 		}
 
-		protected virtual bool TryGetThresholdGuess(Dictionary<string, double> normalizedFrequencies, out string guess)
+		protected virtual bool TryGetThresholdGuess(Dictionary<Word, double> normalizedFrequencies, out Word guess)
 		{
 			if (normalizedFrequencies.Count < _limit)
 			{
@@ -76,21 +77,21 @@ namespace WordleSolver.Solvers
 			return false;
 		}
 
-		protected virtual bool TryGetCachedGuess(out string cachedGuess)
+		protected virtual bool TryGetCachedGuess(out Word cachedGuess)
 		{
-			if (GuessedWords.Count == 1 && CachedBestSecond.TryGetValue(LastPattern!, out var value))
+			if (GuessedWords.Count == 1 && CachedBestSecond.TryGetValue((Word)LastPattern!, out var value))
 			{
 				GuessedWords.Add(value);
 				cachedGuess = value;
 				return true;
 			}
-			cachedGuess = string.Empty;
+			cachedGuess = Word.Empty;
 			return false;
 		}
 
-		protected virtual ConcurrentDictionary<string, double> GetEntropies(Dictionary<string, double> possibleWords)
+		protected virtual ConcurrentDictionary<Word, double> GetEntropies(Dictionary<Word, double> possibleWords)
 		{
-			ConcurrentDictionary<string, double> entropies = [];
+			ConcurrentDictionary<Word, double> entropies = [];
 
 			Parallel.ForEach(Words, word =>
 			{
@@ -106,9 +107,9 @@ namespace WordleSolver.Solvers
 			return entropies;
 		}
 
-		protected virtual Dictionary<string, double> GetPatternGroups(string word, Dictionary<string, double> normalizedFrequencies)
+		protected virtual Dictionary<Word, double> GetPatternGroups(Word word, Dictionary<Word, double> normalizedFrequencies)
 		{
-			Dictionary<string, double> patternGroups = [];
+			Dictionary<Word, double> patternGroups = [];
 
 			foreach (var possibleWord in normalizedFrequencies.Keys)
 			{
@@ -120,7 +121,7 @@ namespace WordleSolver.Solvers
 			return patternGroups;
 		}
 
-		public override string GetFirstGuess()
+		public override Word GetFirstGuess()
 		{
 			GuessedWords.Add(FirstGuess);
 			return base.GetFirstGuess();
@@ -133,7 +134,7 @@ namespace WordleSolver.Solvers
 			base.Reset();
 		}
 
-		protected virtual Dictionary<string, double> GetNormalizedFrequencies(Dictionary<string, double> possibleWords)
+		protected virtual Dictionary<Word, double> GetNormalizedFrequencies(Dictionary<Word, double> possibleWords)
 		{
 			var totalFreq = possibleWords.Values.Sum();
 			var normalizedFrequencies = possibleWords.ToDictionary(x => x.Key, x => x.Value / totalFreq);

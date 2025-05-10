@@ -7,6 +7,17 @@ namespace WordleSolver.Models
 	{
 		private readonly char c0, c1, c2, c3, c4;
 
+		public Word(char[] chars)
+		{
+			if (chars.Length != 5) throw new ArgumentException("Word must be 5 characters long.", nameof(chars));
+
+			c0 = chars[0];
+			c1 = chars[1];
+			c2 = chars[2];
+			c3 = chars[3];
+			c4 = chars[4];
+		}
+
 		public Word(ReadOnlySpan<char> span)
 		{
 			if (span.Length != 5) throw new ArgumentException("Word must be 5 characters long.", nameof(span));
@@ -18,17 +29,22 @@ namespace WordleSolver.Models
 			c4 = span[4];
 		}
 
-		public Word(string word) : this(word.AsSpan()) { }
-
-		public static implicit operator Word(Span<char> span)
+		public Word(string word)
 		{
-			return new Word(span);
+			if (word.Length != 5) throw new ArgumentException("Word must be 5 characters long.", nameof(word));
+
+			c0 = word[0];
+			c1 = word[1];
+			c2 = word[2];
+			c3 = word[3];
+			c4 = word[4];
 		}
 
-		public static implicit operator Word(string word)
-		{
-			return new Word(word.AsSpan());
-		}
+		public static implicit operator Word(char[] chars) => new(chars);
+
+		public static implicit operator Word(Span<char> span) => new(span);
+
+		public static implicit operator Word(string word) => new(word);
 
 		public char this[int index] => index switch
 		{
@@ -55,6 +71,8 @@ namespace WordleSolver.Models
 		}
 
 		public int Length => 5;
+
+		public static Word Empty => new();
 
 		public bool Equals(Word other)
 		{
