@@ -87,19 +87,41 @@ namespace WordleSolver.Services
 		private static string CalculatePattern(string guess, string wordle)
 		{
 			Span<char> buffer = stackalloc char[5];
+			var frequency = new int[26];
+
+			for (int i = 0; i < 5; i++) frequency[wordle[i] - 'A']++;
 
 			for (int i = 0; i < 5; i++)
 			{
-				if (guess[i] == wordle[i]) buffer[i] = 'C';
-				else if (!wordle.Contains(guess[i])) buffer[i] = 'A';
+				int letterIndex = guess[i] - 'A';
+				if (frequency[letterIndex] == 0)
+				{
+					buffer[i] = 'A';
+				}
+			}
+
+			for (int i = 0; i < 5; i++)
+			{
+				if (guess[i] == wordle[i])
+				{
+					buffer[i] = 'C';
+					frequency[guess[i] - 'A']--;
+				}
+			}
+
+			for (int i = 0; i < 5; i++)
+			{
+				if (buffer[i] == 'C' || buffer[i] == 'A') continue;
+
+				int letterIndex = guess[i] - 'A';
+				if (frequency[letterIndex] > 0)
+				{
+					buffer[i] = 'P';
+					frequency[letterIndex]--;
+				}
 				else
 				{
-					int total = wordle.Count(x => x == guess[i]);
-					int correctAfter = wordle.Where((x, j) => j > i && x == guess[i] && x == guess[j]).Count();
-					int countUpTo = guess[..(i + 1)].Count(x => x == guess[i]);
-
-					if (total - correctAfter >= countUpTo) buffer[i] = 'P';
-					else buffer[i] = 'O';
+					buffer[i] = 'O';
 				}
 			}
 			return buffer.ToString();
