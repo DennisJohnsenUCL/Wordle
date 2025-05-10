@@ -1,4 +1,5 @@
 ﻿using WordleSolver.Interfaces;
+using WordleSolver.Models;
 
 namespace WordleSolver.Solvers
 {
@@ -6,13 +7,13 @@ namespace WordleSolver.Solvers
 	{
 		private readonly double _threshold;
 
-		public EntropyFrequencyThresholdSolver(IFirstGuessProvider firstGuessProvider, IConstraintManager constraintManager, IPatternsProvider patternsProvider, Dictionary<string, double> wordFrequencies, double threshold, string identifier)
+		public EntropyFrequencyThresholdSolver(IFirstGuessProvider firstGuessProvider, IConstraintManager constraintManager, IPatternsProvider patternsProvider, Dictionary<Word, double> wordFrequencies, double threshold, string identifier)
 			: base(firstGuessProvider, constraintManager, patternsProvider, wordFrequencies, 0, identifier)
 		{
 			_threshold = threshold;
 		}
 
-		protected override bool TryGetThresholdGuess(Dictionary<string, double> normalizedFrequencies, out string guess)
+		protected override bool TryGetThresholdGuess(Dictionary<Word, double> normalizedFrequencies, out Word guess)
 		{
 			var maxPair = normalizedFrequencies.Aggregate((a, b) => a.Value > b.Value ? a : b);
 			if (maxPair.Value > _threshold)

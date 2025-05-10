@@ -1,16 +1,17 @@
 ﻿using System.Collections.Concurrent;
 using WordleSolver.Interfaces;
+using WordleSolver.Models;
 
 namespace WordleSolver.Solvers
 {
 	internal class PositionalEntropySolver : EntropySolver
 	{
-		public PositionalEntropySolver(IFirstGuessProvider firstGuessProvider, IConstraintManager constraintManager, IPatternsProvider patternsProvider, Dictionary<string, double> wordFrequencies, int limit, string identifier)
+		public PositionalEntropySolver(IFirstGuessProvider firstGuessProvider, IConstraintManager constraintManager, IPatternsProvider patternsProvider, Dictionary<Word, double> wordFrequencies, int limit, string identifier)
 			: base(firstGuessProvider, constraintManager, patternsProvider, wordFrequencies, limit, identifier) { }
 
-		protected override ConcurrentDictionary<string, double> GetEntropies(Dictionary<string, double> possibleWords)
+		protected override ConcurrentDictionary<Word, double> GetEntropies(Dictionary<Word, double> possibleWords)
 		{
-			ConcurrentDictionary<string, double> entropies = [];
+			ConcurrentDictionary<Word, double> entropies = [];
 
 			Parallel.ForEach(Words, word =>
 			{
@@ -29,7 +30,7 @@ namespace WordleSolver.Solvers
 			return entropies;
 		}
 
-		private double GetPositionalEntropy(string[] possibleWords)
+		private double GetPositionalEntropy(Word[] possibleWords)
 		{
 			var positionalEntropy = 0d;
 
@@ -41,7 +42,7 @@ namespace WordleSolver.Solvers
 			return positionalEntropy;
 		}
 
-		private double GetPositionEntropy(int i, string[] words)
+		private static double GetPositionEntropy(int i, Word[] words)
 		{
 			var letterCounts = new Dictionary<char, int>();
 			foreach (var word in words)
@@ -54,10 +55,10 @@ namespace WordleSolver.Solvers
 			return entropy;
 		}
 
-		protected virtual new (Dictionary<string, List<string>>, Dictionary<string, double>) GetPatternGroups(string guess, Dictionary<string, double> frequencies)
+		protected virtual new (Dictionary<Word, List<Word>>, Dictionary<Word, double>) GetPatternGroups(Word guess, Dictionary<Word, double> frequencies)
 		{
-			var patternGroupWords = new Dictionary<string, List<string>>();
-			var patternGroupProbabilities = new Dictionary<string, double>();
+			var patternGroupWords = new Dictionary<Word, List<Word>>();
+			var patternGroupProbabilities = new Dictionary<Word, double>();
 			foreach (var word in frequencies.Keys)
 			{
 				var frequency = frequencies[word];
@@ -69,7 +70,7 @@ namespace WordleSolver.Solvers
 			return (patternGroupWords, patternGroupProbabilities);
 		}
 
-		private double GetExpectedPositionalEntropy(Dictionary<string, List<string>> patternGroupWords, Dictionary<string, double> patternGroupProbabilities)
+		private double GetExpectedPositionalEntropy(Dictionary<Word, List<Word>> patternGroupWords, Dictionary<Word, double> patternGroupProbabilities)
 		{
 			var expectedPositionalEntropy = 0d;
 			foreach (var pair in patternGroupWords)
