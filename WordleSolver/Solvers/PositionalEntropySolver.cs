@@ -8,7 +8,19 @@ namespace WordleSolver.Solvers
 		public PositionalEntropySolver(IFirstGuessProvider firstGuessProvider, IConstraintManager constraintManager, IPatternsProvider patternsProvider, Dictionary<string, double> wordFrequencies, int limit, string identifier)
 			: base(firstGuessProvider, constraintManager, patternsProvider, wordFrequencies, limit, identifier) { }
 
-		protected override ConcurrentDictionary<string, double> GetEntropies(Dictionary<string, double> possibleWords)
+		protected override string GetStrategyGuess(Dictionary<string, double> possibleWords)
+		{
+			return GetPositionalEntropyGuess(possibleWords);
+		}
+
+		protected virtual string GetPositionalEntropyGuess(Dictionary<string, double> possibleWords)
+		{
+			var positionalEntropies = GetPositionalEntropies(possibleWords);
+			var guess = positionalEntropies.Aggregate((acc, current) => acc.Value > current.Value ? acc : current).Key;
+			return guess;
+		}
+
+		protected virtual ConcurrentDictionary<string, double> GetPositionalEntropies(Dictionary<string, double> possibleWords)
 		{
 			ConcurrentDictionary<string, double> entropies = [];
 
@@ -18,7 +30,7 @@ namespace WordleSolver.Solvers
 
 				var totalPositionalEntropy = GetPositionalEntropy([.. possibleWords.Keys]);
 
-				var (patternGroupWords, patternGroupProbabilities) = GetPatternGroups(word, possibleWords);
+				var (patternGroupWords, patternGroupProbabilities) = GetPatternBuckets(word, possibleWords);
 
 				var expectedPositionalEntropy = GetExpectedPositionalEntropy(patternGroupWords, patternGroupProbabilities);
 
@@ -29,7 +41,7 @@ namespace WordleSolver.Solvers
 			return entropies;
 		}
 
-		private double GetPositionalEntropy(string[] possibleWords)
+		private static double GetPositionalEntropy(string[] possibleWords)
 		{
 			var positionalEntropy = 0d;
 
@@ -54,7 +66,7 @@ namespace WordleSolver.Solvers
 			return entropy;
 		}
 
-		protected virtual new (Dictionary<string, List<string>>, Dictionary<string, double>) GetPatternGroups(string guess, Dictionary<string, double> frequencies)
+		protected virtual (Dictionary<string, List<string>>, Dictionary<string, double>) GetPatternBuckets(string guess, Dictionary<string, double> frequencies)
 		{
 			var patternGroupWords = new Dictionary<string, List<string>>();
 			var patternGroupProbabilities = new Dictionary<string, double>();
@@ -69,7 +81,7 @@ namespace WordleSolver.Solvers
 			return (patternGroupWords, patternGroupProbabilities);
 		}
 
-		private double GetExpectedPositionalEntropy(Dictionary<string, List<string>> patternGroupWords, Dictionary<string, double> patternGroupProbabilities)
+		private static double GetExpectedPositionalEntropy(Dictionary<string, List<string>> patternGroupWords, Dictionary<string, double> patternGroupProbabilities)
 		{
 			var expectedPositionalEntropy = 0d;
 			foreach (var pair in patternGroupWords)
@@ -78,8 +90,8 @@ namespace WordleSolver.Solvers
 				var words = pair.Value;
 				var probability = patternGroupProbabilities[pattern];
 
-				var totalPositionalEntropy = GetPositionalEntropy([.. words]);
-				expectedPositionalEntropy += probability * totalPositionalEntropy;
+				var patternPositionalEntropy = GetPositionalEntropy([.. words]);
+				expectedPositionalEntropy += probability * patternPositionalEntropy;
 			}
 			return expectedPositionalEntropy;
 		}

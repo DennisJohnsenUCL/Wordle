@@ -44,13 +44,23 @@ namespace WordleSolver.Solvers
 
 			if (TryGetCachedGuess(out var cachedGuess)) return cachedGuess;
 
-			var entropies = GetEntropies(normalizedFrequencies);
-
-			var guess = entropies.Aggregate((acc, current) => acc.Value > current.Value ? acc : current).Key;
+			var guess = GetStrategyGuess(normalizedFrequencies);
 
 			if (GuessedWords.Count == 1) CachedBestSecond.Add(LastPattern!, guess);
 
 			GuessedWords.Add(guess);
+			return guess;
+		}
+
+		protected virtual string GetStrategyGuess(Dictionary<string, double> possibleWords)
+		{
+			return GetEntropyGuess(possibleWords);
+		}
+
+		protected virtual string GetEntropyGuess(Dictionary<string, double> possibleWords)
+		{
+			var entropies = GetEntropies(possibleWords);
+			var guess = entropies.Aggregate((acc, current) => acc.Value > current.Value ? acc : current).Key;
 			return guess;
 		}
 
@@ -102,7 +112,7 @@ namespace WordleSolver.Solvers
 			{
 				if (GuessedWords.Contains(word)) return;
 
-				var patternGroups = GetPatternGroups(word, possibleWords);
+				var patternGroups = GetPatternFrequencies(word, possibleWords);
 
 				var entropy = patternGroups.Sum(pattern => pattern.Value * Math.Log2(1 / pattern.Value));
 
@@ -112,7 +122,7 @@ namespace WordleSolver.Solvers
 			return entropies;
 		}
 
-		protected virtual Dictionary<string, double> GetPatternGroups(string word, Dictionary<string, double> normalizedFrequencies)
+		protected virtual Dictionary<string, double> GetPatternFrequencies(string word, Dictionary<string, double> normalizedFrequencies)
 		{
 			Dictionary<string, double> patternGroups = [];
 

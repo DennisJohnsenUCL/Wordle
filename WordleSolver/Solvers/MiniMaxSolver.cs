@@ -8,35 +8,19 @@ namespace WordleSolver.Solvers
 		public MiniMaxSolver(IFirstGuessProvider firstGuessProvider, IConstraintManager constraintManager, IPatternsProvider patternsProvider, Dictionary<string, double> wordFrequencies, int limit, string identifier)
 			: base(firstGuessProvider, constraintManager, patternsProvider, wordFrequencies, limit, identifier) { }
 
-		public override string GetNextGuess()
+		protected override string GetStrategyGuess(Dictionary<string, double> possibleWords)
 		{
-			if (GuessedWords.Count == 0)
-			{
-				GuessedWords.Add(FirstGuess);
-				return FirstGuess;
-			}
+			return GetMiniMaxGuess([.. possibleWords.Keys]);
+		}
 
-			var possibleWords = GetPossibleWords();
-			if (possibleWords.Count < Limit) return possibleWords[0];
-			if (TryGetCachedGuess(out var cachedGuess)) return cachedGuess;
+		protected virtual string GetMiniMaxGuess(string[] possibleWords)
+		{
 			var maxPatterns = GetMaxPatterns(possibleWords);
 			var minWord = maxPatterns.Aggregate((l, r) => l.Value < r.Value ? l : r).Key;
-			if (GuessedWords.Count == 1) CachedBestSecond.Add(LastPattern!, minWord);
-			GuessedWords.Add(minWord);
 			return minWord;
 		}
 
-		protected new List<string> GetPossibleWords()
-		{
-			List<string> possibleWords = [];
-			foreach (var word in Words)
-			{
-				if (FitsConstraints(word)) possibleWords.Add(word);
-			}
-			return possibleWords;
-		}
-
-		protected virtual ConcurrentDictionary<string, int> GetMaxPatterns(List<string> possibleWords)
+		protected virtual ConcurrentDictionary<string, int> GetMaxPatterns(string[] possibleWords)
 		{
 			ConcurrentDictionary<string, int> maxPatterns = [];
 			Parallel.ForEach(Words, word =>
