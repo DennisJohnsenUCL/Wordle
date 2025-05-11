@@ -30,6 +30,12 @@ namespace WordleSolver.Solvers
 
 		public override string GetNextGuess()
 		{
+			if (GuessedWords.Count == 0)
+			{
+				GuessedWords.Add(FirstGuess);
+				return FirstGuess;
+			}
+
 			var possibleWords = GetPossibleWords();
 
 			var normalizedFrequencies = GetNormalizedFrequencies(possibleWords);
@@ -118,12 +124,6 @@ namespace WordleSolver.Solvers
 				if (!patternGroups.TryAdd(pattern, frequency)) patternGroups[pattern] += frequency;
 			}
 			return patternGroups;
-		}
-
-		public override string GetFirstGuess()
-		{
-			GuessedWords.Add(FirstGuess);
-			return base.GetFirstGuess();
 		}
 
 		public override void Reset()

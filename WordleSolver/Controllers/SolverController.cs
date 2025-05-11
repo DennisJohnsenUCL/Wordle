@@ -48,15 +48,11 @@ namespace WordleSolver.Controllers
 		{
 			game.Start();
 
-			var guess = _solver.GetFirstGuess();
-			var response = game.GuessWordle(guess);
-
 			while (!IsGameOver(game))
 			{
+				var guess = _solver.GetNextGuess();
+				var response = game.GuessWordle(guess);
 				if (_solver is IReactiveSolver solver) solver.AddResponse(response);
-
-				guess = _solver.GetNextGuess();
-				response = game.GuessWordle(guess);
 			}
 
 			int guesses = game.Guesses - game.GuessesLeft;

@@ -41,7 +41,7 @@ namespace WordleSolver.Solvers
 			return positionalEntropy;
 		}
 
-		private double GetPositionEntropy(int i, string[] words)
+		private static double GetPositionEntropy(int i, string[] words)
 		{
 			var letterCounts = new Dictionary<char, int>();
 			foreach (var word in words)

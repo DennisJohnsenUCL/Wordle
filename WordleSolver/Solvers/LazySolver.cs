@@ -14,11 +14,6 @@ namespace WordleSolver.Solvers
 			Identifier = identifier;
 		}
 
-		public virtual string GetFirstGuess()
-		{
-			return GetNextGuess();
-		}
-
 		public virtual string GetNextGuess()
 		{
 			var guess = Words[Index];

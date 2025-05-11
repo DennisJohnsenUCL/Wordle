@@ -10,6 +10,12 @@ namespace WordleSolver.Solvers
 
 		public override string GetNextGuess()
 		{
+			if (GuessedWords.Count == 0)
+			{
+				GuessedWords.Add(FirstGuess);
+				return FirstGuess;
+			}
+
 			var possibleWords = GetPossibleWords();
 			if (possibleWords.Count < Limit) return possibleWords[0];
 			if (TryGetCachedGuess(out var cachedGuess)) return cachedGuess;
