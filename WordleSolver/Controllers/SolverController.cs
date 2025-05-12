@@ -38,6 +38,7 @@ namespace WordleSolver.Controllers
 				averageGuesses,
 				failedGames,
 				_guessesList.Max(),
+				_guessesList.Sum(),
 				_games.Count(),
 				timer.ElapsedMilliseconds);
 
