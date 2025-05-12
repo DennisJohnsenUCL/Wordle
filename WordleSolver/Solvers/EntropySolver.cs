@@ -32,17 +32,13 @@ namespace WordleSolver.Solvers
 
 		public override string GetNextGuess()
 		{
-			if (GuessedWords.Count == 0)
-			{
-				GuessedWords.Add(FirstGuess);
-				return FirstGuess;
-			}
+			if (TryGetFirstGuess(out var firstGuess)) return firstGuess;
 
 			SetPossibleWords();
 
 			var normalizedFrequencies = GetNormalizedFrequencies();
 
-			if (TryGetThresholdGuess(normalizedFrequencies, out var value)) return value;
+			if (TryGetThresholdGuess(normalizedFrequencies, out var thresholdGuess)) return thresholdGuess;
 
 			if (TryGetCachedGuess(out var cachedGuess)) return cachedGuess;
 
@@ -52,6 +48,17 @@ namespace WordleSolver.Solvers
 
 			GuessedWords.Add(guess);
 			return guess;
+		}
+
+		protected virtual bool TryGetFirstGuess(out string firstGuess)
+		{
+			if (GuessedWords.Count == 0)
+			{
+				firstGuess = FirstGuess;
+				return true;
+			}
+			firstGuess = string.Empty;
+			return false;
 		}
 
 		protected virtual string GetStrategyGuess(Dictionary<string, double> possibleWords)
