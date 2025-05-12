@@ -25,7 +25,6 @@ namespace WordleSolver.Solvers
 			ConcurrentDictionary<string, int> maxPatterns = [];
 			Parallel.ForEach(Words, word =>
 			{
-				if (GuessedWords.Contains(word)) return;
 				Dictionary<string, int> patternGroups = [];
 
 				foreach (var possibleWord in possibleWords)

@@ -26,8 +26,6 @@ namespace WordleSolver.Solvers
 
 			Parallel.ForEach(Words, word =>
 			{
-				if (GuessedWords.Contains(word)) return;
-
 				var totalPositionalEntropy = GetPositionalEntropy([.. possibleWords.Keys]);
 
 				var (patternGroupWords, patternGroupProbabilities) = GetPatternBuckets(word, possibleWords);
