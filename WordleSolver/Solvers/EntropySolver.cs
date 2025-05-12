@@ -54,6 +54,7 @@ namespace WordleSolver.Solvers
 		{
 			if (GuessedWords.Count == 0)
 			{
+				GuessedWords.Add(FirstGuess);
 				firstGuess = FirstGuess;
 				return true;
 			}
