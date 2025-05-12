@@ -13,6 +13,7 @@ namespace WordleSolver.Solvers
 		protected IPatternsProvider PatternsProvider { get; }
 		protected int Limit { get; }
 		private readonly Dictionary<string, double> _wordFrequencies;
+		private Dictionary<string, double> _possibleWords;
 
 		public EntropySolver(IFirstGuessProvider firstGuessProvider, IConstraintManager constraintManager, IPatternsProvider patternsProvider, Dictionary<string, double> wordFrequencies, int limit, string identifier)
 			: base(firstGuessProvider, constraintManager, [.. wordFrequencies.Keys], identifier)
@@ -20,6 +21,7 @@ namespace WordleSolver.Solvers
 			PatternsProvider = patternsProvider;
 			_wordFrequencies = wordFrequencies;
 			Limit = limit;
+			_possibleWords = _wordFrequencies;
 		}
 
 		public override void AddResponse(WordleResponse response)
@@ -68,7 +70,7 @@ namespace WordleSolver.Solvers
 		{
 			var possibleWords = new Dictionary<string, double>();
 
-			foreach (var pair in _wordFrequencies)
+			foreach (var pair in _possibleWords)
 			{
 				var word = pair.Key;
 				if (GuessedWords.Contains(word)) continue;
@@ -140,6 +142,7 @@ namespace WordleSolver.Solvers
 		{
 			LastPattern = null;
 			GuessedWords = [];
+			_possibleWords = _wordFrequencies;
 			base.Reset();
 		}
 
