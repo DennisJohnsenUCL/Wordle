@@ -6,8 +6,8 @@ namespace WordleSolver.Solvers
 	{
 		private readonly double _threshold;
 
-		public EntropyFrequencyThresholdSolver(IFirstGuessProvider firstGuessProvider, IConstraintManager constraintManager, IPatternsProvider patternsProvider, Dictionary<string, double> wordFrequencies, double threshold, string identifier)
-			: base(firstGuessProvider, constraintManager, patternsProvider, wordFrequencies, 0, identifier)
+		public EntropyFrequencyThresholdSolver(IFirstGuessProvider firstGuessProvider, IPatternsProvider patternsProvider, Dictionary<string, double> wordFrequencies, double threshold, string identifier)
+			: base(firstGuessProvider, patternsProvider, wordFrequencies, 0, identifier)
 		{
 			_threshold = threshold;
 		}

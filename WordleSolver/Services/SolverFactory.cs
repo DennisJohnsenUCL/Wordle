@@ -1,5 +1,4 @@
-﻿using WordleSolver.Core;
-using WordleSolver.Enums;
+﻿using WordleSolver.Enums;
 using WordleSolver.Interfaces;
 using WordleSolver.Solvers;
 
@@ -96,76 +95,67 @@ namespace WordleSolver.Services
 		private FilteredSolver GetFilteredRandomSolver()
 		{
 			var words = _words;
-			var constraintManager = new ConstraintManager();
-			var solver = new FilteredSolver(_firstGuessProvider, constraintManager, words, "FilteredRandomSolver");
+			var solver = new FilteredSolver(_firstGuessProvider, _patternsProvider, words, "FilteredRandomSolver");
 			return solver;
 		}
 
 		private FilteredSolver GetFilteredSortedSolver()
 		{
 			var words = _sortedWordOccurrences.Keys.ToArray();
-			var constraintManager = new ConstraintManager();
-			var solver = new FilteredSolver(_firstGuessProvider, constraintManager, words, "FilteredSortedSolver");
+			var solver = new FilteredSolver(_firstGuessProvider, _patternsProvider, words, "FilteredSortedSolver");
 			return solver;
 		}
 
 		private EntropySolver GetEntropySolver()
 		{
 			var flatFrequency = GetFlatFrequencies();
-			var constraintManager = new ConstraintManager();
 			int limit = 20;
-			var solver = new EntropySolver(_firstGuessProvider, constraintManager, _patternsProvider, flatFrequency, limit, "EntropySolver");
+			var solver = new EntropySolver(_firstGuessProvider, _patternsProvider, flatFrequency, limit, "EntropySolver");
 			return solver;
 		}
 
 		private EntropySolver GetEntropyFrequencySolver()
 		{
 			var normalizedFrequency = GetNormalizedFrequencies();
-			var constraintManager = new ConstraintManager();
 			int limit = 21;
-			var solver = new EntropySolver(_firstGuessProvider, constraintManager, _patternsProvider, normalizedFrequency, limit, "EntropyFrequencySolver");
+			var solver = new EntropySolver(_firstGuessProvider, _patternsProvider, normalizedFrequency, limit, "EntropyFrequencySolver");
 			return solver;
 		}
 
 		private EntropySolver GetEntropyFrequencySigmoidSolver()
 		{
 			var normalizedSigmoidFrequency = GetSigmoidFrequencies();
-			var constraintManager = new ConstraintManager();
 			int limit = 20;
-			var solver = new EntropySolver(_firstGuessProvider, constraintManager, _patternsProvider, normalizedSigmoidFrequency, limit, "EntropyFrequencySigmoidSolver");
+			var solver = new EntropySolver(_firstGuessProvider, _patternsProvider, normalizedSigmoidFrequency, limit, "EntropyFrequencySigmoidSolver");
 			return solver;
 		}
 
 		private EntropySolver GetEntropyFrequencyLogSolver()
 		{
 			var normalizedLogFrequency = GetLogFrequencies();
-			var constraintManager = new ConstraintManager();
 			int limit = 20;
-			var solver = new EntropySolver(_firstGuessProvider, constraintManager, _patternsProvider, normalizedLogFrequency, limit, "EntropyFrequencyLogSolver");
+			var solver = new EntropySolver(_firstGuessProvider, _patternsProvider, normalizedLogFrequency, limit, "EntropyFrequencyLogSolver");
 			return solver;
 		}
 
 		private PositionalEntropySolver GetPositionalEntropySolver()
 		{
 			var normalizedFrequency = GetNormalizedFrequencies();
-			var constraintManager = new ConstraintManager();
-			var solver = new PositionalEntropySolver(_firstGuessProvider, constraintManager, _patternsProvider, normalizedFrequency, 20, "PositionalEntropy");
+			var solver = new PositionalEntropySolver(_firstGuessProvider, _patternsProvider, normalizedFrequency, 20, "PositionalEntropy");
 			return solver;
 		}
 
 		private EntropyFrequencyThresholdSolver GetFrequencyThresholdSolver()
 		{
 			var normalizedFrequency = GetNormalizedFrequencies();
-			var constraintManager = new ConstraintManager();
-			var solver = new EntropyFrequencyThresholdSolver(_firstGuessProvider, constraintManager, _patternsProvider, normalizedFrequency, 0.50, "EntropyFrequencyThreshold");
+			var solver = new EntropyFrequencyThresholdSolver(_firstGuessProvider, _patternsProvider, normalizedFrequency, 0.50, "EntropyFrequencyThreshold");
 			return solver;
 		}
 
 		private MiniMaxSolver GetMinimaxSolver()
 		{
 			var flatFrequency = GetFlatFrequencies();
-			var constraintManager = new ConstraintManager();
-			var solver = new MiniMaxSolver(_firstGuessProvider, constraintManager, _patternsProvider, flatFrequency, 25, "MiniMax");
+			var solver = new MiniMaxSolver(_firstGuessProvider, _patternsProvider, flatFrequency, 25, "MiniMax");
 			return solver;
 		}
 		#endregion

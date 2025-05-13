@@ -1,6 +1,4 @@
 ﻿using System.Collections.Concurrent;
-using WordleCore.Enums;
-using WordleCore.Models;
 using WordleSolver.Interfaces;
 
 namespace WordleSolver.Solvers
@@ -8,25 +6,16 @@ namespace WordleSolver.Solvers
 	internal class EntropySolver : FilteredSolver
 	{
 		private readonly Dictionary<string, string> _cachedGuesses = [];
-		protected virtual string CacheKey { get; protected private set; } = "";
-		protected IPatternsProvider PatternsProvider { get; }
 		private readonly int _limit;
 		private readonly Dictionary<string, double> _wordFrequencies;
 		private Dictionary<string, double> _possibleWords;
 
-		public EntropySolver(IFirstGuessProvider firstGuessProvider, IConstraintManager constraintManager, IPatternsProvider patternsProvider, Dictionary<string, double> wordFrequencies, int limit, string identifier)
-			: base(firstGuessProvider, constraintManager, [.. wordFrequencies.Keys], identifier)
+		public EntropySolver(IFirstGuessProvider firstGuessProvider, IPatternsProvider patternsProvider, Dictionary<string, double> wordFrequencies, int limit, string identifier)
+			: base(firstGuessProvider, patternsProvider, [.. wordFrequencies.Keys], identifier)
 		{
-			PatternsProvider = patternsProvider;
 			_wordFrequencies = wordFrequencies;
 			_limit = limit;
 			_possibleWords = _wordFrequencies;
-		}
-
-		public override void AddResponse(WordleResponse response)
-		{
-			CacheKey += string.Concat(response.LetterResults.Select(result => CorrectnessMappings[result.Correctness]));
-			base.AddResponse(response);
 		}
 
 		public override string GetNextGuess()
@@ -72,7 +61,7 @@ namespace WordleSolver.Solvers
 			return guess;
 		}
 
-		protected virtual void SetPossibleWords()
+		protected void SetPossibleWords()
 		{
 			var possibleWords = new Dictionary<string, double>();
 			var guess = CacheKey[^10..^5];
@@ -85,8 +74,6 @@ namespace WordleSolver.Solvers
 				var word = pair.Key;
 				var wordIndex = PatternsProvider.GetWordIndex(word);
 
-				//>> Also deal with FilteredSolver, probably move _possibleWords tracking back to there
-				//>> And add guess adding to threshold solver
 				if (PatternsProvider.FitsPattern(guessIndex, wordIndex, patternIndex))
 				{
 					possibleWords.Add(word, pair.Value);
@@ -152,7 +139,6 @@ namespace WordleSolver.Solvers
 		public override void Reset()
 		{
 			_possibleWords = _wordFrequencies;
-			CacheKey = "";
 			base.Reset();
 		}
 
@@ -162,13 +148,5 @@ namespace WordleSolver.Solvers
 			var normalizedFrequencies = _possibleWords.ToDictionary(x => x.Key, x => x.Value / totalFreq);
 			return normalizedFrequencies;
 		}
-
-		private static readonly Dictionary<Correctness, char> CorrectnessMappings = new()
-		{
-			{ Correctness.Absent, 'A' },
-			{ Correctness.Present, 'P' },
-			{ Correctness.Correct, 'C' },
-			{ Correctness.OverCount, 'O' },
-		};
 	}
 }

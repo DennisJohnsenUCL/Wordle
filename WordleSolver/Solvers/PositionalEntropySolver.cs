@@ -5,8 +5,8 @@ namespace WordleSolver.Solvers
 {
 	internal class PositionalEntropySolver : EntropySolver
 	{
-		public PositionalEntropySolver(IFirstGuessProvider firstGuessProvider, IConstraintManager constraintManager, IPatternsProvider patternsProvider, Dictionary<string, double> wordFrequencies, int limit, string identifier)
-			: base(firstGuessProvider, constraintManager, patternsProvider, wordFrequencies, limit, identifier) { }
+		public PositionalEntropySolver(IFirstGuessProvider firstGuessProvider, IPatternsProvider patternsProvider, Dictionary<string, double> wordFrequencies, int limit, string identifier)
+			: base(firstGuessProvider, patternsProvider, wordFrequencies, limit, identifier) { }
 
 		protected override string GetStrategyGuess(Dictionary<string, double> possibleWords)
 		{
