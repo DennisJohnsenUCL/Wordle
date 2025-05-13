@@ -8,7 +8,7 @@ namespace WordleSolver.Solvers
 	{
 		protected IPatternsProvider PatternsProvider { get; }
 		protected string FirstGuess { get; protected private set; }
-		protected string CacheKey { get; protected private set; } = string.Empty;
+		protected string GameKey { get; protected private set; } = string.Empty;
 		private List<string> _possibleWords;
 
 		public FilteredSolver(IFirstGuessProvider firstGuessProvider, IPatternsProvider patternsProvider, string[] words, string identifier) : base(words, identifier)
@@ -20,30 +20,30 @@ namespace WordleSolver.Solvers
 
 		public virtual void AddResponse(WordleResponse response)
 		{
-			CacheKey += string.Concat(response.LetterResults.Select(result => CorrectnessMappings[result.Correctness]));
+			GameKey += string.Concat(response.LetterResults.Select(result => CorrectnessMappings[result.Correctness]));
 		}
 
 		public override string GetNextGuess()
 		{
-			if (CacheKey == "")
+			if (GameKey == "")
 			{
-				CacheKey += FirstGuess;
+				GameKey += FirstGuess;
 				return FirstGuess;
 			}
 
 			SetPossibleWords();
 
 			var guess = _possibleWords[0];
-			CacheKey += guess;
+			GameKey += guess;
 			return guess;
 		}
 
 		private void SetPossibleWords()
 		{
 			var possibleWords = new List<string>();
-			var guess = CacheKey[^10..^5];
+			var guess = GameKey[^10..^5];
 			var guessIndex = PatternsProvider.GetWordIndex(guess);
-			var pattern = CacheKey[^5..^0];
+			var pattern = GameKey[^5..^0];
 			var patternIndex = PatternsProvider.GetPatternIndex(pattern);
 
 			foreach (var word in _possibleWords)
@@ -60,7 +60,7 @@ namespace WordleSolver.Solvers
 
 		public override void Reset()
 		{
-			CacheKey = string.Empty;
+			GameKey = string.Empty;
 			_possibleWords = [.. Words];
 		}
 

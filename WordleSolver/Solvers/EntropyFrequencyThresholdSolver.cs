@@ -18,7 +18,7 @@ namespace WordleSolver.Solvers
 			if (maxPair.Value > _threshold)
 			{
 				guess = maxPair.Key;
-				CacheKey += guess;
+				GameKey += guess;
 				return true;
 			}
 			guess = "";

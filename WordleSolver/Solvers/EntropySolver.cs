@@ -32,16 +32,16 @@ namespace WordleSolver.Solvers
 
 			var guess = GetStrategyGuess(normalizedFrequencies);
 
-			_cachedGuesses.Add(CacheKey, guess);
-			CacheKey += guess;
+			_cachedGuesses.Add(GameKey, guess);
+			GameKey += guess;
 			return guess;
 		}
 
 		protected virtual bool TryGetFirstGuess(out string firstGuess)
 		{
-			if (CacheKey.Length == 0)
+			if (GameKey.Length == 0)
 			{
-				CacheKey += FirstGuess;
+				GameKey += FirstGuess;
 				firstGuess = FirstGuess;
 				return true;
 			}
@@ -64,9 +64,9 @@ namespace WordleSolver.Solvers
 		protected void SetPossibleWords()
 		{
 			var possibleWords = new Dictionary<string, double>();
-			var guess = CacheKey[^10..^5];
+			var guess = GameKey[^10..^5];
 			var guessIndex = PatternsProvider.GetWordIndex(guess);
-			var pattern = CacheKey[^5..^0];
+			var pattern = GameKey[^5..^0];
 			var patternIndex = PatternsProvider.GetPatternIndex(pattern);
 
 			foreach (var pair in _possibleWords)
@@ -87,7 +87,7 @@ namespace WordleSolver.Solvers
 			if (normalizedFrequencies.Count < _limit)
 			{
 				guess = normalizedFrequencies.First().Key;
-				CacheKey += guess;
+				GameKey += guess;
 				return true;
 			}
 			guess = "";
@@ -96,9 +96,9 @@ namespace WordleSolver.Solvers
 
 		protected virtual bool TryGetCachedGuess(out string cachedGuess)
 		{
-			if (_cachedGuesses.TryGetValue(CacheKey, out var value))
+			if (_cachedGuesses.TryGetValue(GameKey, out var value))
 			{
-				CacheKey += value;
+				GameKey += value;
 				cachedGuess = value;
 				return true;
 			}
