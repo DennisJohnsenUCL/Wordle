@@ -8,7 +8,7 @@ namespace WordleSolver.Solvers
 	internal class EntropySolver : FilteredSolver
 	{
 		private readonly Dictionary<string, string> _cachedGuesses = [];
-		private string _cacheKey = "";
+		protected virtual string CacheKey { get; protected private set; } = "";
 		protected IPatternsProvider PatternsProvider { get; }
 		private readonly int _limit;
 		private readonly Dictionary<string, double> _wordFrequencies;
@@ -25,7 +25,7 @@ namespace WordleSolver.Solvers
 
 		public override void AddResponse(WordleResponse response)
 		{
-			_cacheKey += string.Concat(response.LetterResults.Select(result => CorrectnessMappings[result.Correctness]));
+			CacheKey += string.Concat(response.LetterResults.Select(result => CorrectnessMappings[result.Correctness]));
 			base.AddResponse(response);
 		}
 
@@ -43,16 +43,16 @@ namespace WordleSolver.Solvers
 
 			var guess = GetStrategyGuess(normalizedFrequencies);
 
-			_cachedGuesses.Add(_cacheKey, guess);
-			_cacheKey += guess;
+			_cachedGuesses.Add(CacheKey, guess);
+			CacheKey += guess;
 			return guess;
 		}
 
 		protected virtual bool TryGetFirstGuess(out string firstGuess)
 		{
-			if (_cacheKey.Length == 0)
+			if (CacheKey.Length == 0)
 			{
-				_cacheKey += FirstGuess;
+				CacheKey += FirstGuess;
 				firstGuess = FirstGuess;
 				return true;
 			}
@@ -75,12 +75,19 @@ namespace WordleSolver.Solvers
 		protected virtual void SetPossibleWords()
 		{
 			var possibleWords = new Dictionary<string, double>();
+			var guess = CacheKey[^10..^5];
+			var guessIndex = PatternsProvider.GetWordIndex(guess);
+			var pattern = CacheKey[^5..^0];
+			var patternIndex = PatternsProvider.GetPatternIndex(pattern);
 
 			foreach (var pair in _possibleWords)
 			{
 				var word = pair.Key;
+				var wordIndex = PatternsProvider.GetWordIndex(word);
 
-				if (FitsConstraints(word))
+				//>> Also deal with FilteredSolver, probably move _possibleWords tracking back to there
+				//>> And add guess adding to threshold solver
+				if (PatternsProvider.FitsPattern(guessIndex, wordIndex, patternIndex))
 				{
 					possibleWords.Add(word, pair.Value);
 				}
@@ -93,6 +100,7 @@ namespace WordleSolver.Solvers
 			if (normalizedFrequencies.Count < _limit)
 			{
 				guess = normalizedFrequencies.First().Key;
+				CacheKey += guess;
 				return true;
 			}
 			guess = "";
@@ -101,9 +109,9 @@ namespace WordleSolver.Solvers
 
 		protected virtual bool TryGetCachedGuess(out string cachedGuess)
 		{
-			if (_cachedGuesses.TryGetValue(_cacheKey, out var value))
+			if (_cachedGuesses.TryGetValue(CacheKey, out var value))
 			{
-				_cacheKey += value;
+				CacheKey += value;
 				cachedGuess = value;
 				return true;
 			}
@@ -144,7 +152,7 @@ namespace WordleSolver.Solvers
 		public override void Reset()
 		{
 			_possibleWords = _wordFrequencies;
-			_cacheKey = "";
+			CacheKey = "";
 			base.Reset();
 		}
 

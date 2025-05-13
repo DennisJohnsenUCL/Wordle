@@ -37,6 +37,15 @@ namespace WordleSolver.Services
 			return pattern;
 		}
 
+		public int GetWordIndex(string word) => _wordsReverseLookup[word];
+
+		public int GetPatternIndex(string pattern) => _patternsReverseLookup[pattern];
+
+		public bool FitsPattern(int guessIndex, int wordleIndex, int patternIndex)
+		{
+			return _PatternsIndexMatrix[guessIndex, wordleIndex] == patternIndex;
+		}
+
 		private static string[] GeneratePatterns()
 		{
 			char[] letters = ['A', 'P', 'C', 'O'];
