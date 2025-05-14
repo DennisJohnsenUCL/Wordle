@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
-using WordleSolver.Interfaces;
+using WordleSolver.Enums;
+using WordleSolver.Services;
 
 namespace WordleSolver.Solvers
 {
@@ -10,10 +11,17 @@ namespace WordleSolver.Solvers
 		private readonly Dictionary<string, double> _wordFrequencies;
 		private Dictionary<string, double> _possibleWords;
 
-		public EntropySolver(IFirstGuessProvider firstGuessProvider, IPatternsProvider patternsProvider, Dictionary<string, double> wordFrequencies, int limit, string identifier)
-			: base(firstGuessProvider, patternsProvider, [.. wordFrequencies.Keys], identifier)
+		public EntropySolver(SolverContext context, Frequencies frequencies, int limit, string identifier)
+			: base(context, identifier)
 		{
-			_wordFrequencies = wordFrequencies;
+			_wordFrequencies = frequencies switch
+			{
+				Frequencies.Flat => context.WordFrequenciesFlat,
+				Frequencies.Weighted => context.WordFrequenciesWeighted,
+				Frequencies.Sigmoid => context.WordFrequenciesSigmoid,
+				Frequencies.Log => context.WordFrequenciesLog,
+				_ => throw new Exception(),
+			};
 			_limit = limit;
 			_possibleWords = _wordFrequencies;
 		}

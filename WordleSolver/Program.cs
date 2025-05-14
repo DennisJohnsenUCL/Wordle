@@ -41,7 +41,7 @@ namespace WordleSolver
 				SolverTypes.MiniMax,
 				];
 
-			var solverFactory = new SolverFactory(solverContext);
+			var solverFactory = new SolverFactory(context);
 
 			var solvers = solverFactory.GetSolvers(solversToGet);
 

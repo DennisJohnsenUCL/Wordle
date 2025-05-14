@@ -1,4 +1,5 @@
-﻿using WordleSolver.Interfaces;
+﻿using WordleSolver.Enums;
+using WordleSolver.Services;
 
 namespace WordleSolver.Solvers
 {
@@ -6,8 +7,8 @@ namespace WordleSolver.Solvers
 	{
 		private readonly double _threshold;
 
-		public EntropyFrequencyThresholdSolver(IFirstGuessProvider firstGuessProvider, IPatternsProvider patternsProvider, Dictionary<string, double> wordFrequencies, double threshold, string identifier)
-			: base(firstGuessProvider, patternsProvider, wordFrequencies, 0, identifier)
+		public EntropyFrequencyThresholdSolver(SolverContext context, Frequencies frequencies, double threshold, string identifier)
+			: base(context, frequencies, 0, identifier)
 		{
 			_threshold = threshold;
 		}

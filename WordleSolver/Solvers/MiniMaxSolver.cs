@@ -1,12 +1,13 @@
 ﻿using System.Collections.Concurrent;
-using WordleSolver.Interfaces;
+using WordleSolver.Enums;
+using WordleSolver.Services;
 
 namespace WordleSolver.Solvers
 {
 	internal class MiniMaxSolver : EntropySolver
 	{
-		public MiniMaxSolver(IFirstGuessProvider firstGuessProvider, IPatternsProvider patternsProvider, Dictionary<string, double> wordFrequencies, int limit, string identifier)
-			: base(firstGuessProvider, patternsProvider, wordFrequencies, limit, identifier) { }
+		public MiniMaxSolver(SolverContext context, int limit, string identifier)
+			: base(context, Frequencies.Flat, limit, identifier) { }
 
 		protected override string GetStrategyGuess(Dictionary<string, double> possibleWords)
 		{

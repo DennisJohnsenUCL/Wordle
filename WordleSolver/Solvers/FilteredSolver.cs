@@ -1,6 +1,7 @@
 ﻿using WordleCore.Enums;
 using WordleCore.Models;
 using WordleSolver.Interfaces;
+using WordleSolver.Services;
 
 namespace WordleSolver.Solvers
 {
@@ -11,11 +12,11 @@ namespace WordleSolver.Solvers
 		protected string GameKey { get; protected private set; } = string.Empty;
 		private List<string> _possibleWords;
 
-		public FilteredSolver(IFirstGuessProvider firstGuessProvider, IPatternsProvider patternsProvider, string[] words, string identifier) : base(words, identifier)
+		public FilteredSolver(SolverContext context, string identifier) : base([.. context.WordOccurrences.Keys], identifier)
 		{
-			FirstGuess = firstGuessProvider.Value;
-			PatternsProvider = patternsProvider;
-			_possibleWords = [.. Words];
+			FirstGuess = context.FirstGuessProvider.Value;
+			PatternsProvider = context.PatternsProvider;
+			_possibleWords = [.. context.Words];
 		}
 
 		public virtual void AddResponse(WordleResponse response)

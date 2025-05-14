@@ -81,7 +81,7 @@ namespace WordleSolver.Services
 
 		private LazySolver GetLazySortedSolver()
 		{
-			var solver = new LazySolver(_context.Words, "LazySortedSolver");
+			var solver = new LazySolver([.. _context.WordOccurrences.Keys], "LazySortedSolver");
 			return solver;
 		}
 

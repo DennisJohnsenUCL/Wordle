@@ -1,12 +1,13 @@
 ﻿using System.Collections.Concurrent;
-using WordleSolver.Interfaces;
+using WordleSolver.Enums;
+using WordleSolver.Services;
 
 namespace WordleSolver.Solvers
 {
 	internal class PositionalEntropySolver : EntropySolver
 	{
-		public PositionalEntropySolver(IFirstGuessProvider firstGuessProvider, IPatternsProvider patternsProvider, Dictionary<string, double> wordFrequencies, int limit, string identifier)
-			: base(firstGuessProvider, patternsProvider, wordFrequencies, limit, identifier) { }
+		public PositionalEntropySolver(SolverContext context, Frequencies frequencies, int limit, string identifier)
+			: base(context, frequencies, limit, identifier) { }
 
 		protected override string GetStrategyGuess(Dictionary<string, double> possibleWords)
 		{
