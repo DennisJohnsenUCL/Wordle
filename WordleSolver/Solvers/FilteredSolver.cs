@@ -12,7 +12,7 @@ namespace WordleSolver.Solvers
 		protected string GameKey { get; protected private set; } = string.Empty;
 		private List<string> _possibleWords;
 
-		public FilteredSolver(SolverContext context, string identifier) : base([.. context.WordOccurrences.Keys], identifier)
+		public FilteredSolver(SolverContext context, string identifier) : base(context.Words, identifier)
 		{
 			FirstGuess = context.FirstGuessProvider.Value;
 			PatternsProvider = context.PatternsProvider;
