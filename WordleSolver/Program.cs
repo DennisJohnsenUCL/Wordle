@@ -18,7 +18,7 @@ namespace WordleSolver
 				.Select(line => line.Split('\t'))
 				.ToDictionary(parts => parts[0], parts => long.Parse(parts[1]));
 
-			var patternsProvider = new PatternsProvider([.. sortedWordOccurrences.Keys]);
+			var patternsProvider = new PatternsProvider([.. sortedWordOccurrences.Keys], Patterns.Expanded);
 
 			var context = new SolverContext(staticFirstGuessProvider, patternsProvider, sortedWordOccurrences, wordles);
 
