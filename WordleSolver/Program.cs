@@ -30,7 +30,7 @@ namespace WordleSolver
 				SolverTypes.Lazy,
 				SolverTypes.Filtered,
 				SolverTypes.Entropy,
-				SolverTypes.Frequency,
+				SolverTypes.Weighted,
 				SolverTypes.Sigmoid,
 				SolverTypes.Log,
 				SolverTypes.Positional,

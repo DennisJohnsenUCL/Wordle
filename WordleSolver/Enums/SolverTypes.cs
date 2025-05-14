@@ -5,7 +5,7 @@
 		Lazy,
 		Filtered,
 		Entropy,
-		Frequency,
+		Weighted,
 		Sigmoid,
 		Log,
 		Positional,
