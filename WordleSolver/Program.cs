@@ -13,15 +13,18 @@ namespace WordleSolver
 			var staticFirstGuessProvider = new StaticFirstGuessProvider("SALET");
 
 			string[] words = WordleCoreUtils.LoadEmbeddedTxt("WordleCore.Data.allowed_words.txt");
+			string[] wordles = WordleCoreUtils.LoadEmbeddedTxt("WordleCore.Data.previous_wordles.txt");
 
 			var sortedWordOccurrences = WordleCoreUtils.LoadEmbeddedTxt("WordleCore.Data.allowed_words_sorted_frequencies.txt")
 				.Select(line => line.Split('\t'))
 				.ToDictionary(parts => parts[0], parts => long.Parse(parts[1]));
 
-			string[] wordles = WordleCoreUtils.LoadEmbeddedTxt("WordleCore.Data.previous_wordles.txt");
+			var patternsProvider = new PatternsProvider([.. sortedWordOccurrences.Keys]);
+
+			var context = new SolverContext(staticFirstGuessProvider, patternsProvider, words, sortedWordOccurrences, wordles);
+
 			var guesses = int.MaxValue;
 			var gameFactory = new WordleGameFactory();
-			var patternsProvider = new PatternsProvider([.. sortedWordOccurrences.Keys]);
 
 			SolverTypes[] solversToGet =
 				[
