@@ -21,20 +21,12 @@ namespace WordleSolver.Services
 			{
 				switch (solver)
 				{
-					case SolverTypes.Random:
-						var random = GetLazyRandomSolver();
-						solvers.Add(random);
-						break;
-					case SolverTypes.Sorted:
-						var sorted = GetLazySortedSolver();
+					case SolverTypes.Lazy:
+						var sorted = GetLazySolver();
 						solvers.Add(sorted);
 						break;
-					case SolverTypes.FilteredRandom:
-						var filteredRandom = GetFilteredRandomSolver();
-						solvers.Add(filteredRandom);
-						break;
-					case SolverTypes.FilteredSorted:
-						var filteredSorted = GetFilteredSortedSolver();
+					case SolverTypes.Filtered:
+						var filteredSorted = GetFilteredSolver();
 						solvers.Add(filteredSorted);
 						break;
 					case SolverTypes.Entropy:
@@ -73,25 +65,13 @@ namespace WordleSolver.Services
 		}
 
 		#region Solver Get methods
-		private LazySolver GetLazyRandomSolver()
+		private LazySolver GetLazySolver()
 		{
-			var solver = new LazySolver(_context.Words, "LazyRandomSolver");
+			var solver = new LazySolver(_context.Words, "LazySortedSolver");
 			return solver;
 		}
 
-		private LazySolver GetLazySortedSolver()
-		{
-			var solver = new LazySolver([.. _context.WordOccurrences.Keys], "LazySortedSolver");
-			return solver;
-		}
-
-		private FilteredSolver GetFilteredRandomSolver()
-		{
-			var solver = new FilteredSolver(_context, "FilteredRandomSolver");
-			return solver;
-		}
-
-		private FilteredSolver GetFilteredSortedSolver()
+		private FilteredSolver GetFilteredSolver()
 		{
 			var solver = new FilteredSolver(_context, "FilteredSortedSolver");
 			return solver;

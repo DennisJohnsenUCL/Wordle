@@ -2,10 +2,8 @@
 {
 	internal enum SolverTypes
 	{
-		Random,
-		Sorted,
-		FilteredRandom,
-		FilteredSorted,
+		Lazy,
+		Filtered,
 		Entropy,
 		Frequency,
 		Sigmoid,

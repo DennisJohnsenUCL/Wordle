@@ -14,11 +14,11 @@ namespace WordleSolver.Services
 		public Dictionary<string, double> WordFrequenciesSigmoid { get; }
 		public Dictionary<string, double> WordFrequenciesLog { get; }
 
-		public SolverContext(IFirstGuessProvider firstGuessProvider, IPatternsProvider patternsProvider, string[] words, Dictionary<string, long> wordOccurrences, string[] wordles)
+		public SolverContext(IFirstGuessProvider firstGuessProvider, IPatternsProvider patternsProvider, Dictionary<string, long> wordOccurrences, string[] wordles)
 		{
 			FirstGuessProvider = firstGuessProvider;
 			PatternsProvider = patternsProvider;
-			Words = words;
+			Words = [.. wordOccurrences.Keys];
 			WordOccurrences = wordOccurrences;
 			Wordles = wordles;
 			WordFrequenciesFlat = GetFlatFrequencies();
