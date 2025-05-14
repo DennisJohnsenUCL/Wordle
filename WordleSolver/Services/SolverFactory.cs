@@ -6,17 +6,11 @@ namespace WordleSolver.Services
 {
 	internal class SolverFactory
 	{
-		private readonly string[] _words;
-		private readonly Dictionary<string, long> _sortedWordOccurrences;
-		private readonly IFirstGuessProvider _firstGuessProvider;
-		private readonly IPatternsProvider _patternsProvider;
+		private readonly SolverContext _context;
 
-		public SolverFactory(string[] words, Dictionary<string, long> sortedWordOccurrences, IFirstGuessProvider firstGuessProvider, IPatternsProvider patternsProvider)
+		public SolverFactory(SolverContext context)
 		{
-			_words = words;
-			_sortedWordOccurrences = sortedWordOccurrences;
-			_firstGuessProvider = firstGuessProvider;
-			_patternsProvider = patternsProvider;
+			_context = context;
 		}
 
 		public List<ISolver> GetSolvers(IEnumerable<SolverTypes> solversToGet)
@@ -81,142 +75,75 @@ namespace WordleSolver.Services
 		#region Solver Get methods
 		private LazySolver GetLazyRandomSolver()
 		{
-			var solver = new LazySolver(_words, "LazyRandomSolver");
+			var solver = new LazySolver(_context.Words, "LazyRandomSolver");
 			return solver;
 		}
 
 		private LazySolver GetLazySortedSolver()
 		{
-			var words = _sortedWordOccurrences.Keys.ToArray();
-			var solver = new LazySolver(words, "LazySortedSolver");
+			var solver = new LazySolver(_context.Words, "LazySortedSolver");
 			return solver;
 		}
 
 		private FilteredSolver GetFilteredRandomSolver()
 		{
-			var words = _words;
-			var solver = new FilteredSolver(_firstGuessProvider, _patternsProvider, words, "FilteredRandomSolver");
+			var solver = new FilteredSolver(_context, "FilteredRandomSolver");
 			return solver;
 		}
 
 		private FilteredSolver GetFilteredSortedSolver()
 		{
-			var words = _sortedWordOccurrences.Keys.ToArray();
-			var solver = new FilteredSolver(_firstGuessProvider, _patternsProvider, words, "FilteredSortedSolver");
+			var solver = new FilteredSolver(_context, "FilteredSortedSolver");
 			return solver;
 		}
 
 		private EntropySolver GetEntropySolver()
 		{
-			var flatFrequency = GetFlatFrequencies();
 			int limit = 20;
-			var solver = new EntropySolver(_firstGuessProvider, _patternsProvider, flatFrequency, limit, "EntropySolver");
+			var solver = new EntropySolver(_context, Frequencies.Flat, limit, "EntropySolver");
 			return solver;
 		}
 
 		private EntropySolver GetEntropyFrequencySolver()
 		{
-			var normalizedFrequency = GetNormalizedFrequencies();
 			int limit = 21;
-			var solver = new EntropySolver(_firstGuessProvider, _patternsProvider, normalizedFrequency, limit, "EntropyFrequencySolver");
+			var solver = new EntropySolver(_context, Frequencies.Weighted, limit, "EntropyFrequencySolver");
 			return solver;
 		}
 
 		private EntropySolver GetEntropyFrequencySigmoidSolver()
 		{
-			var normalizedSigmoidFrequency = GetSigmoidFrequencies();
 			int limit = 20;
-			var solver = new EntropySolver(_firstGuessProvider, _patternsProvider, normalizedSigmoidFrequency, limit, "EntropyFrequencySigmoidSolver");
+			var solver = new EntropySolver(_context, Frequencies.Sigmoid, limit, "EntropyFrequencySigmoidSolver");
 			return solver;
 		}
 
 		private EntropySolver GetEntropyFrequencyLogSolver()
 		{
-			var normalizedLogFrequency = GetLogFrequencies();
 			int limit = 20;
-			var solver = new EntropySolver(_firstGuessProvider, _patternsProvider, normalizedLogFrequency, limit, "EntropyFrequencyLogSolver");
+			var solver = new EntropySolver(_context, Frequencies.Log, limit, "EntropyFrequencyLogSolver");
 			return solver;
 		}
 
 		private PositionalEntropySolver GetPositionalEntropySolver()
 		{
-			var normalizedFrequency = GetNormalizedFrequencies();
-			var solver = new PositionalEntropySolver(_firstGuessProvider, _patternsProvider, normalizedFrequency, 20, "PositionalEntropy");
+			int limit = 20;
+			var solver = new PositionalEntropySolver(_context, Frequencies.Weighted, limit, "PositionalEntropy");
 			return solver;
 		}
 
 		private EntropyFrequencyThresholdSolver GetFrequencyThresholdSolver()
 		{
-			var normalizedFrequency = GetNormalizedFrequencies();
-			var solver = new EntropyFrequencyThresholdSolver(_firstGuessProvider, _patternsProvider, normalizedFrequency, 0.50, "EntropyFrequencyThreshold");
+			double threshold = 0.5;
+			var solver = new EntropyFrequencyThresholdSolver(_context, Frequencies.Weighted, threshold, "EntropyFrequencyThreshold");
 			return solver;
 		}
 
 		private MiniMaxSolver GetMinimaxSolver()
 		{
-			var flatFrequency = GetFlatFrequencies();
-			var solver = new MiniMaxSolver(_firstGuessProvider, _patternsProvider, flatFrequency, 25, "MiniMax");
+			int limit = 25;
+			var solver = new MiniMaxSolver(_context, limit, "MiniMax");
 			return solver;
-		}
-		#endregion
-
-		#region Transformations
-		private Dictionary<string, double> GetFlatFrequencies()
-		{
-			var total = _words.Length;
-			var flatFrequencies = _sortedWordOccurrences.ToDictionary(x => x.Key, x => 1d / total);
-
-			return flatFrequencies;
-		}
-
-		private Dictionary<string, double> GetNormalizedFrequencies()
-		{
-			var total = _sortedWordOccurrences.Values.Sum();
-			var normalizedFrequencies = _sortedWordOccurrences.ToDictionary(x => x.Key, x => (double)x.Value / total);
-
-			return normalizedFrequencies;
-		}
-
-		private Dictionary<string, double> GetSigmoidFrequencies()
-		{
-			int m = 5000000;
-			int s = 1000000;
-			var sigmoidFrequency = new Dictionary<string, double>();
-
-			foreach (var key in _sortedWordOccurrences.Keys)
-			{
-				var value = _sortedWordOccurrences[key];
-
-				var exponent = -(double)(value - m) / s;
-				var newValue = 1.0 / (1.0 + Math.Exp(exponent));
-
-				sigmoidFrequency[key] = newValue;
-			}
-
-			double total = sigmoidFrequency.Values.Sum();
-
-			var normalizedSigmoidFrequency = sigmoidFrequency.ToDictionary(x => x.Key, x => x.Value / total);
-
-			return normalizedSigmoidFrequency;
-		}
-
-		private Dictionary<string, double> GetLogFrequencies()
-		{
-			var logFrequency = new Dictionary<string, double>();
-
-			foreach (var key in _sortedWordOccurrences.Keys)
-			{
-				var value = _sortedWordOccurrences[key];
-				var newValue = Math.Log(1 + value);
-
-				logFrequency[key] = newValue;
-			}
-
-			double total = logFrequency.Values.Sum();
-
-			var normalizedLogFrequency = logFrequency.ToDictionary(x => x.Key, x => x.Value / total);
-
-			return normalizedLogFrequency;
 		}
 		#endregion
 	}
