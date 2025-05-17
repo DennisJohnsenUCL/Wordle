@@ -33,7 +33,10 @@ namespace WordleSolver
 				SolverTypes.EntropyWeighted,
 				SolverTypes.EntropySigmoid,
 				SolverTypes.EntropyLog,
+				SolverTypes.PositionalFlat,
 				SolverTypes.PositionalWeighted,
+				SolverTypes.PositionalSigmoid,
+				SolverTypes.PositionalLog,
 				SolverTypes.FrequencyThreshold,
 				SolverTypes.MiniMax,
 				];

@@ -8,7 +8,10 @@
 		EntropyWeighted,
 		EntropySigmoid,
 		EntropyLog,
+		PositionalFlat,
 		PositionalWeighted,
+		PositionalSigmoid,
+		PositionalLog,
 		FrequencyThreshold,
 		MiniMax,
 	}
