@@ -4,11 +4,11 @@
 	{
 		Lazy,
 		Filtered,
-		Entropy,
-		Weighted,
-		Sigmoid,
-		Log,
-		Positional,
+		EntropyFlat,
+		EntropyWeighted,
+		EntropySigmoid,
+		EntropyLog,
+		PositionalWeighted,
 		FrequencyThreshold,
 		MiniMax,
 	}

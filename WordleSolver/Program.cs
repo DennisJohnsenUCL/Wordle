@@ -29,11 +29,11 @@ namespace WordleSolver
 				[
 				SolverTypes.Lazy,
 				SolverTypes.Filtered,
-				SolverTypes.Entropy,
-				SolverTypes.Weighted,
-				SolverTypes.Sigmoid,
-				SolverTypes.Log,
-				SolverTypes.Positional,
+				SolverTypes.EntropyFlat,
+				SolverTypes.EntropyWeighted,
+				SolverTypes.EntropySigmoid,
+				SolverTypes.EntropyLog,
+				SolverTypes.PositionalWeighted,
 				SolverTypes.FrequencyThreshold,
 				SolverTypes.MiniMax,
 				];

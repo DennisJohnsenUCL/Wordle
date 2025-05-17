@@ -23,11 +23,11 @@ namespace WordleSolver.Services
 				{
 					SolverTypes.Lazy => new LazySolver(_context.Words, "LazySolver"),
 					SolverTypes.Filtered => new FilteredSolver(_context, "FilteredSolver"),
-					SolverTypes.Entropy => new EntropySolver(_context, Frequencies.Flat, 20, "EntropySolver"),
-					SolverTypes.Weighted => new EntropySolver(_context, Frequencies.Weighted, 21, "EntropyFrequencySolver"),
-					SolverTypes.Sigmoid => new EntropySolver(_context, Frequencies.Sigmoid, 20, "EntropyFrequencySigmoidSolver"),
-					SolverTypes.Log => new EntropySolver(_context, Frequencies.Log, 20, "EntropyFrequencyLogSolver"),
-					SolverTypes.Positional => new PositionalEntropySolver(_context, Frequencies.Weighted, 20, "PositionalEntropy"),
+					SolverTypes.EntropyFlat => new EntropySolver(_context, Frequencies.Flat, 20, "EntropySolver"),
+					SolverTypes.EntropyWeighted => new EntropySolver(_context, Frequencies.Weighted, 21, "EntropyFrequencySolver"),
+					SolverTypes.EntropySigmoid => new EntropySolver(_context, Frequencies.Sigmoid, 20, "EntropyFrequencySigmoidSolver"),
+					SolverTypes.EntropyLog => new EntropySolver(_context, Frequencies.Log, 20, "EntropyFrequencyLogSolver"),
+					SolverTypes.PositionalWeighted => new PositionalEntropySolver(_context, Frequencies.Weighted, 20, "PositionalEntropy"),
 					SolverTypes.FrequencyThreshold => new EntropyFrequencyThresholdSolver(_context, Frequencies.Weighted, 0.5, "EntropyFrequencyThreshold"),
 					SolverTypes.MiniMax => new MiniMaxSolver(_context, 25, "MiniMax"),
 					_ => throw new Exception()
