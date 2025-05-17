@@ -93,9 +93,7 @@ namespace WordleSolver.Services
 				for (int j = 0; j < _words.Length; j++)
 				{
 					var pattern = calculatePattern(_words[i], _words[j]);
-
 					var patternIndex = _patternsReverseLookup[pattern];
-
 					_PatternsIndexMatrix[i, j] = patternIndex;
 				}
 			});
@@ -131,7 +129,7 @@ namespace WordleSolver.Services
 
 			for (int i = 0; i < 5; i++)
 			{
-				if (buffer[i] != 'P' || buffer[i] != 'C') buffer[i] = 'A';
+				if (buffer[i] != 'P' && buffer[i] != 'C') buffer[i] = 'A';
 			}
 
 			return buffer.ToString();

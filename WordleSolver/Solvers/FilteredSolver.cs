@@ -1,5 +1,6 @@
 ﻿using WordleCore.Enums;
 using WordleCore.Models;
+using WordleSolver.Enums;
 using WordleSolver.Interfaces;
 using WordleSolver.Services;
 
@@ -21,7 +22,10 @@ namespace WordleSolver.Solvers
 
 		public virtual void AddResponse(WordleResponse response)
 		{
-			GameKey += string.Concat(response.LetterResults.Select(result => CorrectnessMappings[result.Correctness]));
+			var pattern = string.Concat(response.LetterResults.Select(result => CorrectnessMappings[result.Correctness]));
+			if (PatternsProvider.Patterns == Patterns.Simple) pattern = pattern.Replace('O', 'A');
+
+			GameKey += pattern;
 		}
 
 		public override string GetNextGuess()
@@ -31,9 +35,7 @@ namespace WordleSolver.Solvers
 				GameKey += FirstGuess;
 				return FirstGuess;
 			}
-
 			SetPossibleWords();
-
 			var guess = _possibleWords[0];
 			GameKey += guess;
 			return guess;
