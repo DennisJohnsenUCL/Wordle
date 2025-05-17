@@ -81,15 +81,18 @@ namespace WordleSolver.Services
 			return reverseLookup;
 		}
 
+
 		private void Compute()
 		{
+			Func<string, string, string> calculatePattern = Patterns == Patterns.Simple
+				? CalculatePatternSimple
+				: CalculatePatternExpanded;
+
 			Parallel.For(0, _words.Length, i =>
 			{
 				for (int j = 0; j < _words.Length; j++)
 				{
-					var pattern = Patterns == Patterns.Simple
-					? CalculatePatternSimple(_words[i], _words[j])
-					: CalculatePatternExpanded(_words[i], _words[j]);
+					var pattern = calculatePattern(_words[i], _words[j]);
 
 					var patternIndex = _patternsReverseLookup[pattern];
 
