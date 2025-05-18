@@ -1,4 +1,5 @@
-﻿using WordleSolver.Interfaces;
+﻿using WordleSolver.Enums;
+using WordleSolver.Interfaces;
 
 namespace WordleSolver.Services
 {
@@ -9,18 +10,20 @@ namespace WordleSolver.Services
 		public string[] Words { get; }
 		public Dictionary<string, long> WordOccurrences { get; }
 		public string[] Wordles { get; }
+		public AnswerPools AnswerPools { get; }
 		public Dictionary<string, double> WordFrequenciesFlat { get; }
 		public Dictionary<string, double> WordFrequenciesWeighted { get; }
 		public Dictionary<string, double> WordFrequenciesSigmoid { get; }
 		public Dictionary<string, double> WordFrequenciesLog { get; }
 
-		public SolverContext(IFirstGuessProvider firstGuessProvider, IPatternsProvider patternsProvider, Dictionary<string, long> wordOccurrences, string[] wordles)
+		public SolverContext(IFirstGuessProvider firstGuessProvider, IPatternsProvider patternsProvider, Dictionary<string, long> wordOccurrences, string[] wordles, AnswerPools answerPools)
 		{
 			FirstGuessProvider = firstGuessProvider;
 			PatternsProvider = patternsProvider;
 			Words = [.. wordOccurrences.Keys];
 			WordOccurrences = wordOccurrences;
 			Wordles = wordles;
+			AnswerPools = answerPools;
 			WordFrequenciesFlat = GetFlatFrequencies();
 			WordFrequenciesWeighted = GetWeightedFrequencies();
 			WordFrequenciesSigmoid = GetSigmoidFrequencies();

@@ -8,13 +8,13 @@ namespace WordleSolver.Solvers
 	{
 		private readonly Dictionary<string, string> _cachedGuesses = [];
 		private readonly int _limit;
-		private readonly Dictionary<string, double> _wordFrequencies;
 		private Dictionary<string, double> _possibleWords;
+		private readonly Dictionary<string, double> _possibleWordsPool;
 
 		public EntropySolver(SolverContext context, Frequencies frequencies, int limit, string identifier)
 			: base(context, identifier)
 		{
-			_wordFrequencies = frequencies switch
+			var _wordFrequencies = frequencies switch
 			{
 				Frequencies.Flat => context.WordFrequenciesFlat,
 				Frequencies.Weighted => context.WordFrequenciesWeighted,
@@ -23,7 +23,10 @@ namespace WordleSolver.Solvers
 				_ => throw new Exception(),
 			};
 			_limit = limit;
-			_possibleWords = _wordFrequencies;
+
+			if (context.AnswerPools == AnswerPools.AllWords) _possibleWordsPool = _wordFrequencies;
+			else _possibleWordsPool = _wordFrequencies.Where(x => context.Wordles.Contains(x.Key)).ToDictionary();
+			_possibleWords = _possibleWordsPool;
 		}
 
 		public override string GetNextGuess()
@@ -146,7 +149,7 @@ namespace WordleSolver.Solvers
 
 		public override void Reset()
 		{
-			_possibleWords = _wordFrequencies;
+			_possibleWords = _possibleWordsPool;
 			base.Reset();
 		}
 

@@ -12,12 +12,16 @@ namespace WordleSolver.Solvers
 		protected string FirstGuess { get; protected private set; }
 		protected string GameKey { get; protected private set; } = string.Empty;
 		private List<string> _possibleWords;
+		private readonly List<string> _possibleWordsPool;
 
 		public FilteredSolver(SolverContext context, string identifier) : base(context.Words, identifier)
 		{
 			FirstGuess = context.FirstGuessProvider.Value;
 			PatternsProvider = context.PatternsProvider;
-			_possibleWords = [.. context.Words];
+
+			if (context.AnswerPools == AnswerPools.AllWords) _possibleWordsPool = [.. context.Words];
+			else _possibleWordsPool = [.. context.Wordles];
+			_possibleWords = _possibleWordsPool;
 		}
 
 		public virtual void AddResponse(WordleResponse response)
@@ -64,7 +68,7 @@ namespace WordleSolver.Solvers
 		public override void Reset()
 		{
 			GameKey = string.Empty;
-			_possibleWords = [.. Words];
+			_possibleWords = _possibleWordsPool;
 		}
 
 		private static readonly Dictionary<Correctness, char> CorrectnessMappings = new()

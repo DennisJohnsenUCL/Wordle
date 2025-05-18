@@ -20,25 +20,25 @@ namespace WordleSolver
 
 			var patternsProvider = new PatternsProvider([.. sortedWordOccurrences.Keys], Patterns.Simple);
 
-			var context = new SolverContext(staticFirstGuessProvider, patternsProvider, sortedWordOccurrences, wordles);
+			var context = new SolverContext(staticFirstGuessProvider, patternsProvider, sortedWordOccurrences, wordles, AnswerPools.OnlyWordles);
 
 			var guesses = int.MaxValue;
 			var gameFactory = new WordleGameFactory();
 
 			SolverTypes[] solversToGet =
 				[
-				//SolverTypes.Lazy,
-				//SolverTypes.Filtered,
-				//SolverTypes.EntropyFlat,
-				//SolverTypes.EntropyWeighted,
-				//SolverTypes.EntropySigmoid,
-				//SolverTypes.EntropyLog,
-				//SolverTypes.PositionalFlat,
-				//SolverTypes.PositionalWeighted,
-				//SolverTypes.PositionalSigmoid,
-				//SolverTypes.PositionalLog,
-				//SolverTypes.FrequencyThreshold,
-				//SolverTypes.MiniMax,
+				SolverTypes.Lazy,
+				SolverTypes.Filtered,
+				SolverTypes.EntropyFlat,
+				SolverTypes.EntropyWeighted,
+				SolverTypes.EntropySigmoid,
+				SolverTypes.EntropyLog,
+				SolverTypes.PositionalFlat,
+				SolverTypes.PositionalWeighted,
+				SolverTypes.PositionalSigmoid,
+				SolverTypes.PositionalLog,
+				SolverTypes.FrequencyThreshold,
+				SolverTypes.MiniMax,
 				];
 
 			var solverFactory = new SolverFactory(context);
