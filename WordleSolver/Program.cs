@@ -14,7 +14,7 @@ namespace WordleSolver
 
 			string[] wordles = WordleCoreUtils.LoadEmbeddedTxt("WordleCore.Data.previous_wordles.txt");
 
-			var sortedWordOccurrences = WordleCoreUtils.LoadEmbeddedTxt("WordleCore.Data.allowed_words_sorted_frequencies.txt")
+			var sortedWordOccurrences = WordleCoreUtils.LoadEmbeddedTxt("WordleCore.Data.allowed_words_sorted_occurrences.txt")
 				.Select(line => line.Split('\t'))
 				.ToDictionary(parts => parts[0], parts => long.Parse(parts[1]));
 
@@ -27,18 +27,18 @@ namespace WordleSolver
 
 			SolverTypes[] solversToGet =
 				[
-				SolverTypes.Lazy,
-				SolverTypes.Filtered,
-				SolverTypes.EntropyFlat,
-				SolverTypes.EntropyWeighted,
-				SolverTypes.EntropySigmoid,
-				SolverTypes.EntropyLog,
-				SolverTypes.PositionalFlat,
-				SolverTypes.PositionalWeighted,
-				SolverTypes.PositionalSigmoid,
-				SolverTypes.PositionalLog,
-				SolverTypes.FrequencyThreshold,
-				SolverTypes.MiniMax,
+				//SolverTypes.Lazy,
+				//SolverTypes.Filtered,
+				//SolverTypes.EntropyFlat,
+				//SolverTypes.EntropyWeighted,
+				//SolverTypes.EntropySigmoid,
+				//SolverTypes.EntropyLog,
+				//SolverTypes.PositionalFlat,
+				//SolverTypes.PositionalWeighted,
+				//SolverTypes.PositionalSigmoid,
+				//SolverTypes.PositionalLog,
+				//SolverTypes.FrequencyThreshold,
+				//SolverTypes.MiniMax,
 				];
 
 			var solverFactory = new SolverFactory(context);

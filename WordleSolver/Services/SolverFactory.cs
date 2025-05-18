@@ -23,21 +23,20 @@ namespace WordleSolver.Services
 				{
 					SolverTypes.Lazy => new LazySolver(_context.Words, "LazySolver"),
 					SolverTypes.Filtered => new FilteredSolver(_context, "FilteredSolver"),
-					SolverTypes.EntropyFlat => new EntropySolver(_context, Frequencies.Flat, 20, "EntropyFlatSolver"),
-					SolverTypes.EntropyWeighted => new EntropySolver(_context, Frequencies.Weighted, 21, "EntropyWeightedSolver"),
-					SolverTypes.EntropySigmoid => new EntropySolver(_context, Frequencies.Sigmoid, 20, "EntropySigmoidSolver"),
-					SolverTypes.EntropyLog => new EntropySolver(_context, Frequencies.Log, 20, "EntropyLogSolver"),
-					SolverTypes.PositionalFlat => new PositionalEntropySolver(_context, Frequencies.Flat, 20, "PositionalEntropyFlatSolver"),
-					SolverTypes.PositionalWeighted => new PositionalEntropySolver(_context, Frequencies.Weighted, 20, "PositionalEntropyWeightedSolver"),
-					SolverTypes.PositionalSigmoid => new PositionalEntropySolver(_context, Frequencies.Sigmoid, 20, "PositionalEntropySigmoidSolver"),
-					SolverTypes.PositionalLog => new PositionalEntropySolver(_context, Frequencies.Log, 20, "PositionalEntropyLogSolver"),
+					SolverTypes.EntropyFlat => new EntropySolver(_context, Frequencies.Flat, 15, "EntropyFlatSolver"),
+					SolverTypes.EntropyWeighted => new EntropySolver(_context, Frequencies.Weighted, 13, "EntropyWeightedSolver"),
+					SolverTypes.EntropySigmoid => new EntropySolver(_context, Frequencies.Sigmoid, 13, "EntropySigmoidSolver"),
+					SolverTypes.EntropyLog => new EntropySolver(_context, Frequencies.Log, 14, "EntropyLogSolver"),
+					SolverTypes.PositionalFlat => new PositionalEntropySolver(_context, Frequencies.Flat, 14, "PositionalEntropyFlatSolver"),
+					SolverTypes.PositionalWeighted => new PositionalEntropySolver(_context, Frequencies.Weighted, 14, "PositionalEntropyWeightedSolver"),
+					SolverTypes.PositionalSigmoid => new PositionalEntropySolver(_context, Frequencies.Sigmoid, 6, "PositionalEntropySigmoidSolver"),
+					SolverTypes.PositionalLog => new PositionalEntropySolver(_context, Frequencies.Log, 5, "PositionalEntropyLogSolver"),
 					SolverTypes.FrequencyThreshold => new EntropyFrequencyThresholdSolver(_context, Frequencies.Weighted, 0.5, "EntropyFrequencyThreshold"),
-					SolverTypes.MiniMax => new MiniMaxSolver(_context, 25, "MiniMax"),
+					SolverTypes.MiniMax => new MiniMaxSolver(_context, 16, "MiniMax"),
 					_ => throw new Exception()
 				};
 
 				solvers.Add(solver);
-
 			}
 			return solvers;
 		}
