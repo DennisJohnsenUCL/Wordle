@@ -15,6 +15,8 @@ namespace WordleSolver.Services
 
 		public List<ISolver> GetSolvers(IEnumerable<SolverTypes> solversToGet)
 		{
+			var limits = _context.AnswerPools == AnswerPools.AllWords ? _limitsAllWords : _limitsOnlyWordles;
+
 			var solvers = new List<ISolver>();
 
 			foreach (var solverType in solversToGet)
@@ -23,16 +25,16 @@ namespace WordleSolver.Services
 				{
 					SolverTypes.Lazy => new LazySolver(_context.Words, "LazySolver"),
 					SolverTypes.Filtered => new FilteredSolver(_context, "FilteredSolver"),
-					SolverTypes.EntropyFlat => new EntropySolver(_context, Frequencies.Flat, 15, "EntropyFlatSolver"),
-					SolverTypes.EntropyWeighted => new EntropySolver(_context, Frequencies.Weighted, 13, "EntropyWeightedSolver"),
-					SolverTypes.EntropySigmoid => new EntropySolver(_context, Frequencies.Sigmoid, 13, "EntropySigmoidSolver"),
-					SolverTypes.EntropyLog => new EntropySolver(_context, Frequencies.Log, 14, "EntropyLogSolver"),
-					SolverTypes.PositionalFlat => new PositionalEntropySolver(_context, Frequencies.Flat, 14, "PositionalEntropyFlatSolver"),
-					SolverTypes.PositionalWeighted => new PositionalEntropySolver(_context, Frequencies.Weighted, 14, "PositionalEntropyWeightedSolver"),
-					SolverTypes.PositionalSigmoid => new PositionalEntropySolver(_context, Frequencies.Sigmoid, 6, "PositionalEntropySigmoidSolver"),
-					SolverTypes.PositionalLog => new PositionalEntropySolver(_context, Frequencies.Log, 5, "PositionalEntropyLogSolver"),
+					SolverTypes.EntropyFlat => new EntropySolver(_context, Frequencies.Flat, limits[SolverTypes.EntropyFlat], "EntropyFlatSolver"),
+					SolverTypes.EntropyWeighted => new EntropySolver(_context, Frequencies.Weighted, limits[SolverTypes.EntropyWeighted], "EntropyWeightedSolver"),
+					SolverTypes.EntropySigmoid => new EntropySolver(_context, Frequencies.Sigmoid, limits[SolverTypes.EntropySigmoid], "EntropySigmoidSolver"),
+					SolverTypes.EntropyLog => new EntropySolver(_context, Frequencies.Log, limits[SolverTypes.EntropyLog], "EntropyLogSolver"),
+					SolverTypes.PositionalFlat => new PositionalEntropySolver(_context, Frequencies.Flat, limits[SolverTypes.PositionalFlat], "PositionalEntropyFlatSolver"),
+					SolverTypes.PositionalWeighted => new PositionalEntropySolver(_context, Frequencies.Weighted, limits[SolverTypes.PositionalWeighted], "PositionalEntropyWeightedSolver"),
+					SolverTypes.PositionalSigmoid => new PositionalEntropySolver(_context, Frequencies.Sigmoid, limits[SolverTypes.PositionalSigmoid], "PositionalEntropySigmoidSolver"),
+					SolverTypes.PositionalLog => new PositionalEntropySolver(_context, Frequencies.Log, limits[SolverTypes.PositionalLog], "PositionalEntropyLogSolver"),
 					SolverTypes.FrequencyThreshold => new EntropyFrequencyThresholdSolver(_context, Frequencies.Weighted, 0.5, "EntropyFrequencyThreshold"),
-					SolverTypes.MiniMax => new MiniMaxSolver(_context, 16, "MiniMax"),
+					SolverTypes.MiniMax => new MiniMaxSolver(_context, limits[SolverTypes.MiniMax], "MiniMax"),
 					_ => throw new Exception()
 				};
 
@@ -40,5 +42,31 @@ namespace WordleSolver.Services
 			}
 			return solvers;
 		}
+
+		private readonly Dictionary<SolverTypes, int> _limitsAllWords = new()
+		{
+			{ SolverTypes.EntropyFlat, 15 },
+			{ SolverTypes.EntropyWeighted, 13 },
+			{ SolverTypes.EntropySigmoid, 13 },
+			{ SolverTypes.EntropyLog, 14 },
+			{ SolverTypes.PositionalFlat, 14 },
+			{ SolverTypes.PositionalWeighted, 14 },
+			{ SolverTypes.PositionalSigmoid, 6 },
+			{ SolverTypes.PositionalLog, 5 },
+			{ SolverTypes.MiniMax, 16 }
+		};
+
+		private readonly Dictionary<SolverTypes, int> _limitsOnlyWordles = new()
+		{
+			{ SolverTypes.EntropyFlat, 15 },
+			{ SolverTypes.EntropyWeighted, 13 },
+			{ SolverTypes.EntropySigmoid, 13 },
+			{ SolverTypes.EntropyLog, 14 },
+			{ SolverTypes.PositionalFlat, 14 },
+			{ SolverTypes.PositionalWeighted, 14 },
+			{ SolverTypes.PositionalSigmoid, 6 },
+			{ SolverTypes.PositionalLog, 5 },
+			{ SolverTypes.MiniMax, 16 }
+		};
 	}
 }
