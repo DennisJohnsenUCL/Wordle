@@ -28,7 +28,11 @@ namespace WordleSolver.Solvers
 
 		private Node BuildTree()
 		{
-			return GetSubTree(_firstGuess, [.. _wordles], 1);
+			var root = GetSubTree(_firstGuess, [.. _wordles], 1);
+
+			Console.WriteLine(CountGuesses(root));
+
+			return root;
 		}
 
 		private Node GetSubTree(string guess, List<string> possibleWords, int steps)
@@ -111,9 +115,19 @@ namespace WordleSolver.Solvers
 			return node;
 		}
 
-		private static int CountGuesses()
+		private static int CountGuesses(Node node)
 		{
-			return 0;
+			var count = 0;
+
+			if (node.IsLeaf == true) count += node.Steps;
+			else
+			{
+				foreach (var subNode in node.Nodes)
+				{
+					count += CountGuesses(subNode.Value);
+				}
+			}
+			return count;
 		}
 
 		public void AddResponse(WordleResponse response)
