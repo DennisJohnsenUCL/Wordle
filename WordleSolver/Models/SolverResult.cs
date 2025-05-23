@@ -24,7 +24,7 @@
 		public override string ToString()
 		{
 			return $"Solver: {SolverIdentifier}\n" +
-				$"Avg: {AverageGuesses:0.00}, Time: {ElapsedMilliseconds}, Total: {TotalGuesses}\n" +
+				$"Avg: {AverageGuesses:0.0000}, Time: {ElapsedMilliseconds}, Total: {TotalGuesses}\n" +
 				$"Games: {GamesPlayed}, Failed: {FailedGames}, Worst case: {WorstCase}";
 		}
 	}

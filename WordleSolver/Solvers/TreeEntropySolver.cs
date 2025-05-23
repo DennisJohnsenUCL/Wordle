@@ -182,7 +182,6 @@ namespace WordleSolver.Solvers
 						tries -= 1;
 						if (tries == 0) break;
 					}
-
 					nodes.Add(patternGroup.Key, bestNode);
 				}
 			}
