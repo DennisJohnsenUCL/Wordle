@@ -3,6 +3,7 @@ using WordleSolver.Controllers;
 using WordleSolver.Enums;
 using WordleSolver.Interfaces;
 using WordleSolver.Services;
+using WordleSolver.Solvers;
 
 namespace WordleSolver
 {
@@ -27,23 +28,25 @@ namespace WordleSolver
 
 			SolverTypes[] solversToGet =
 				[
-				SolverTypes.Lazy,
-				SolverTypes.Filtered,
+				//SolverTypes.Lazy,
+				//SolverTypes.Filtered,
 				SolverTypes.EntropyFlat,
-				SolverTypes.EntropyWeighted,
-				SolverTypes.EntropySigmoid,
-				SolverTypes.EntropyLog,
-				SolverTypes.PositionalFlat,
-				SolverTypes.PositionalWeighted,
-				SolverTypes.PositionalSigmoid,
-				SolverTypes.PositionalLog,
-				SolverTypes.FrequencyThreshold,
-				SolverTypes.MiniMax,
+				//SolverTypes.EntropyWeighted,
+				//SolverTypes.EntropySigmoid,
+				//SolverTypes.EntropyLog,
+				//SolverTypes.PositionalFlat,
+				//SolverTypes.PositionalWeighted,
+				//SolverTypes.PositionalSigmoid,
+				//SolverTypes.PositionalLog,
+				//SolverTypes.FrequencyThreshold,
+				//SolverTypes.MiniMax,
 				];
 
 			var solverFactory = new SolverFactory(context);
 
 			var solvers = solverFactory.GetSolvers(solversToGet);
+
+			solvers.Add(new TreeEntropySolver(context, "TreeEntropySolver"));
 
 			var controllers = new List<SolverController>();
 

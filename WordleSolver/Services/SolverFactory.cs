@@ -58,7 +58,7 @@ namespace WordleSolver.Services
 
 		private readonly Dictionary<SolverTypes, int> _limitsOnlyWordles = new()
 		{
-			{ SolverTypes.EntropyFlat, 4 },
+			{ SolverTypes.EntropyFlat, 3 },
 			{ SolverTypes.EntropyWeighted, 5 },
 			{ SolverTypes.EntropySigmoid, 4 },
 			{ SolverTypes.EntropyLog, 4 },

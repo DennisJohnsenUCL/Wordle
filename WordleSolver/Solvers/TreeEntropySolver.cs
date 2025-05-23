@@ -23,7 +23,7 @@ namespace WordleSolver.Solvers
 			_firstGuess = context.FirstGuessProvider.Value;
 			_words = context.Words;
 			_wordles = context.Wordles;
-			_root = new(BuildTree());
+			_root = new(() => BuildTree());
 		}
 
 		private Node BuildTree()
@@ -33,10 +33,85 @@ namespace WordleSolver.Solvers
 
 		private Node GetSubTree(string guess, List<string> possibleWords, int steps)
 		{
-			return new Node();
+			var sortedWords = new Dictionary<string, List<string>>();
+			foreach (var possibleWord in possibleWords)
+			{
+				var pattern = _patternsProvider.GetPattern(guess, possibleWord);
+				if (!sortedWords.TryAdd(pattern, [possibleWord])) sortedWords[pattern].Add(possibleWord);
+			}
+
+			var nodes = new Dictionary<string, Node>();
+			foreach (var patternGroup in sortedWords)
+			{
+				if (patternGroup.Value.Count == 1)
+				{
+					if (patternGroup.Key == "CCCCC")
+					{
+						nodes.Add(patternGroup.Key, new Node(steps));
+					}
+					else
+					{
+						nodes.Add(patternGroup.Key, new Node()
+						{
+							Guess = patternGroup.Value[0],
+							Steps = steps + 1,
+							IsLeaf = false
+						});
+						nodes[patternGroup.Key].Nodes.Add(_patternsProvider.GetPattern(guess, patternGroup.Value[0]), new Node(steps + 1));
+					}
+				}
+				else if (patternGroup.Value.Count == 2)
+				{
+					nodes.Add(patternGroup.Key, new Node()
+					{
+						Guess = patternGroup.Value[0],
+						Steps = steps + 1,
+						IsLeaf = false
+					});
+					nodes[patternGroup.Key].Nodes.Add("CCCCC", new Node(steps + 1));
+					nodes[patternGroup.Key].Nodes.Add(_patternsProvider.GetPattern(patternGroup.Value[0], patternGroup.Value[1]), new Node()
+					{
+						Guess = patternGroup.Value[1],
+						Steps = steps + 2,
+						IsLeaf = false,
+					});
+					nodes[patternGroup.Key].Nodes[_patternsProvider.GetPattern(patternGroup.Value[0], patternGroup.Value[1])].Nodes.Add("CCCCC", new Node(steps + 2));
+				}
+				else
+				{
+					var entropies = new Dictionary<string, double>();
+					foreach (var word in _words)
+					{
+						var patternGroups = new Dictionary<string, List<string>>();
+						foreach (var possibleWord in sortedWords[patternGroup.Key])
+						{
+							var pattern = _patternsProvider.GetPattern(word, possibleWord);
+							if (!patternGroups.TryAdd(pattern, [possibleWord])) patternGroups[pattern].Add(possibleWord);
+						}
+
+						var entropy = patternGroups.Sum(pattern => pattern.Value.Count * Math.Log2(1d / pattern.Value.Count));
+
+						entropies.Add(word, entropy);
+					}
+					var bestGuess = entropies.Aggregate((acc, current) => acc.Value > current.Value ? acc : current).Key;
+					var bestNode = GetSubTree(bestGuess, sortedWords[patternGroup.Key], steps + 1);
+
+					nodes.Add(patternGroup.Key, bestNode);
+				}
+			}
+
+			var node = new Node()
+			{
+				Guess = guess,
+				Nodes = nodes,
+				Steps = steps,
+				IsLeaf = false
+			};
+
+			return node;
 		}
 
-		private int CountGuesses()
+		private static int CountGuesses()
 		{
 			return 0;
 		}
@@ -46,12 +121,16 @@ namespace WordleSolver.Solvers
 			var pattern = string.Concat(response.LetterResults.Select(result => CorrectnessMappings[result.Correctness]));
 			if (_patternsProvider.Patterns == Patterns.Simple) pattern = pattern.Replace('O', 'A');
 
-			_node = _node?.Nodes[pattern];
+			if (!(pattern == "CCCCC")) _node = _node?.Nodes[pattern];
 		}
 
 		public string GetNextGuess()
 		{
-			if (_node == null) return _root.Value.Guess;
+			if (_node == null)
+			{
+				_node = _root.Value;
+				return _root.Value.Guess;
+			}
 			else return _node.Guess;
 		}
 
@@ -76,5 +155,13 @@ namespace WordleSolver.Solvers
 		public Dictionary<string, Node> Nodes { get; set; } = [];
 		public int Steps { get; set; } = 0;
 		public bool IsLeaf { get; set; } = false;
+
+		public Node() { }
+
+		public Node(int steps)
+		{
+			Steps = steps;
+			IsLeaf = true;
+		}
 	}
 }
