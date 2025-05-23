@@ -47,16 +47,13 @@ namespace WordleSolver.Solvers
 			var nodes = new Dictionary<string, Node>();
 			foreach (var patternGroup in sortedWords)
 			{
-				if (patternGroup.Value.Count == 1)
+				if (patternGroup.Key == "CCCCC")
 				{
-					if (patternGroup.Key == "CCCCC")
-					{
-						nodes.Add(patternGroup.Key, new Node(steps));
-					}
-					else
-					{
-						nodes.Add(patternGroup.Key, new Node(patternGroup.Value[0], steps + 1));
-					}
+					nodes.Add(patternGroup.Key, new Node(steps));
+				}
+				else if (patternGroup.Value.Count == 1)
+				{
+					nodes.Add(patternGroup.Key, new Node(patternGroup.Value[0], steps + 1));
 				}
 				else if (patternGroup.Value.Count == 2)
 				{
@@ -193,20 +190,18 @@ namespace WordleSolver.Solvers
 		};
 	}
 
-	//>> Move this out
 	internal class Node
 	{
-		public string Guess { get; set; }
-		public Dictionary<string, Node> Nodes { get; set; }
-		public int Steps { get; set; }
-		public bool IsLeaf { get; set; }
+		public string Guess { get; set; } = "";
+		public Dictionary<string, Node> Nodes { get; set; } = [];
+		public int Steps { get; set; } = 0;
+		public bool IsLeaf { get; set; } = false;
 
 		public Node(string guess, Dictionary<string, Node> nodes, int steps)
 		{
 			Guess = guess;
 			Nodes = nodes;
 			Steps = steps;
-			IsLeaf = false;
 		}
 
 		public Node(string guess, int steps)
@@ -214,23 +209,14 @@ namespace WordleSolver.Solvers
 			Guess = guess;
 			Nodes = new() { { "CCCCC", new Node(steps) } };
 			Steps = steps;
-			IsLeaf = false;
 		}
 
 		public Node(int steps)
 		{
-			Guess = "";
-			Nodes = [];
 			Steps = steps;
 			IsLeaf = true;
 		}
 
-		public Node()
-		{
-			Guess = "";
-			Nodes = [];
-			Steps = 0;
-			IsLeaf = false;
-		}
+		public Node() { }
 	}
 }
