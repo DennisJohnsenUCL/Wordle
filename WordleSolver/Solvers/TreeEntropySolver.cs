@@ -143,7 +143,7 @@ namespace WordleSolver.Solvers
 					foreach (var word in _words)
 					{
 						var patternGroups = new Dictionary<string, List<string>>();
-						foreach (var possibleWord in sortedWords[patternGroup.Key])
+						foreach (var possibleWord in patternGroup.Value)
 						{
 							var pattern = _patternsProvider.GetPattern(word, possibleWord);
 							if (!patternGroups.TryAdd(pattern, [possibleWord])) patternGroups[pattern].Add(possibleWord);
@@ -153,8 +153,35 @@ namespace WordleSolver.Solvers
 
 						entropies.Add(word, entropy);
 					}
-					var bestGuess = entropies.Aggregate((acc, current) => acc.Value > current.Value ? acc : current).Key;
-					var bestNode = GetSubTree(bestGuess, sortedWords[patternGroup.Key], steps + 1);
+
+					foreach (var entropy in entropies)
+					{
+						if (patternGroup.Value.Contains(entropy.Key)) entropies[entropy.Key] += 1 / patternGroup.Value.Count;
+					}
+
+					int tries = 8;
+					if (steps > 2) tries = 1;
+
+					entropies = entropies.OrderByDescending(x => x.Value).ToDictionary();
+
+					Node bestNode = new();
+					var bestCount = int.MaxValue;
+
+					foreach (var entropy in entropies)
+					{
+						var possibleGuess = entropy.Key;
+						var possibleNode = GetSubTree(possibleGuess, patternGroup.Value, steps + 1);
+						var possibleCount = CountGuesses(possibleNode);
+
+						if (possibleCount < bestCount)
+						{
+							bestCount = possibleCount;
+							bestNode = possibleNode;
+						}
+
+						tries -= 1;
+						if (tries == 0) break;
+					}
 
 					nodes.Add(patternGroup.Key, bestNode);
 				}
@@ -165,7 +192,6 @@ namespace WordleSolver.Solvers
 				Guess = guess,
 				Nodes = nodes,
 				Steps = steps,
-				IsLeaf = false
 			};
 
 			return node;
