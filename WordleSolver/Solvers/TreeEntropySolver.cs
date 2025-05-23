@@ -61,7 +61,7 @@ namespace WordleSolver.Solvers
 							Steps = steps + 1,
 							IsLeaf = false
 						});
-						nodes[patternGroup.Key].Nodes.Add(_patternsProvider.GetPattern(guess, patternGroup.Value[0]), new Node(steps + 1));
+						nodes[patternGroup.Key].Nodes.Add("CCCCC", new Node(steps + 1));
 					}
 				}
 				else if (patternGroup.Value.Count == 2)
@@ -135,7 +135,7 @@ namespace WordleSolver.Solvers
 			var pattern = string.Concat(response.LetterResults.Select(result => CorrectnessMappings[result.Correctness]));
 			if (_patternsProvider.Patterns == Patterns.Simple) pattern = pattern.Replace('O', 'A');
 
-			if (!(pattern == "CCCCC")) _node = _node?.Nodes[pattern];
+			_node = _node?.Nodes[pattern];
 		}
 
 		public string GetNextGuess()
