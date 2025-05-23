@@ -156,7 +156,7 @@ namespace WordleSolver.Solvers
 
 					foreach (var entropy in entropies)
 					{
-						if (patternGroup.Value.Contains(entropy.Key)) entropies[entropy.Key] += 1 / patternGroup.Value.Count;
+						if (patternGroup.Value.Contains(entropy.Key)) entropies[entropy.Key] += 1d / patternGroup.Value.Count;
 					}
 
 					int tries = 8;
