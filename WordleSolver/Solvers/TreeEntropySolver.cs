@@ -58,10 +58,9 @@ namespace WordleSolver.Solvers
 						nodes.Add(patternGroup.Key, new Node()
 						{
 							Guess = patternGroup.Value[0],
+							Nodes = new() { { "CCCCC", new Node(steps + 1) } },
 							Steps = steps + 1,
-							IsLeaf = false
 						});
-						nodes[patternGroup.Key].Nodes.Add("CCCCC", new Node(steps + 1));
 					}
 				}
 				else if (patternGroup.Value.Count == 2)
@@ -69,17 +68,74 @@ namespace WordleSolver.Solvers
 					nodes.Add(patternGroup.Key, new Node()
 					{
 						Guess = patternGroup.Value[0],
+						Nodes = new() { { "CCCCC", new Node(steps + 1) } },
 						Steps = steps + 1,
-						IsLeaf = false
 					});
-					nodes[patternGroup.Key].Nodes.Add("CCCCC", new Node(steps + 1));
 					nodes[patternGroup.Key].Nodes.Add(_patternsProvider.GetPattern(patternGroup.Value[0], patternGroup.Value[1]), new Node()
 					{
 						Guess = patternGroup.Value[1],
+						Nodes = new() { { "CCCCC", new Node(steps + 2) } },
 						Steps = steps + 2,
-						IsLeaf = false,
 					});
-					nodes[patternGroup.Key].Nodes[_patternsProvider.GetPattern(patternGroup.Value[0], patternGroup.Value[1])].Nodes.Add("CCCCC", new Node(steps + 2));
+				}
+				else if (patternGroup.Value.Count == 3)
+				{
+					var words = patternGroup.Value.ToList();
+					string? splitter = null;
+					foreach (var word1 in words)
+					{
+						var check = new List<string>();
+						foreach (var word2 in words)
+						{
+							if (word1 == word2) continue;
+							var pattern = _patternsProvider.GetPattern(word1, word2);
+							check.Add(pattern);
+						}
+						if (check[0] != check[1]) { splitter = word1; break; }
+					}
+					if (splitter != null)
+					{
+						words.Remove(splitter);
+						nodes.Add(patternGroup.Key, new Node()
+						{
+							Guess = splitter,
+							Nodes = new() { { "CCCCC", new Node(steps + 1) } },
+							Steps = steps + 1,
+						});
+						nodes[patternGroup.Key].Nodes.Add(_patternsProvider.GetPattern(splitter, words[0]), new Node()
+						{
+							Guess = words[0],
+							Nodes = new() { { "CCCCC", new Node(steps + 2) } },
+							Steps = steps + 2,
+						});
+						nodes[patternGroup.Key].Nodes.Add(_patternsProvider.GetPattern(splitter, words[1]), new Node()
+						{
+							Guess = words[1],
+							Nodes = new() { { "CCCCC", new Node(steps + 2) } },
+							Steps = steps + 2,
+						});
+					}
+					else
+					{
+						nodes.Add(patternGroup.Key, new Node()
+						{
+							Guess = patternGroup.Value[0],
+							Nodes = new() { { "CCCCC", new Node(steps + 1) } },
+							Steps = steps + 1,
+						});
+						nodes[patternGroup.Key].Nodes.Add(_patternsProvider.GetPattern(patternGroup.Value[0], patternGroup.Value[1]), new Node()
+						{
+							Guess = patternGroup.Value[1],
+							Nodes = new() { { "CCCCC", new Node(steps + 2) } },
+							Steps = steps + 2,
+						});
+						nodes[patternGroup.Key].Nodes[_patternsProvider.GetPattern(patternGroup.Value[0], patternGroup.Value[1])].Nodes.Add(_patternsProvider.GetPattern(patternGroup.Value[1], patternGroup.Value[2]), new Node()
+						{
+							Guess = patternGroup.Value[2],
+							Nodes = new() { { "CCCCC", new Node(steps + 3) } },
+							Steps = steps + 3,
+						});
+					}
 				}
 				else
 				{
