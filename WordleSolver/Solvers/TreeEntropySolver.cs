@@ -55,28 +55,13 @@ namespace WordleSolver.Solvers
 					}
 					else
 					{
-						nodes.Add(patternGroup.Key, new Node()
-						{
-							Guess = patternGroup.Value[0],
-							Nodes = new() { { "CCCCC", new Node(steps + 1) } },
-							Steps = steps + 1,
-						});
+						nodes.Add(patternGroup.Key, new Node(patternGroup.Value[0], steps + 1));
 					}
 				}
 				else if (patternGroup.Value.Count == 2)
 				{
-					nodes.Add(patternGroup.Key, new Node()
-					{
-						Guess = patternGroup.Value[0],
-						Nodes = new() { { "CCCCC", new Node(steps + 1) } },
-						Steps = steps + 1,
-					});
-					nodes[patternGroup.Key].Nodes.Add(_patternsProvider.GetPattern(patternGroup.Value[0], patternGroup.Value[1]), new Node()
-					{
-						Guess = patternGroup.Value[1],
-						Nodes = new() { { "CCCCC", new Node(steps + 2) } },
-						Steps = steps + 2,
-					});
+					nodes.Add(patternGroup.Key, new Node(patternGroup.Value[0], steps + 1));
+					nodes[patternGroup.Key].Nodes.Add(_patternsProvider.GetPattern(patternGroup.Value[0], patternGroup.Value[1]), new Node(patternGroup.Value[1], steps + 2));
 				}
 				else if (patternGroup.Value.Count == 3)
 				{
@@ -96,45 +81,15 @@ namespace WordleSolver.Solvers
 					if (splitter != null)
 					{
 						words.Remove(splitter);
-						nodes.Add(patternGroup.Key, new Node()
-						{
-							Guess = splitter,
-							Nodes = new() { { "CCCCC", new Node(steps + 1) } },
-							Steps = steps + 1,
-						});
-						nodes[patternGroup.Key].Nodes.Add(_patternsProvider.GetPattern(splitter, words[0]), new Node()
-						{
-							Guess = words[0],
-							Nodes = new() { { "CCCCC", new Node(steps + 2) } },
-							Steps = steps + 2,
-						});
-						nodes[patternGroup.Key].Nodes.Add(_patternsProvider.GetPattern(splitter, words[1]), new Node()
-						{
-							Guess = words[1],
-							Nodes = new() { { "CCCCC", new Node(steps + 2) } },
-							Steps = steps + 2,
-						});
+						nodes.Add(patternGroup.Key, new Node(splitter, steps + 1));
+						nodes[patternGroup.Key].Nodes.Add(_patternsProvider.GetPattern(splitter, words[0]), new Node(words[0], steps + 2));
+						nodes[patternGroup.Key].Nodes.Add(_patternsProvider.GetPattern(splitter, words[1]), new Node(words[1], steps + 2));
 					}
 					else
 					{
-						nodes.Add(patternGroup.Key, new Node()
-						{
-							Guess = patternGroup.Value[0],
-							Nodes = new() { { "CCCCC", new Node(steps + 1) } },
-							Steps = steps + 1,
-						});
-						nodes[patternGroup.Key].Nodes.Add(_patternsProvider.GetPattern(patternGroup.Value[0], patternGroup.Value[1]), new Node()
-						{
-							Guess = patternGroup.Value[1],
-							Nodes = new() { { "CCCCC", new Node(steps + 2) } },
-							Steps = steps + 2,
-						});
-						nodes[patternGroup.Key].Nodes[_patternsProvider.GetPattern(patternGroup.Value[0], patternGroup.Value[1])].Nodes.Add(_patternsProvider.GetPattern(patternGroup.Value[1], patternGroup.Value[2]), new Node()
-						{
-							Guess = patternGroup.Value[2],
-							Nodes = new() { { "CCCCC", new Node(steps + 3) } },
-							Steps = steps + 3,
-						});
+						nodes.Add(patternGroup.Key, new Node(patternGroup.Value[0], steps + 1));
+						nodes[patternGroup.Key].Nodes.Add(_patternsProvider.GetPattern(patternGroup.Value[0], patternGroup.Value[1]), new Node(patternGroup.Value[1], steps + 2));
+						nodes[patternGroup.Key].Nodes[_patternsProvider.GetPattern(patternGroup.Value[0], patternGroup.Value[1])].Nodes.Add(_patternsProvider.GetPattern(patternGroup.Value[1], patternGroup.Value[2]), new Node(patternGroup.Value[2], steps + 3));
 					}
 				}
 				else
@@ -186,12 +141,7 @@ namespace WordleSolver.Solvers
 				}
 			}
 
-			var node = new Node()
-			{
-				Guess = guess,
-				Nodes = nodes,
-				Steps = steps,
-			};
+			var node = new Node(guess, nodes, steps);
 
 			return node;
 		}
@@ -246,17 +196,41 @@ namespace WordleSolver.Solvers
 	//>> Move this out
 	internal class Node
 	{
-		public string Guess { get; set; } = "";
-		public Dictionary<string, Node> Nodes { get; set; } = [];
-		public int Steps { get; set; } = 0;
-		public bool IsLeaf { get; set; } = false;
+		public string Guess { get; set; }
+		public Dictionary<string, Node> Nodes { get; set; }
+		public int Steps { get; set; }
+		public bool IsLeaf { get; set; }
 
-		public Node() { }
+		public Node(string guess, Dictionary<string, Node> nodes, int steps)
+		{
+			Guess = guess;
+			Nodes = nodes;
+			Steps = steps;
+			IsLeaf = false;
+		}
+
+		public Node(string guess, int steps)
+		{
+			Guess = guess;
+			Nodes = new() { { "CCCCC", new Node(steps) } };
+			Steps = steps;
+			IsLeaf = false;
+		}
 
 		public Node(int steps)
 		{
+			Guess = "";
+			Nodes = [];
 			Steps = steps;
 			IsLeaf = true;
+		}
+
+		public Node()
+		{
+			Guess = "";
+			Nodes = [];
+			Steps = 0;
+			IsLeaf = false;
 		}
 	}
 }
