@@ -1,4 +1,6 @@
-﻿using WordleCore.Models;
+﻿using WordleCore.Enums;
+using WordleCore.Models;
+using WordleSolver.Enums;
 using WordleSolver.Interfaces;
 using WordleSolver.Services;
 
@@ -21,10 +23,15 @@ namespace WordleSolver.Solvers
 			_firstGuess = context.FirstGuessProvider.Value;
 			_words = context.Words;
 			_wordles = context.Wordles;
-			_root = new(() => BuildTree());
+			_root = new(BuildTree());
 		}
 
 		private Node BuildTree()
+		{
+			return GetSubTree(_firstGuess, [.. _wordles], 1);
+		}
+
+		private Node GetSubTree(string guess, List<string> possibleWords, int steps)
 		{
 			return new Node();
 		}
@@ -36,18 +43,30 @@ namespace WordleSolver.Solvers
 
 		public void AddResponse(WordleResponse response)
 		{
+			var pattern = string.Concat(response.LetterResults.Select(result => CorrectnessMappings[result.Correctness]));
+			if (_patternsProvider.Patterns == Patterns.Simple) pattern = pattern.Replace('O', 'A');
 
+			_node = _node?.Nodes[pattern];
 		}
 
 		public string GetNextGuess()
 		{
-			return "";
+			if (_node == null) return _root.Value.Guess;
+			else return _node.Guess;
 		}
 
 		public void Reset()
 		{
-
+			_node = null;
 		}
+
+		private static readonly Dictionary<Correctness, char> CorrectnessMappings = new()
+		{
+			{ Correctness.Absent, 'A' },
+			{ Correctness.Present, 'P' },
+			{ Correctness.Correct, 'C' },
+			{ Correctness.OverCount, 'O' },
+		};
 	}
 
 	//>> Move this out
