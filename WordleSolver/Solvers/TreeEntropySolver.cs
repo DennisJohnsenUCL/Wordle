@@ -94,14 +94,14 @@ namespace WordleSolver.Solvers
 					var entropies = new Dictionary<string, double>();
 					foreach (var word in _words)
 					{
-						var patternGroups = new Dictionary<string, List<string>>();
+						var patternGroups = new Dictionary<string, int>();
 						foreach (var possibleWord in patternGroup.Value)
 						{
 							var pattern = _patternsProvider.GetPattern(word, possibleWord);
-							if (!patternGroups.TryAdd(pattern, [possibleWord])) patternGroups[pattern].Add(possibleWord);
+							if (!patternGroups.TryAdd(pattern, 1)) patternGroups[pattern] += 1;
 						}
 
-						var entropy = patternGroups.Sum(pattern => pattern.Value.Count * Math.Log2(1d / pattern.Value.Count));
+						var entropy = patternGroups.Sum(pattern => pattern.Value * Math.Log2(1d / pattern.Value));
 
 						entropies.Add(word, entropy);
 					}
