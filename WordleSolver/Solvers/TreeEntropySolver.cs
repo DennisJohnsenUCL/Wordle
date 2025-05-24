@@ -45,24 +45,27 @@ namespace WordleSolver.Solvers
 			}
 
 			var nodes = new Dictionary<string, Node>();
-			foreach (var patternGroup in sortedWords)
+			foreach (var kvp in sortedWords)
 			{
-				if (patternGroup.Key == "CCCCC")
+				var pattern = kvp.Key;
+				var group = kvp.Value;
+
+				if (pattern == "CCCCC")
 				{
-					nodes.Add(patternGroup.Key, new Node(steps));
+					nodes.Add(pattern, new Node(steps));
 				}
-				else if (patternGroup.Value.Count == 1)
+				else if (group.Count == 1)
 				{
-					nodes.Add(patternGroup.Key, new Node(patternGroup.Value[0], steps + 1));
+					nodes.Add(pattern, new Node(group[0], steps + 1));
 				}
-				else if (patternGroup.Value.Count == 2)
+				else if (group.Count == 2)
 				{
-					nodes.Add(patternGroup.Key, new Node(patternGroup.Value[0], steps + 1));
-					nodes[patternGroup.Key].Nodes.Add(_patternsProvider.GetPattern(patternGroup.Value[0], patternGroup.Value[1]), new Node(patternGroup.Value[1], steps + 2));
+					nodes.Add(pattern, new Node(group[0], steps + 1));
+					nodes[pattern].Nodes.Add(_patternsProvider.GetPattern(group[0], group[1]), new Node(group[1], steps + 2));
 				}
-				else if (patternGroup.Value.Count == 3)
+				else if (group.Count == 3)
 				{
-					var words = patternGroup.Value.ToList();
+					var words = group.ToList();
 					string? splitter = null;
 					foreach (var word1 in words)
 					{
@@ -70,23 +73,22 @@ namespace WordleSolver.Solvers
 						foreach (var word2 in words)
 						{
 							if (word1 == word2) continue;
-							var pattern = _patternsProvider.GetPattern(word1, word2);
-							check.Add(pattern);
+							check.Add(_patternsProvider.GetPattern(word1, word2));
 						}
 						if (check[0] != check[1]) { splitter = word1; break; }
 					}
 					if (splitter != null)
 					{
 						words.Remove(splitter);
-						nodes.Add(patternGroup.Key, new Node(splitter, steps + 1));
-						nodes[patternGroup.Key].Nodes.Add(_patternsProvider.GetPattern(splitter, words[0]), new Node(words[0], steps + 2));
-						nodes[patternGroup.Key].Nodes.Add(_patternsProvider.GetPattern(splitter, words[1]), new Node(words[1], steps + 2));
+						nodes.Add(pattern, new Node(splitter, steps + 1));
+						nodes[pattern].Nodes.Add(_patternsProvider.GetPattern(splitter, words[0]), new Node(words[0], steps + 2));
+						nodes[pattern].Nodes.Add(_patternsProvider.GetPattern(splitter, words[1]), new Node(words[1], steps + 2));
 					}
 					else
 					{
-						nodes.Add(patternGroup.Key, new Node(patternGroup.Value[0], steps + 1));
-						nodes[patternGroup.Key].Nodes.Add(_patternsProvider.GetPattern(patternGroup.Value[0], patternGroup.Value[1]), new Node(patternGroup.Value[1], steps + 2));
-						nodes[patternGroup.Key].Nodes[_patternsProvider.GetPattern(patternGroup.Value[0], patternGroup.Value[1])].Nodes.Add(_patternsProvider.GetPattern(patternGroup.Value[1], patternGroup.Value[2]), new Node(patternGroup.Value[2], steps + 3));
+						nodes.Add(pattern, new Node(group[0], steps + 1));
+						nodes[pattern].Nodes.Add(_patternsProvider.GetPattern(group[0], group[1]), new Node(group[1], steps + 2));
+						nodes[pattern].Nodes[_patternsProvider.GetPattern(group[0], group[1])].Nodes.Add(_patternsProvider.GetPattern(group[1], group[2]), new Node(group[2], steps + 3));
 					}
 				}
 				else
@@ -95,10 +97,10 @@ namespace WordleSolver.Solvers
 					foreach (var word in _words)
 					{
 						var patternGroups = new Dictionary<string, int>();
-						foreach (var possibleWord in patternGroup.Value)
+						foreach (var possibleWord in group)
 						{
-							var pattern = _patternsProvider.GetPattern(word, possibleWord);
-							if (!patternGroups.TryAdd(pattern, 1)) patternGroups[pattern] += 1;
+							var patternKey = _patternsProvider.GetPattern(word, possibleWord);
+							if (!patternGroups.TryAdd(patternKey, 1)) patternGroups[patternKey] += 1;
 						}
 
 						var entropy = patternGroups.Sum(pattern => pattern.Value * Math.Log2(1d / pattern.Value));
@@ -108,7 +110,7 @@ namespace WordleSolver.Solvers
 
 					foreach (var entropy in entropies)
 					{
-						if (patternGroup.Value.Contains(entropy.Key)) entropies[entropy.Key] += 1d / patternGroup.Value.Count;
+						if (group.Contains(entropy.Key)) entropies[entropy.Key] += 1d / group.Count;
 					}
 
 					int tries = steps < 3 ? 8 : 1;
@@ -120,7 +122,7 @@ namespace WordleSolver.Solvers
 
 					foreach (var entropy in entropies)
 					{
-						var possibleNode = GetSubTree(entropy.Key, patternGroup.Value, steps + 1);
+						var possibleNode = GetSubTree(entropy.Key, group, steps + 1);
 						var possibleCount = CountGuesses(possibleNode);
 
 						if (possibleCount < bestCount)
@@ -129,7 +131,7 @@ namespace WordleSolver.Solvers
 							bestNode = possibleNode;
 						}
 					}
-					nodes.Add(patternGroup.Key, bestNode);
+					nodes.Add(pattern, bestNode);
 				}
 			}
 
