@@ -111,18 +111,16 @@ namespace WordleSolver.Solvers
 						if (patternGroup.Value.Contains(entropy.Key)) entropies[entropy.Key] += 1d / patternGroup.Value.Count;
 					}
 
-					int tries = 8;
-					if (steps > 2) tries = 1;
+					int tries = steps < 3 ? 8 : 1;
 
-					entropies = entropies.OrderByDescending(x => x.Value).ToDictionary();
+					entropies = entropies.OrderByDescending(x => x.Value).Take(tries).ToDictionary();
 
 					Node bestNode = new();
 					var bestCount = int.MaxValue;
 
 					foreach (var entropy in entropies)
 					{
-						var possibleGuess = entropy.Key;
-						var possibleNode = GetSubTree(possibleGuess, patternGroup.Value, steps + 1);
+						var possibleNode = GetSubTree(entropy.Key, patternGroup.Value, steps + 1);
 						var possibleCount = CountGuesses(possibleNode);
 
 						if (possibleCount < bestCount)
@@ -130,9 +128,6 @@ namespace WordleSolver.Solvers
 							bestCount = possibleCount;
 							bestNode = possibleNode;
 						}
-
-						tries -= 1;
-						if (tries == 0) break;
 					}
 					nodes.Add(patternGroup.Key, bestNode);
 				}
