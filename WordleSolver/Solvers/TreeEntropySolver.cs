@@ -134,7 +134,6 @@ namespace WordleSolver.Solvers
 			}
 
 			var node = new Node(guess, nodes, steps);
-
 			return node;
 		}
 
@@ -163,12 +162,8 @@ namespace WordleSolver.Solvers
 
 		public string GetNextGuess()
 		{
-			if (_node == null)
-			{
-				_node = _root.Value;
-				return _root.Value.Guess;
-			}
-			else return _node.Guess;
+			_node ??= _root.Value;
+			return _node.Guess;
 		}
 
 		public void Reset()
