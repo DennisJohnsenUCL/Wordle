@@ -61,8 +61,10 @@ namespace WordleSolver.Solvers
 				}
 				else if (count == 2)
 				{
+					var patternKey = _patternsProvider.GetPattern(group[0], group[1]);
+
 					nodes.Add(pattern, new Node(group[0], steps + 1));
-					nodes[pattern].Nodes.Add(_patternsProvider.GetPattern(group[0], group[1]), new Node(group[1], steps + 2));
+					nodes[pattern].Nodes.Add(patternKey, new Node(group[1], steps + 2));
 				}
 				else if (count == 3)
 				{
@@ -81,15 +83,22 @@ namespace WordleSolver.Solvers
 					if (splitter != null)
 					{
 						words.Remove(splitter);
+
+						var pattern1 = _patternsProvider.GetPattern(splitter, words[0]);
+						var pattern2 = _patternsProvider.GetPattern(splitter, words[1]);
+
 						nodes.Add(pattern, new Node(splitter, steps + 1));
-						nodes[pattern].Nodes.Add(_patternsProvider.GetPattern(splitter, words[0]), new Node(words[0], steps + 2));
-						nodes[pattern].Nodes.Add(_patternsProvider.GetPattern(splitter, words[1]), new Node(words[1], steps + 2));
+						nodes[pattern].Nodes.Add(pattern1, new Node(words[0], steps + 2));
+						nodes[pattern].Nodes.Add(pattern2, new Node(words[1], steps + 2));
 					}
 					else
 					{
+						var pattern1 = _patternsProvider.GetPattern(group[0], group[1]);
+						var pattern2 = _patternsProvider.GetPattern(group[1], group[2]);
+
 						nodes.Add(pattern, new Node(group[0], steps + 1));
-						nodes[pattern].Nodes.Add(_patternsProvider.GetPattern(group[0], group[1]), new Node(group[1], steps + 2));
-						nodes[pattern].Nodes[_patternsProvider.GetPattern(group[0], group[1])].Nodes.Add(_patternsProvider.GetPattern(group[1], group[2]), new Node(group[2], steps + 3));
+						nodes[pattern].Nodes.Add(pattern1, new Node(group[1], steps + 2));
+						nodes[pattern].Nodes[pattern1].Nodes.Add(pattern2, new Node(group[2], steps + 3));
 					}
 				}
 				else
@@ -121,9 +130,9 @@ namespace WordleSolver.Solvers
 					Node bestNode = new();
 					var bestCount = int.MaxValue;
 
-					foreach (var entropy in entropies)
+					foreach (var candidate in entropies.Keys)
 					{
-						var possibleNode = GetSubTree(entropy.Key, group, steps + 1);
+						var possibleNode = GetSubTree(candidate, group, steps + 1);
 						var possibleCount = CountGuesses(possibleNode);
 
 						if (possibleCount < bestCount)
