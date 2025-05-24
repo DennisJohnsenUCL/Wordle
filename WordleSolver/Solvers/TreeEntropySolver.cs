@@ -49,21 +49,22 @@ namespace WordleSolver.Solvers
 			{
 				var pattern = kvp.Key;
 				var group = kvp.Value;
+				var count = group.Count;
 
 				if (pattern == "CCCCC")
 				{
 					nodes.Add(pattern, new Node(steps));
 				}
-				else if (group.Count == 1)
+				else if (count == 1)
 				{
 					nodes.Add(pattern, new Node(group[0], steps + 1));
 				}
-				else if (group.Count == 2)
+				else if (count == 2)
 				{
 					nodes.Add(pattern, new Node(group[0], steps + 1));
 					nodes[pattern].Nodes.Add(_patternsProvider.GetPattern(group[0], group[1]), new Node(group[1], steps + 2));
 				}
-				else if (group.Count == 3)
+				else if (count == 3)
 				{
 					var words = group.ToList();
 					string? splitter = null;
@@ -108,9 +109,9 @@ namespace WordleSolver.Solvers
 						entropies.Add(word, entropy);
 					}
 
-					foreach (var entropy in entropies)
+					foreach (var key in entropies.Keys)
 					{
-						if (group.Contains(entropy.Key)) entropies[entropy.Key] += 1d / group.Count;
+						if (group.Contains(key)) entropies[key] += 1d / count;
 					}
 
 					int tries = steps < 3 ? 8 : 1;
