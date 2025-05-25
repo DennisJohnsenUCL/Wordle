@@ -7,16 +7,20 @@ namespace WordleSolver.Services
 	internal class PatternsProvider : IPatternsProvider
 	{
 		private readonly string[] _words;
+		private readonly string[] _wordles;
 		public Patterns Patterns { get; }
 		private readonly ushort[,] _PatternsIndexMatrix;
 		private readonly string[] _patterns;
 		private readonly Dictionary<string, int> _wordsReverseLookup;
 		private readonly Dictionary<string, ushort> _patternsReverseLookup;
+		private readonly AnswerPools _answerPools;
 
-		public PatternsProvider(string[] words, Patterns patterns)
+		public PatternsProvider(string[] words, string[] wordles, Patterns patterns, AnswerPools answerPools)
 		{
 			_words = words;
+			_wordles = wordles;
 			Patterns = patterns;
+			_answerPools = answerPools;
 
 			_PatternsIndexMatrix = new ushort[_words.Length, _words.Length];
 
@@ -88,11 +92,13 @@ namespace WordleSolver.Services
 				? CalculatePatternSimple
 				: CalculatePatternExpanded;
 
+			string[] possibleWords = _answerPools == AnswerPools.AllWords ? _words : _wordles;
+
 			Parallel.For(0, _words.Length, i =>
 			{
-				for (int j = 0; j < _words.Length; j++)
+				for (int j = 0; j < possibleWords.Length; j++)
 				{
-					var pattern = calculatePattern(_words[i], _words[j]);
+					var pattern = calculatePattern(_words[i], possibleWords[j]);
 					var patternIndex = _patternsReverseLookup[pattern];
 					_PatternsIndexMatrix[i, j] = patternIndex;
 				}
