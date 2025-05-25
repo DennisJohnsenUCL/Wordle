@@ -104,8 +104,8 @@ namespace WordleSolver.Solvers
 				}
 				else
 				{
-					var entropies = new ConcurrentDictionary<string, double>();
-					Parallel.ForEach(_words, word =>
+					var entropies = new Dictionary<string, double>();
+					foreach (var word in _words)
 					{
 						var patternGroups = new Dictionary<string, int>();
 						foreach (var possibleWord in group)
@@ -123,27 +123,25 @@ namespace WordleSolver.Solvers
 
 						if (group.Contains(word)) entropy += 1 / total;
 
-						entropies.TryAdd(word, entropy);
-					});
+						entropies.Add(word, entropy);
+					}
+					;
 
 					int tries = steps < 3 ? 8 : 1;
 
 					var bestEntropies = entropies.OrderByDescending(x => x.Value).Take(tries).ToDictionary();
 
-					Node bestNode = new();
-					var bestCount = int.MaxValue;
+					var bestCounts = new ConcurrentDictionary<Node, int>();
 
-					foreach (var candidate in bestEntropies.Keys)
+					Parallel.ForEach(bestEntropies.Keys, candidate =>
 					{
 						var possibleNode = GetSubTree(candidate, group, steps + 1);
 						var possibleCount = CountGuesses(possibleNode);
+						bestCounts.TryAdd(possibleNode, possibleCount);
+					});
 
-						if (possibleCount < bestCount)
-						{
-							bestCount = possibleCount;
-							bestNode = possibleNode;
-						}
-					}
+					var bestNode = bestCounts.Aggregate((l, r) => l.Value < r.Value ? l : r).Key;
+
 					nodes.Add(pattern, bestNode);
 				}
 			}
