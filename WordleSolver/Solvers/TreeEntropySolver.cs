@@ -1,4 +1,5 @@
-﻿using WordleCore.Enums;
+﻿using System.Collections.Concurrent;
+using WordleCore.Enums;
 using WordleCore.Models;
 using WordleSolver.Enums;
 using WordleSolver.Interfaces;
@@ -103,8 +104,8 @@ namespace WordleSolver.Solvers
 				}
 				else
 				{
-					var entropies = new Dictionary<string, double>();
-					foreach (var word in _words)
+					var entropies = new ConcurrentDictionary<string, double>();
+					Parallel.ForEach(_words, word =>
 					{
 						var patternGroups = new Dictionary<string, int>();
 						foreach (var possibleWord in group)
@@ -122,17 +123,17 @@ namespace WordleSolver.Solvers
 
 						if (group.Contains(word)) entropy += 1 / total;
 
-						entropies.Add(word, entropy);
-					}
+						entropies.TryAdd(word, entropy);
+					});
 
 					int tries = steps < 3 ? 8 : 1;
 
-					entropies = entropies.OrderByDescending(x => x.Value).Take(tries).ToDictionary();
+					var bestEntropies = entropies.OrderByDescending(x => x.Value).Take(tries).ToDictionary();
 
 					Node bestNode = new();
 					var bestCount = int.MaxValue;
 
-					foreach (var candidate in entropies.Keys)
+					foreach (var candidate in bestEntropies.Keys)
 					{
 						var possibleNode = GetSubTree(candidate, group, steps + 1);
 						var possibleCount = CountGuesses(possibleNode);
