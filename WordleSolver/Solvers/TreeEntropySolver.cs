@@ -21,7 +21,7 @@ namespace WordleSolver.Solvers
 			Identifier = identifier;
 			_patternsProvider = context.PatternsProvider;
 			_firstGuess = context.FirstGuessProvider.Value;
-			_words = context.Words;
+			_words = context.UnsortedWords;
 			_wordles = context.Wordles;
 			_root = new(() => BuildTree());
 		}
@@ -113,7 +113,12 @@ namespace WordleSolver.Solvers
 							if (!patternGroups.TryAdd(patternKey, 1)) patternGroups[patternKey] += 1;
 						}
 
-						var entropy = patternGroups.Sum(pattern => pattern.Value * Math.Log2(1d / pattern.Value));
+						var total = (double)count;
+						var entropy = patternGroups.Sum(pattern =>
+						{
+							var probability = pattern.Value / total;
+							return probability * Math.Log2(1 / probability);
+						});
 
 						entropies.Add(word, entropy);
 					}

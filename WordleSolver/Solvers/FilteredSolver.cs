@@ -14,12 +14,12 @@ namespace WordleSolver.Solvers
 		private List<string> _possibleWords;
 		private readonly List<string> _possibleWordsPool;
 
-		public FilteredSolver(SolverContext context, string identifier) : base(context.Words, identifier)
+		public FilteredSolver(SolverContext context, string identifier) : base(context.SortedWords, identifier)
 		{
 			FirstGuess = context.FirstGuessProvider.Value;
 			PatternsProvider = context.PatternsProvider;
 
-			if (context.AnswerPools == AnswerPools.AllWords) _possibleWordsPool = [.. context.Words];
+			if (context.AnswerPools == AnswerPools.AllWords) _possibleWordsPool = [.. context.SortedWords];
 			else _possibleWordsPool = [.. context.Wordles];
 			_possibleWords = _possibleWordsPool;
 		}

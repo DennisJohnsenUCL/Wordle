@@ -13,6 +13,7 @@ namespace WordleSolver
 		{
 			var staticFirstGuessProvider = new StaticFirstGuessProvider("SALET");
 
+			string[] words = WordleCoreUtils.LoadEmbeddedTxt("WordleCore.Data.allowed_words.txt");
 			string[] wordles = WordleCoreUtils.LoadEmbeddedTxt("WordleCore.Data.previous_wordles.txt");
 
 			var sortedWordOccurrences = WordleCoreUtils.LoadEmbeddedTxt("WordleCore.Data.allowed_words_sorted_occurrences.txt")
@@ -21,7 +22,7 @@ namespace WordleSolver
 
 			var patternsProvider = new PatternsProvider([.. sortedWordOccurrences.Keys], Patterns.Simple);
 
-			var context = new SolverContext(staticFirstGuessProvider, patternsProvider, sortedWordOccurrences, wordles, AnswerPools.OnlyWordles);
+			var context = new SolverContext(staticFirstGuessProvider, patternsProvider, sortedWordOccurrences, words, wordles, AnswerPools.OnlyWordles);
 
 			var guesses = int.MaxValue;
 			var gameFactory = new WordleGameFactory();

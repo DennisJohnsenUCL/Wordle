@@ -7,8 +7,9 @@ namespace WordleSolver.Services
 	{
 		public IFirstGuessProvider FirstGuessProvider { get; }
 		public IPatternsProvider PatternsProvider { get; }
-		public string[] Words { get; }
+		public string[] SortedWords { get; }
 		public Dictionary<string, long> WordOccurrences { get; }
+		public string[] UnsortedWords { get; }
 		public string[] Wordles { get; }
 		public AnswerPools AnswerPools { get; }
 		public Dictionary<string, double> WordFrequenciesFlat { get; }
@@ -16,12 +17,13 @@ namespace WordleSolver.Services
 		public Dictionary<string, double> WordFrequenciesSigmoid { get; }
 		public Dictionary<string, double> WordFrequenciesLog { get; }
 
-		public SolverContext(IFirstGuessProvider firstGuessProvider, IPatternsProvider patternsProvider, Dictionary<string, long> wordOccurrences, string[] wordles, AnswerPools answerPools)
+		public SolverContext(IFirstGuessProvider firstGuessProvider, IPatternsProvider patternsProvider, Dictionary<string, long> wordOccurrences, string[] unsortedWords, string[] wordles, AnswerPools answerPools)
 		{
 			FirstGuessProvider = firstGuessProvider;
 			PatternsProvider = patternsProvider;
-			Words = [.. wordOccurrences.Keys];
+			SortedWords = [.. wordOccurrences.Keys];
 			WordOccurrences = wordOccurrences;
+			UnsortedWords = unsortedWords;
 			Wordles = wordles;
 			AnswerPools = answerPools;
 			WordFrequenciesFlat = GetFlatFrequencies();

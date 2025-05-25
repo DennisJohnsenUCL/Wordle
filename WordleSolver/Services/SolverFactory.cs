@@ -23,7 +23,7 @@ namespace WordleSolver.Services
 			{
 				ISolver solver = solverType switch
 				{
-					SolverTypes.Lazy => new LazySolver(_context.Words, "LazySolver"),
+					SolverTypes.Lazy => new LazySolver(_context.SortedWords, "LazySolver"),
 					SolverTypes.Filtered => new FilteredSolver(_context, "FilteredSolver"),
 					SolverTypes.EntropyFlat => new EntropySolver(_context, Frequencies.Flat, limits[SolverTypes.EntropyFlat], "EntropyFlatSolver"),
 					SolverTypes.EntropyWeighted => new EntropySolver(_context, Frequencies.Weighted, limits[SolverTypes.EntropyWeighted], "EntropyWeightedSolver"),
