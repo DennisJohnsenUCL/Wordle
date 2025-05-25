@@ -120,12 +120,9 @@ namespace WordleSolver.Solvers
 							return probability * Math.Log2(1 / probability);
 						});
 
-						entropies.Add(word, entropy);
-					}
+						if (group.Contains(word)) entropy += 1 / total;
 
-					foreach (var key in entropies.Keys)
-					{
-						if (group.Contains(key)) entropies[key] += 1d / count;
+						entropies.Add(word, entropy);
 					}
 
 					int tries = steps < 3 ? 8 : 1;
