@@ -181,7 +181,7 @@ namespace WordleSolver.Solvers
 
 		public void Reset()
 		{
-			_node = null;
+			_node = _root.Value;
 		}
 
 		private static readonly Dictionary<Correctness, char> CorrectnessMappings = new()
