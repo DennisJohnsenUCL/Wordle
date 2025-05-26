@@ -30,9 +30,6 @@ namespace WordleSolver.Solvers
 		private Node BuildTree()
 		{
 			var root = GetSubTree(_firstGuess, [.. _wordles], 1);
-
-			Console.WriteLine(CountGuesses(root));
-
 			return root;
 		}
 
@@ -125,7 +122,6 @@ namespace WordleSolver.Solvers
 
 						entropies.Add(word, entropy);
 					}
-					;
 
 					int tries = steps < 3 ? 8 : 1;
 
