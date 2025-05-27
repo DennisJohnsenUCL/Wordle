@@ -14,6 +14,7 @@ namespace WordleSolver.Solvers
 		private readonly string _firstGuess;
 		private readonly string[] _words;
 		private readonly string[] _wordles;
+		private readonly AnswerPools _answerPools;
 		private readonly Lazy<Node> _root;
 		private Node? _node;
 
@@ -24,12 +25,15 @@ namespace WordleSolver.Solvers
 			_firstGuess = context.FirstGuessProvider.Value;
 			_words = context.UnsortedWords;
 			_wordles = context.Wordles;
+			_answerPools = context.AnswerPools;
 			_root = new(() => BuildTree());
 		}
 
 		private Node BuildTree()
 		{
-			var root = GetSubTree(_firstGuess, [.. _wordles], 1);
+			List<string> possibleWords = _answerPools == AnswerPools.AllWords ? [.. _words] : [.. _wordles];
+
+			var root = GetSubTree(_firstGuess, possibleWords, 1);
 			return root;
 		}
 
