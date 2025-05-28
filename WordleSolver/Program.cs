@@ -3,6 +3,7 @@ using WordleSolver.Controllers;
 using WordleSolver.Enums;
 using WordleSolver.Interfaces;
 using WordleSolver.Services;
+using WordleSolver.Solvers;
 
 namespace WordleSolver
 {
@@ -47,6 +48,8 @@ namespace WordleSolver
 			var solverFactory = new SolverFactory(context);
 
 			var solvers = solverFactory.GetSolvers(solversToGet);
+
+			solvers.Add(new TreeEntropySigmoidSolver(context, "TreeEntropySigmoidSolver"));
 
 			var controllers = new List<SolverController>();
 
