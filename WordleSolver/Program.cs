@@ -41,7 +41,7 @@ namespace WordleSolver
 				//SolverTypes.PositionalLog,
 				//SolverTypes.FrequencyThreshold,
 				//SolverTypes.MiniMax,
-				//SolverTypes.TreeEntropy
+				SolverTypes.TreeEntropy
 				//SolverTypes.TreeEntropySigmoid
 				];
 
