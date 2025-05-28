@@ -3,7 +3,6 @@ using WordleSolver.Controllers;
 using WordleSolver.Enums;
 using WordleSolver.Interfaces;
 using WordleSolver.Services;
-using WordleSolver.Solvers;
 
 namespace WordleSolver
 {
@@ -15,7 +14,7 @@ namespace WordleSolver
 
 			string[] words = WordleCoreUtils.LoadEmbeddedTxt("WordleCore.Data.allowed_words.txt");
 			string[] wordles = WordleCoreUtils.LoadEmbeddedTxt("WordleCore.Data.previous_wordles.txt");
-			var answerPools = AnswerPools.OnlyWordles;
+			var answerPools = AnswerPools.AllWords;
 
 			var sortedWordOccurrences = WordleCoreUtils.LoadEmbeddedTxt("WordleCore.Data.allowed_words_sorted_occurrences.txt")
 				.Select(line => line.Split('\t'))
@@ -42,13 +41,12 @@ namespace WordleSolver
 				//SolverTypes.PositionalLog,
 				//SolverTypes.FrequencyThreshold,
 				//SolverTypes.MiniMax,
+				//SolverTypes.TreeEntropy
 				];
 
 			var solverFactory = new SolverFactory(context);
 
 			var solvers = solverFactory.GetSolvers(solversToGet);
-
-			solvers.Add(new TreeEntropySolver(context, "TreeEntropySolver"));
 
 			var controllers = new List<SolverController>();
 
