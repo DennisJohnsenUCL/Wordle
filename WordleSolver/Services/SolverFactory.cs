@@ -36,6 +36,7 @@ namespace WordleSolver.Services
 					SolverTypes.FrequencyThreshold => new EntropyFrequencyThresholdSolver(_context, Frequencies.Weighted, 0.5, "EntropyFrequencyThreshold"),
 					SolverTypes.MiniMax => new MiniMaxSolver(_context, limits[SolverTypes.MiniMax], "MiniMax"),
 					SolverTypes.TreeEntropy => new TreeEntropySolver(_context, "TreeEntropySolver"),
+					SolverTypes.TreeEntropySigmoid => new TreeEntropySigmoidSolver(_context, "TreeEntropySigmoidSolver"),
 					_ => throw new Exception()
 				};
 

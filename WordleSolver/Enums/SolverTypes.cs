@@ -14,6 +14,7 @@
 		PositionalLog,
 		FrequencyThreshold,
 		MiniMax,
-		TreeEntropy
+		TreeEntropy,
+		TreeEntropySigmoid
 	}
 }
