@@ -26,8 +26,7 @@ namespace WordleSolver.Solvers
 
 		public virtual void AddResponse(WordleResponse response)
 		{
-			var pattern = string.Concat(response.LetterResults.Select(result => CorrectnessMappings[result.Correctness]));
-			if (PatternsProvider.Patterns == Patterns.Simple) pattern = pattern.Replace('O', 'A');
+			var pattern = string.Concat(response.LetterResults.Select(result => CorrectnessMappings[result.Correctness])).Replace('O', 'A');
 
 			GameKey += pattern;
 		}

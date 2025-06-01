@@ -20,7 +20,7 @@ namespace WordleSolver
 				.Select(line => line.Split('\t'))
 				.ToDictionary(parts => parts[0], parts => long.Parse(parts[1]));
 
-			var patternsProvider = new PatternsProvider(words, wordles, Patterns.Simple, answerPools);
+			var patternsProvider = new PatternsProvider(words, wordles, answerPools);
 
 			var context = new SolverContext(staticFirstGuessProvider, patternsProvider, sortedWordOccurrences, words, wordles, answerPools);
 

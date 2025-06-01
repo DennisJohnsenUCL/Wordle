@@ -1,7 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using WordleCore.Enums;
 using WordleCore.Models;
-using WordleSolver.Enums;
 using WordleSolver.Interfaces;
 using WordleSolver.Models;
 using WordleSolver.Services;
@@ -164,8 +163,7 @@ namespace WordleSolver.Solvers
 
 		public void AddResponse(WordleResponse response)
 		{
-			var pattern = string.Concat(response.LetterResults.Select(result => CorrectnessMappings[result.Correctness]));
-			if (_patternsProvider.Patterns == Patterns.Simple) pattern = pattern.Replace('O', 'A');
+			var pattern = string.Concat(response.LetterResults.Select(result => CorrectnessMappings[result.Correctness])).Replace('O', 'A');
 
 			_node = _node?.Nodes[pattern];
 		}

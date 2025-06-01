@@ -8,18 +8,16 @@ namespace WordleSolver.Services
 	{
 		private readonly string[] _words;
 		private readonly string[] _wordles;
-		public Patterns Patterns { get; }
 		private readonly ushort[,] _PatternsIndexMatrix;
 		private readonly string[] _patterns;
 		private readonly Dictionary<string, int> _wordsReverseLookup;
 		private readonly Dictionary<string, ushort> _patternsReverseLookup;
 		private readonly AnswerPools _answerPools;
 
-		public PatternsProvider(string[] words, string[] wordles, Patterns patterns, AnswerPools answerPools)
+		public PatternsProvider(string[] words, string[] wordles, AnswerPools answerPools)
 		{
 			_words = words;
 			_wordles = wordles;
-			Patterns = patterns;
 			_answerPools = answerPools;
 
 			_PatternsIndexMatrix = new ushort[_words.Length, _words.Length];
@@ -53,9 +51,9 @@ namespace WordleSolver.Services
 			return _PatternsIndexMatrix[guessIndex, wordleIndex] == patternIndex;
 		}
 
-		private string[] GeneratePatterns()
+		private static string[] GeneratePatterns()
 		{
-			char[] letters = Patterns == Patterns.Simple ? ['A', 'P', 'C'] : ['A', 'P', 'C', 'O'];
+			char[] letters = ['A', 'P', 'C'];
 
 			var patterns = letters
 				.SelectMany(c1 => letters
@@ -88,24 +86,20 @@ namespace WordleSolver.Services
 
 		private void Compute()
 		{
-			Func<string, string, string> calculatePattern = Patterns == Patterns.Simple
-				? CalculatePatternSimple
-				: CalculatePatternExpanded;
-
 			string[] possibleWords = _answerPools == AnswerPools.AllWords ? _words : _wordles;
 
 			Parallel.For(0, _words.Length, i =>
 			{
 				for (int j = 0; j < possibleWords.Length; j++)
 				{
-					var pattern = calculatePattern(_words[i], possibleWords[j]);
+					var pattern = CalculatePattern(_words[i], possibleWords[j]);
 					var patternIndex = _patternsReverseLookup[pattern];
 					_PatternsIndexMatrix[i, j] = patternIndex;
 				}
 			});
 		}
 
-		private static string CalculatePatternSimple(string guess, string wordle)
+		private static string CalculatePattern(string guess, string wordle)
 		{
 			Span<char> buffer = stackalloc char[5];
 			var counts = new int[26];
@@ -138,49 +132,6 @@ namespace WordleSolver.Services
 				if (buffer[i] != 'P' && buffer[i] != 'C') buffer[i] = 'A';
 			}
 
-			return buffer.ToString();
-		}
-
-		private static string CalculatePatternExpanded(string guess, string wordle)
-		{
-			Span<char> buffer = stackalloc char[5];
-			var counts = new int[26];
-
-			for (int i = 0; i < 5; i++) counts[wordle[i] - 'A']++;
-
-			for (int i = 0; i < 5; i++)
-			{
-				int letterIndex = guess[i] - 'A';
-				if (counts[letterIndex] == 0)
-				{
-					buffer[i] = 'A';
-				}
-			}
-
-			for (int i = 0; i < 5; i++)
-			{
-				if (guess[i] == wordle[i])
-				{
-					buffer[i] = 'C';
-					counts[guess[i] - 'A']--;
-				}
-			}
-
-			for (int i = 0; i < 5; i++)
-			{
-				if (buffer[i] == 'C' || buffer[i] == 'A') continue;
-
-				int letterIndex = guess[i] - 'A';
-				if (counts[letterIndex] > 0)
-				{
-					buffer[i] = 'P';
-					counts[letterIndex]--;
-				}
-				else
-				{
-					buffer[i] = 'O';
-				}
-			}
 			return buffer.ToString();
 		}
 	}

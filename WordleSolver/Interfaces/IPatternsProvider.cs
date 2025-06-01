@@ -1,10 +1,7 @@
-﻿using WordleSolver.Enums;
-
-namespace WordleSolver.Interfaces
+﻿namespace WordleSolver.Interfaces
 {
 	internal interface IPatternsProvider
 	{
-		Patterns Patterns { get; }
 		string GetPattern(string guess, string wordle);
 		int GetWordIndex(string word);
 		int GetPatternIndex(string pattern);
