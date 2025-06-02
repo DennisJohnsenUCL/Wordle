@@ -33,7 +33,7 @@ namespace WordleSolver.Services
 					SolverTypes.PositionalWeighted => new PositionalEntropySolver(_context, Frequencies.Weighted, limits[SolverTypes.PositionalWeighted], "PositionalEntropyWeightedSolver"),
 					SolverTypes.PositionalSigmoid => new PositionalEntropySolver(_context, Frequencies.Sigmoid, limits[SolverTypes.PositionalSigmoid], "PositionalEntropySigmoidSolver"),
 					SolverTypes.PositionalLog => new PositionalEntropySolver(_context, Frequencies.Log, limits[SolverTypes.PositionalLog], "PositionalEntropyLogSolver"),
-					SolverTypes.FrequencyThreshold => new EntropyFrequencyThresholdSolver(_context, Frequencies.Weighted, 0.5, "EntropyFrequencyThreshold"),
+					SolverTypes.FrequencyThreshold => new EntropyFrequencyThresholdSolver(_context, Frequencies.Sigmoid, 0.5, "EntropyFrequencyThreshold"),
 					SolverTypes.MiniMax => new MiniMaxSolver(_context, limits[SolverTypes.MiniMax], "MiniMax"),
 					SolverTypes.TreeEntropy when _context.AnswerPools == AnswerPools.OnlyWordles => new TreeEntropySolver(_context, "TreeEntropySolver"),
 					SolverTypes.TreeEntropySigmoid when _context.AnswerPools == AnswerPools.AllWords => new TreeEntropySigmoidSolver(_context, "TreeEntropySigmoidSolver"),
