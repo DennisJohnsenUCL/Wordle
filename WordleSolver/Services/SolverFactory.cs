@@ -21,7 +21,7 @@ namespace WordleSolver.Services
 
 			foreach (var solverType in solversToGet)
 			{
-				ISolver solver = solverType switch
+				ISolver? solver = solverType switch
 				{
 					SolverTypes.Lazy => new LazySolver(_context.SortedWords, "LazySolver"),
 					SolverTypes.Filtered => new FilteredSolver(_context, "FilteredSolver"),
@@ -35,12 +35,12 @@ namespace WordleSolver.Services
 					SolverTypes.PositionalLog => new PositionalEntropySolver(_context, Frequencies.Log, limits[SolverTypes.PositionalLog], "PositionalEntropyLogSolver"),
 					SolverTypes.FrequencyThreshold => new EntropyFrequencyThresholdSolver(_context, Frequencies.Weighted, 0.5, "EntropyFrequencyThreshold"),
 					SolverTypes.MiniMax => new MiniMaxSolver(_context, limits[SolverTypes.MiniMax], "MiniMax"),
-					SolverTypes.TreeEntropy => new TreeEntropySolver(_context, "TreeEntropySolver"),
-					SolverTypes.TreeEntropySigmoid => new TreeEntropySigmoidSolver(_context, "TreeEntropySigmoidSolver"),
-					_ => throw new Exception()
+					SolverTypes.TreeEntropy when _context.AnswerPools == AnswerPools.OnlyWordles => new TreeEntropySolver(_context, "TreeEntropySolver"),
+					SolverTypes.TreeEntropySigmoid when _context.AnswerPools == AnswerPools.AllWords => new TreeEntropySigmoidSolver(_context, "TreeEntropySigmoidSolver"),
+					_ => null
 				};
 
-				solvers.Add(solver);
+				if (solver != null) solvers.Add(solver);
 			}
 
 			return solvers;
