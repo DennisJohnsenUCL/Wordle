@@ -15,7 +15,7 @@ namespace WordleSolver.Solvers
 
 		protected override bool TryGetThresholdGuess(Dictionary<string, double> normalizedFrequencies, out string guess)
 		{
-			var maxPair = normalizedFrequencies.Aggregate((a, b) => a.Value > b.Value ? a : b);
+			var maxPair = normalizedFrequencies.MaxBy(x => x.Value);
 			if (maxPair.Value > _threshold)
 			{
 				guess = maxPair.Key;

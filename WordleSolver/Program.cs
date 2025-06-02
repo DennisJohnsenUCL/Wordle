@@ -14,7 +14,7 @@ namespace WordleSolver
 
 			string[] words = WordleCoreUtils.LoadEmbeddedTxt("WordleCore.Data.allowed_words.txt");
 			string[] wordles = WordleCoreUtils.LoadEmbeddedTxt("WordleCore.Data.previous_wordles.txt");
-			var answerPools = AnswerPools.AllWords;
+			var answerPools = AnswerPools.OnlyWordles;
 
 			var sortedWordOccurrences = WordleCoreUtils.LoadEmbeddedTxt("WordleCore.Data.allowed_words_sorted_occurrences.txt")
 				.Select(line => line.Split('\t'))
@@ -41,8 +41,8 @@ namespace WordleSolver
 				//SolverTypes.PositionalLog,
 				//SolverTypes.FrequencyThreshold,
 				//SolverTypes.MiniMax,
-				SolverTypes.TreeEntropy
-				//SolverTypes.TreeEntropySigmoid
+				//SolverTypes.TreeEntropy,
+				//SolverTypes.TreeEntropySigmoid,
 				];
 
 			var solverFactory = new SolverFactory(context);

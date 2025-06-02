@@ -18,7 +18,7 @@ namespace WordleSolver.Solvers
 		protected virtual string GetPositionalEntropyGuess(Dictionary<string, double> possibleWords)
 		{
 			var positionalEntropies = GetPositionalEntropies(possibleWords);
-			var guess = positionalEntropies.Aggregate((acc, current) => acc.Value > current.Value ? acc : current).Key;
+			var guess = positionalEntropies.MaxBy(x => x.Value).Key;
 			return guess;
 		}
 

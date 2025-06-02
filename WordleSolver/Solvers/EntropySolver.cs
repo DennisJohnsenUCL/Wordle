@@ -68,7 +68,7 @@ namespace WordleSolver.Solvers
 		protected virtual string GetEntropyGuess(Dictionary<string, double> possibleWords)
 		{
 			var entropies = GetEntropies(possibleWords);
-			var guess = entropies.Aggregate((acc, current) => acc.Value > current.Value ? acc : current).Key;
+			var guess = entropies.MaxBy(x => x.Value).Key;
 			return guess;
 		}
 

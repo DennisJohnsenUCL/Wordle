@@ -17,7 +17,7 @@ namespace WordleSolver.Solvers
 		protected virtual string GetMiniMaxGuess(string[] possibleWords)
 		{
 			var maxPatterns = GetMaxPatterns(possibleWords);
-			var minWord = maxPatterns.Aggregate((l, r) => l.Value < r.Value ? l : r).Key;
+			var minWord = maxPatterns.MinBy(x => x.Value).Key;
 			return minWord;
 		}
 
@@ -33,7 +33,7 @@ namespace WordleSolver.Solvers
 					var pattern = PatternsProvider.GetPattern(word, possibleWord);
 					if (!patternGroups.TryAdd(pattern, 1)) patternGroups[pattern] += 1;
 				}
-				var maxPartition = patternGroups.Aggregate((l, r) => l.Value > r.Value ? l : r).Value;
+				var maxPartition = patternGroups.Max(x => x.Value);
 				maxPatterns.TryAdd(word, maxPartition);
 			});
 			return maxPatterns;

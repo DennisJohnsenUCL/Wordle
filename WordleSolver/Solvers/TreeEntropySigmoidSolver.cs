@@ -138,7 +138,7 @@ namespace WordleSolver.Solvers
 						bestCounts.TryAdd(possibleNode, possibleSum);
 					});
 
-					var bestNode = bestCounts.Aggregate((l, r) => l.Value < r.Value ? l : r).Key;
+					var bestNode = bestCounts.MinBy(x => x.Value).Key;
 
 					nodes.Add(pattern, bestNode);
 				}
