@@ -1,9 +1,7 @@
-﻿using WordleCore.Models;
-
-namespace WordleSolver.Interfaces
+﻿namespace WordleSolver.Interfaces
 {
-    internal interface IReactiveSolver
-    {
-        void AddResponse(WordleResponse response);
-    }
+	internal interface IReactiveSolver
+	{
+		void AddResponse(string pattern);
+	}
 }

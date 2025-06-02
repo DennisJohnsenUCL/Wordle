@@ -1,6 +1,4 @@
-﻿using WordleCore.Enums;
-using WordleCore.Models;
-using WordleSolver.Enums;
+﻿using WordleSolver.Enums;
 using WordleSolver.Interfaces;
 using WordleSolver.Services;
 
@@ -24,10 +22,8 @@ namespace WordleSolver.Solvers
 			_possibleWords = _possibleWordsPool;
 		}
 
-		public virtual void AddResponse(WordleResponse response)
+		public virtual void AddResponse(string pattern)
 		{
-			var pattern = string.Concat(response.LetterResults.Select(result => CorrectnessMappings[result.Correctness])).Replace('O', 'A');
-
 			GameKey += pattern;
 		}
 
@@ -69,13 +65,5 @@ namespace WordleSolver.Solvers
 			GameKey = string.Empty;
 			_possibleWords = _possibleWordsPool;
 		}
-
-		private static readonly Dictionary<Correctness, char> CorrectnessMappings = new()
-		{
-			{ Correctness.Absent, 'A' },
-			{ Correctness.Present, 'P' },
-			{ Correctness.Correct, 'C' },
-			{ Correctness.OverCount, 'O' },
-		};
 	}
 }

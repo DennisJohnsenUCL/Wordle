@@ -1,6 +1,4 @@
 ﻿using System.Collections.Concurrent;
-using WordleCore.Enums;
-using WordleCore.Models;
 using WordleSolver.Interfaces;
 using WordleSolver.Models;
 using WordleSolver.Services;
@@ -160,10 +158,8 @@ namespace WordleSolver.Solvers
 			return count;
 		}
 
-		public void AddResponse(WordleResponse response)
+		public void AddResponse(string pattern)
 		{
-			var pattern = string.Concat(response.LetterResults.Select(result => CorrectnessMappings[result.Correctness])).Replace('O', 'A');
-
 			_node = _node?.Nodes[pattern];
 		}
 
@@ -177,13 +173,5 @@ namespace WordleSolver.Solvers
 		{
 			_node = _root.Value;
 		}
-
-		private static readonly Dictionary<Correctness, char> CorrectnessMappings = new()
-		{
-			{ Correctness.Absent, 'A' },
-			{ Correctness.Present, 'P' },
-			{ Correctness.Correct, 'C' },
-			{ Correctness.OverCount, 'O' },
-		};
 	}
 }

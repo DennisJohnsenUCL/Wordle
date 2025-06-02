@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using WordleCore;
 using WordleCore.Enums;
+using WordleCore.Models;
 using WordleSolver.Interfaces;
 using WordleSolver.Models;
 
@@ -53,7 +54,8 @@ namespace WordleSolver.Controllers
 			{
 				var guess = _solver.GetNextGuess();
 				var response = game.GuessWordle(guess);
-				if (_solver is IReactiveSolver solver) solver.AddResponse(response);
+				var pattern = GetPattern(response);
+				if (_solver is IReactiveSolver solver) solver.AddResponse(pattern);
 			}
 
 			int guesses = game.Guesses - game.GuessesLeft;
@@ -65,5 +67,19 @@ namespace WordleSolver.Controllers
 		{
 			return (game.GameState == GameState.Completed || game.GameState == GameState.Failed);
 		}
+
+		private static string GetPattern(WordleResponse response)
+		{
+			var pattern = string.Concat(response.LetterResults.Select(result => CorrectnessMappings[result.Correctness])).Replace('O', 'A');
+			return pattern;
+		}
+
+		private static readonly Dictionary<Correctness, char> CorrectnessMappings = new()
+		{
+			{ Correctness.Absent, 'A' },
+			{ Correctness.Present, 'P' },
+			{ Correctness.Correct, 'C' },
+			{ Correctness.OverCount, 'O' },
+		};
 	}
 }

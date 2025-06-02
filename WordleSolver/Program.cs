@@ -31,7 +31,7 @@ namespace WordleSolver
 				[
 				//SolverTypes.Lazy,
 				//SolverTypes.Filtered,
-				//SolverTypes.EntropyFlat,
+				SolverTypes.EntropyFlat,
 				//SolverTypes.EntropyWeighted,
 				//SolverTypes.EntropySigmoid,
 				//SolverTypes.EntropyLog,
