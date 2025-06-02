@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using WordleSolver.Enums;
+using WordleSolver.Models;
 using WordleSolver.Services;
 
 namespace WordleSolver.Solvers
@@ -29,9 +30,9 @@ namespace WordleSolver.Solvers
 			{
 				var totalPositionalEntropy = GetPositionalEntropy([.. possibleWords.Keys]);
 
-				var (patternGroupWords, patternGroupProbabilities) = GetPatternBuckets(word, possibleWords);
+				var patternGroups = GetPatternBuckets(word, possibleWords);
 
-				var expectedPositionalEntropy = GetExpectedPositionalEntropy(patternGroupWords, patternGroupProbabilities);
+				var expectedPositionalEntropy = GetExpectedPositionalEntropy(patternGroups);
 
 				var positionalInformationGain = totalPositionalEntropy - expectedPositionalEntropy;
 
@@ -40,7 +41,7 @@ namespace WordleSolver.Solvers
 			return entropies;
 		}
 
-		private static double GetPositionalEntropy(string[] possibleWords)
+		private static double GetPositionalEntropy(List<string> possibleWords)
 		{
 			var positionalEntropy = 0d;
 
@@ -52,7 +53,7 @@ namespace WordleSolver.Solvers
 			return positionalEntropy;
 		}
 
-		private static double GetPositionEntropy(int i, string[] words)
+		private static double GetPositionEntropy(int i, List<string> words)
 		{
 			var letterCounts = new Dictionary<char, int>();
 			foreach (var word in words)
@@ -65,31 +66,32 @@ namespace WordleSolver.Solvers
 			return entropy;
 		}
 
-		protected virtual (Dictionary<string, List<string>>, Dictionary<string, double>) GetPatternBuckets(string guess, Dictionary<string, double> frequencies)
+		protected virtual Dictionary<string, PatternGroup> GetPatternBuckets(string guess, Dictionary<string, double> frequencies)
 		{
-			var patternGroupWords = new Dictionary<string, List<string>>();
-			var patternGroupProbabilities = new Dictionary<string, double>();
-			foreach (var word in frequencies.Keys)
+			var patternGroups = new Dictionary<string, PatternGroup>();
+			foreach (var (word, frequency) in frequencies)
 			{
-				var frequency = frequencies[word];
-
 				var pattern = PatternsProvider.GetPattern(guess, word);
-				if (!patternGroupWords.TryAdd(pattern, [word])) patternGroupWords[pattern].Add(word);
-				if (!patternGroupProbabilities.TryAdd(pattern, frequency)) patternGroupProbabilities[pattern] += frequency;
+				if (!patternGroups.TryGetValue(pattern, out var group))
+				{
+					group = new PatternGroup();
+					patternGroups[pattern] = group;
+				}
+				group.Words.Add(word);
+				group.Frequency += frequency;
 			}
-			return (patternGroupWords, patternGroupProbabilities);
+			return patternGroups;
 		}
 
-		private static double GetExpectedPositionalEntropy(Dictionary<string, List<string>> patternGroupWords, Dictionary<string, double> patternGroupProbabilities)
+		private static double GetExpectedPositionalEntropy(Dictionary<string, PatternGroup> patternGroups)
 		{
 			var expectedPositionalEntropy = 0d;
-			foreach (var pair in patternGroupWords)
+			foreach (var group in patternGroups.Values)
 			{
-				var pattern = pair.Key;
-				var words = pair.Value;
-				var probability = patternGroupProbabilities[pattern];
+				var words = group.Words;
+				var probability = group.Frequency;
 
-				var patternPositionalEntropy = GetPositionalEntropy([.. words]);
+				var patternPositionalEntropy = GetPositionalEntropy(words);
 				expectedPositionalEntropy += probability * patternPositionalEntropy;
 			}
 			return expectedPositionalEntropy;
