@@ -47,21 +47,8 @@ namespace WordleSolver.Solvers
 				var group = kvp.Value;
 				var count = group.Count;
 
-				if (pattern == "CCCCC")
-				{
-					nodes.Add(pattern, new Node(steps));
-				}
-				else if (count == 1)
-				{
-					nodes.Add(pattern, new Node(group[0], steps + 1));
-				}
-				else if (count == 2)
-				{
-					var patternKey = _patternsProvider.GetPattern(group[0], group[1]);
-
-					nodes.Add(pattern, new Node(group[0], steps + 1));
-					nodes[pattern].Nodes.Add(patternKey, new Node(group[1], steps + 2));
-				}
+				if (pattern == "CCCCC") nodes.Add(pattern, new Node(steps));
+				else if (count < 3) nodes.Add(pattern, GetSubTree(group[0], group, steps + 1));
 				else if (count == 3)
 				{
 					var words = group.ToList();
@@ -76,26 +63,8 @@ namespace WordleSolver.Solvers
 						}
 						if (check[0] != check[1]) { splitter = word1; break; }
 					}
-					if (splitter != null)
-					{
-						words.Remove(splitter);
-
-						var pattern1 = _patternsProvider.GetPattern(splitter, words[0]);
-						var pattern2 = _patternsProvider.GetPattern(splitter, words[1]);
-
-						nodes.Add(pattern, new Node(splitter, steps + 1));
-						nodes[pattern].Nodes.Add(pattern1, new Node(words[0], steps + 2));
-						nodes[pattern].Nodes.Add(pattern2, new Node(words[1], steps + 2));
-					}
-					else
-					{
-						var pattern1 = _patternsProvider.GetPattern(group[0], group[1]);
-						var pattern2 = _patternsProvider.GetPattern(group[1], group[2]);
-
-						nodes.Add(pattern, new Node(group[0], steps + 1));
-						nodes[pattern].Nodes.Add(pattern1, new Node(group[1], steps + 2));
-						nodes[pattern].Nodes[pattern1].Nodes.Add(pattern2, new Node(group[2], steps + 3));
-					}
+					if (splitter != null) nodes.Add(pattern, GetSubTree(splitter, group, steps + 1));
+					else nodes.Add(pattern, GetSubTree(group[0], group, steps + 1));
 				}
 				else
 				{
