@@ -47,21 +47,8 @@ namespace WordleSolver.Solvers
 				var totalFreq = kvp.Value.Values.Sum();
 				var normalized = kvp.Value.ToDictionary(x => x.Key, x => x.Value / totalFreq);
 
-				if (pattern == "CCCCC")
-				{
-					nodes.Add(pattern, new Node(steps));
-				}
-				else if (count == 1)
-				{
-					nodes.Add(pattern, new Node(group[0], steps + 1));
-				}
-				else if (count == 2)
-				{
-					var patternKey = _patternsProvider.GetPattern(group[0], group[1]);
-
-					nodes.Add(pattern, new Node(group[0], steps + 1));
-					nodes[pattern].Nodes.Add(patternKey, new Node(group[1], steps + 2));
-				}
+				if (pattern == "CCCCC") nodes.Add(pattern, new Node(steps));
+				else if (count < 3) nodes.Add(pattern, GetSubTree(group[0], normalized, steps + 1));
 				else if (count == 3)
 				{
 					var words = group.ToList();
@@ -76,27 +63,10 @@ namespace WordleSolver.Solvers
 						}
 						if (check[0] != check[1]) { splitter = word1; break; }
 					}
-					if (splitter != null)
-					{
-						words.Remove(splitter);
-
-						var pattern1 = _patternsProvider.GetPattern(splitter, words[0]);
-						var pattern2 = _patternsProvider.GetPattern(splitter, words[1]);
-
-						nodes.Add(pattern, new Node(splitter, steps + 1));
-						nodes[pattern].Nodes.Add(pattern1, new Node(words[0], steps + 2));
-						nodes[pattern].Nodes.Add(pattern2, new Node(words[1], steps + 2));
-					}
-					else
-					{
-						var pattern1 = _patternsProvider.GetPattern(group[0], group[1]);
-						var pattern2 = _patternsProvider.GetPattern(group[1], group[2]);
-
-						nodes.Add(pattern, new Node(group[0], steps + 1));
-						nodes[pattern].Nodes.Add(pattern1, new Node(group[1], steps + 2));
-						nodes[pattern].Nodes[pattern1].Nodes.Add(pattern2, new Node(group[2], steps + 3));
-					}
+					if (splitter != null) nodes.Add(pattern, GetSubTree(splitter, normalized, steps + 1));
+					else nodes.Add(pattern, GetSubTree(group[0], normalized, steps + 1));
 				}
+				else if (normalized[group[0]] > 0.85) nodes.Add(pattern, GetSubTree(group[0], normalized, steps + 1));
 				else
 				{
 					var entropies = new Dictionary<string, double>();
@@ -116,12 +86,12 @@ namespace WordleSolver.Solvers
 							return probability * Math.Log2(1 / probability);
 						});
 
-						if (group.Contains(word)) entropy += 5 / count;
+						if (group.Contains(word)) entropy += normalized[word] / 3;
 
 						entropies.Add(word, entropy);
 					}
 
-					int tries = steps < 3 ? 14 : 3;
+					int tries = steps < 3 ? 16 : 9;
 
 					var bestEntropies = entropies.OrderByDescending(x => x.Value).Take(tries).ToDictionary();
 
@@ -136,7 +106,11 @@ namespace WordleSolver.Solvers
 						bestCounts.TryAdd(possibleNode, possibleSum);
 					});
 
-					var bestNode = bestCounts.OrderBy(x => x.Value).ThenByDescending(x => bestEntropies[x.Key.Guess]).First().Key;
+					var bestNode = bestCounts
+						.OrderBy(x => x.Value)
+						.ThenByDescending(x => bestEntropies[x.Key.Guess])
+						.ThenBy(x => x.Key.Guess)
+						.First().Key;
 
 					nodes.Add(pattern, bestNode);
 				}
@@ -148,7 +122,7 @@ namespace WordleSolver.Solvers
 
 		private double[] CountGuesses(Node node, double[]? count = null)
 		{
-			count ??= new double[11];
+			count ??= new double[100];
 
 			if (node.Nodes.ContainsKey("CCCCC")) count[node.Steps] += _words[node.Guess];
 			foreach (var subNode in node.Nodes)

@@ -103,7 +103,10 @@ namespace WordleSolver.Solvers
 						bestCounts.TryAdd(possibleNode, possibleCount);
 					});
 
-					var bestNode = bestCounts.OrderBy(x => x.Value).ThenByDescending(x => bestEntropies[x.Key.Guess]).First().Key;
+					var bestNode = bestCounts
+						.OrderBy(x => x.Value)
+						.ThenByDescending(x => bestEntropies[x.Key.Guess])
+						.First().Key;
 
 					nodes.Add(pattern, bestNode);
 				}

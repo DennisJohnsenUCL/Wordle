@@ -14,19 +14,10 @@
 			Steps = steps;
 		}
 
-		public Node(string guess, int steps)
-		{
-			Guess = guess;
-			Nodes = new() { { "CCCCC", new Node(steps) } };
-			Steps = steps;
-		}
-
 		public Node(int steps)
 		{
 			Steps = steps;
 			IsLeaf = true;
 		}
-
-		public Node() { }
 	}
 }
